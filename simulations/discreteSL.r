@@ -1,5 +1,6 @@
 library(tidyverse)
 library(xgboost)
+library(foreach)
 library(caret)
 library(patchwork)
 
@@ -173,7 +174,34 @@ cross_validate_multiple <- function(models_fit_predict, dataset, k=5, loss_fun=l
 }
 
 
+cross_validate_multiple_lvl1 <- function(models_fit_predict, dataset, k=5, loss_fun=logloss) {
+    folds <- createFolds(dataset$y, k = k, list = TRUE)     
+    p <- length(models_fit_predict)
+
+    res<- foreach (i = 1:k, .combine = 'rbind') %do% {
+        test_set <- dataset[unlist(folds[i]), ]
+        train_set <- dataset[unlist(folds[-i]), ]
+        
+        preds <- foreach (j = 1:p, .combine = 'cbind') %do% { 
+            model_fun <- models_fit_predict[[j]][[1]]
+            predict_fun <- models_fit_predict[[j]][[2]]
+            fit <- model_fun(train_set)
+            out_of_split_preds <- predict_fun(fit, test_set)
+
+            cbind(out_of_split_preds)
+        }
+
+        cbind(Y = test_set$y, preds)
+    }
+    tibble(res)
+}
+
+
+
 cvres <- cross_validate_multiple(list(c(fit_logreg_true, predict_logreg)), simDat)
+level_1 <- cross_validate_multiple_lvl1(candidates, simDat)
+level_1 <- level_1$level_1
+lapply(lvl_1[,-1], function(col) MSE(lvl_1[,1], col))
 cvres
 
 ## The discrete super learner
@@ -238,6 +266,7 @@ predict_dSL(dSL_mod, simDat)
 
 # Cross validation of discrete super learner
 candidates_with_dSL <- c(candidates, list(dSL = c(fit_dSL, predict_dSL)))
+
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(100), k=100))
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(2000), k=30))
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(10000), k=10))
