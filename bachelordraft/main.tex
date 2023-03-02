@@ -4,6 +4,11 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{mdframed}
 \usepackage{mathtools}
+\usepackage[
+    backend=biber,
+    style=alphabetic
+]{biblatex}
+\bibliography{references.bib}
 
 \setlength\parindent{0pt}
 \DeclareMathOperator*{\argmax}{arg\,max} 
@@ -46,12 +51,34 @@
 
 
 \section{Introduction}
-Let $ X_1, ..., X_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{X}^{n}, \mathcal{A}) $ where $ X_{i} \in \mathcal{X} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta \subseteq \mathbb{R}^{p}$ we define the corresponding loss function $ L : \mathcal{X} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
+Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. 
+Let $ X_1, ..., X_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{X}^{n}, \mathcal{A}) $ where $ X_{i} \in \mathcal{X} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{X} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
 \begin{align*}
     R(\theta) = \int L(x, \theta)  \mathrm{d}P(x) = EL(X_1) 
 \end{align*}
+The parameter set $ \Theta $ can be Euclidean, but it can also be considered as a collection of functions of the form $ \theta : \mathcal{X}^{n} \to \mathbb{R} $. 
+
+\begin{example}[Regression functions $ \Theta $] \label{ex:regfunc}
+    Let $ (Y_1 , X_1) ,..., (Y_n , X_n) \in \mathbb{R} \times \mathcal{X}^{n} $ be i.id. observations such that satisfy the model 
+    \begin{align*}
+        Y_1 = \theta_0(X_1) + \varepsilon,
+    \end{align*}
+    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate the \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X}^{n} \to \mathbb{R}\}$, is the set of regression functions each having $ \mathcal{X}^{n} $ as their domain. \cite{vaart06}
+\end{example}
+
+\begin{example}[Parameteric family] \label{ex:parametricfam}
+    Consider the setup from example \ref{ex:regfunc}. A generalized regression model could be considered as parametrized family of distributions $ \mathcal{Q} = \{Q_{\theta, \eta} \mid \theta \in \Theta , \eta \in \mathbb{R}^{m} \} $ such that
+    \begin{align*}
+        Y_1 \mid X_1 = x \sim Q_{\theta(x) , \eta},
+    \end{align*}
+    where $ \eta \in \mathbb{R}^{m} $ is some nuisance parameter that could relate to $ \varepsilon $. The conditional distributions $ \mathcal{Q} $ are said to be parametrized by $ \theta $ and $ \eta $ \cite{bickel1993efficient}
+\end{example}
 \begin{definition}[Estimator of $ \theta_0 $]
-    An estimator for $ \theta_0 \in \Theta $ is a measurable map $ \hat{\theta} : \mathcal{X}^{n} \to \Theta  $. In the context where the estimator is fitted from our observations, we write $ \hat{\theta}(P_n) : \mathcal{X}^{n} \to \Theta $ to denote the estimator fitted on the empirical distribution, $ P_n $, of our observations. This estimator is sometimes known as the \textbf{plug-in} estimator for $ \theta $.  
+    An estimator for $ \theta_0 \in \Theta $ is a measurable map $ \hat{\theta} : \mathcal{X}^{n} \to \Theta  $.
+\end{definition}
+
+\begin{definition}[Prediction model]
+    %In the context where the estimator is fitted from our observations, we write $ \hat{\theta}(P_n) : \mathcal{X}^{n} \to \Theta $ to denote the estimator fitted on the empirical distribution, $ P_n $, of our observations. This estimator is sometimes known as the \textbf{plug-in} estimator for $ \theta $.  
 \end{definition}
 
 % I would like to formulate this better 
@@ -112,8 +139,9 @@ Given a set of estimators we define the centered conditional risk as the differe
                                                        &= E_{S} \int L(x, \hat{\theta}_{ \hat{\cl} }(P_{n, S}^{0})) - L(x, \theta_0) \mathrm{d}P(x) 
 \end{align*}
 
+The following result is due to \cite{laan03}: 
 \begin{theorem}[Asymptotic equality]
-    The cross validation selector $ \hat{\cl}  $ performs asymptotically as well as the oracle selector $ \tilde{\cl} $  in the sense that 
+    The cross validation selector $ \hat{\cl} $ performs asymptotically as well as the oracle selector $ \tilde{\cl} $ in the sense that 
     \begin{align*}
         \frac{\Delta_{S}( \hat{\theta}_{ \hat{\cl} } , \theta_0 )}{ \Delta_{S}( \hat{\theta}_{ \tilde{\cl} } , \theta_0) } \to 1 \qquad \text{ in probability for } n \to \infty
     \end{align*}
@@ -128,5 +156,7 @@ Given a set of estimators we define the centered conditional risk as the differe
 \section{Simulation results}
 \section{Discussion}
 Pellentesque tincidunt sodales risus, vulputate iaculis odio dictum vitae. Ut ligula tortor, porta a consequat ac, commodo non risus. Nullam sagittis luctus pretium. Integer vel nibh at justo convallis imperdiet sit amet ut lorem. Sed in gravida turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed in massa vitae ligula pellentesque feugiat vitae in risus. Cras iaculis tempus mi, sit amet viverra nulla viverra pellentesque.
+
+
 
 \end{document}
