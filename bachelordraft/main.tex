@@ -1,4 +1,5 @@
 \documentclass[11pt, a4paper]{article}
+\usepackage[margin=3cm]{geometry} 
 \usepackage[english, science, hyperref]{ku-frontpage}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm}
@@ -24,7 +25,20 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \theoremstyle{remark}
+\usepackage{mdframed}
+
+\mdfdefinestyle{examplestyle}{%
+    linewidth=1pt,
+    innerleftmargin=10pt,
+    innerrightmargin=10pt,
+    skipabove=10pt, % add vertical space above
+    skipbelow=10pt, % add vertical space below
+    frametitlefont=\bfseries,
+    nobreak=true
+}
 \newtheorem{example}{Example}
+\surroundwithmdframed[style=examplestyle]{example}
+
 
 \setlength\arraycolsep{2 pt}
 \setcounter{tocdepth}{2}
@@ -52,27 +66,51 @@
 
 \section{Introduction}
 Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. 
-Let $ X_1, ..., X_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{X}^{n}, \mathcal{A}) $ where $ X_{i} \in \mathcal{X} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{X} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
+Let $ O_1, ..., O_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ O_{i} \in \mathcal{O} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{O} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
 \begin{align*}
-    R(\theta) = \int L(x, \theta)  \mathrm{d}P(x) = EL(X_1) 
+    R(\theta) = \int L(x, \theta)  dP(x) = EL(O_1) 
 \end{align*}
-The parameter set $ \Theta $ can be Euclidean, but it can also be considered as a collection of functions of the form $ \theta : \mathcal{X}^{n} \to \mathbb{R} $. 
+The parameter set $ \Theta $ can be Euclidean, but for the focus of this thesis we will consider it as a collection of functions of the form $ \theta : \mathcal{O} \to \mathbb{R} $. 
 
 \begin{example}[Regression functions $ \Theta $] \label{ex:regfunc}
-    Let $ (Y_1 , X_1) ,..., (Y_n , X_n) \in \mathbb{R} \times \mathcal{X}^{n} $ be i.id. observations such that satisfy the model 
+    Let $ O_1 = (Y_1 , X_1) ,..., O_n = (Y_n , X_n) \in  \mathcal{O} = \mathbb{R} \times \mathcal{X} $ be i.i.d. observations such that satisfy the model 
     \begin{align*}
         Y_1 = \theta_0(X_1) + \varepsilon,
     \end{align*}
-    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate the \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X}^{n} \to \mathbb{R}\}$, is the set of regression functions each having $ \mathcal{X}^{n} $ as their domain. \cite{vaart06}
+    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate the \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X} \to \mathbb{R}\}$, is the set of regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
+\end{example}
+\begin{example}[Parameteric family] \label{ex:parametricfam}
+    Consider the initial setup from example \ref{ex:regfunc}. If $ Y_i $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X_i $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions given that $ \Theta $ is finite-dimensional.
+
+    First parametrize the conditional distributions of $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\theta(x), \eta} \mid \theta \in \Theta , \eta \in \mathbb{R}^{m} \} $ such that $ Q_{\theta(x), \eta} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ (\theta,\eta) \in \Theta \times \mathbb{R}^{m} $. The parameter $ \theta $ will be a parameter of interest, and $ \eta $ is some nuisance parameter. We have that 
+    \begin{align*}
+        P(Y \in A \mid X = x) = Q_{ \theta(x), \eta}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
+    \end{align*}
+    Now assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then it is possible to identify a joint distribution $ P_{\theta , \eta} $ over our observations for each $ (\theta , \eta) \in \Theta \times \mathbb{R}^{m} $ such that 
+    \begin{align*}
+        P_{\theta , \eta }(X \in A, Y \in B ) = \int_{A} Q_{\theta(x), \eta}(B) d H_{0}(x) 
+    \end{align*}
+    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. Our parametric model is therefore $ \mathcal{P} = \{P_{\theta , \eta} \mid \theta \in \Theta , \eta \in \mathbb{R}^{m}\} $. \cite{bickel1993efficient}
+\end{example}
+\begin{example}[Logistic regression model]
+    Let $ O_1 = (Y_1 , X_n) , ..., O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \theta \in \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1]\} $
+\begin{align*}
+    \theta(x) = E(Y_1 \mid X_1 = x) = P(Y_1 = 1 \mid X_1 = x),
+\end{align*}
+In logistic regression we assume that $ \theta(x) = P(Y_1 = 1 \mid X_1 = x) = \operatorname{expit}(\beta x)  $  for some $ \beta \in \mathbb{R}^{k} $, and then the goal becomes to estimate the $ k $-dimensional parameter $ \beta $, in this case the $ \mathbb{R}^{k} $ parameter $ \beta  $ completely determines $ \theta $, so $ \Theta $ is also $ k $-dimensional. 
+
+The conditional distributions of $ Y_1 $ given $ X_1 = x $ are Bernoulli distributions and can be parametrized as $ \mathcal{Q} = \{\operatorname{Ber}(\operatorname{expit}(\beta x )) \mid \beta \in \mathbb{R}^{k}  \}  $. Now from example \ref{ex:parametricfam} we know that the statistical model of our observations be parametrized through $ \beta $, in particular we have 
+\begin{align*}
+    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} Q_{\theta(x)}(\{1\}) dH_{0}(x)\\
+ &= \int_{A} \operatorname{expit}(\beta x )  d H_0(x) 
+\end{align*}
+If $ H_{0} $ has density $ f $ w.r.t. Lebesgue measure, we can write
+\begin{align*}
+    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \operatorname{expit}(\beta x ) f(x)  d m(x) 
+\end{align*}
+
 \end{example}
 
-\begin{example}[Parameteric family] \label{ex:parametricfam}
-    Consider the setup from example \ref{ex:regfunc}. A generalized regression model could be considered as parametrized family of distributions $ \mathcal{Q} = \{Q_{\theta, \eta} \mid \theta \in \Theta , \eta \in \mathbb{R}^{m} \} $ such that
-    \begin{align*}
-        Y_1 \mid X_1 = x \sim Q_{\theta(x) , \eta},
-    \end{align*}
-    where $ \eta \in \mathbb{R}^{m} $ is some nuisance parameter that could relate to $ \varepsilon $. The conditional distributions $ \mathcal{Q} $ are said to be parametrized by $ \theta $ and $ \eta $ \cite{bickel1993efficient}
-\end{example}
 \begin{definition}[Estimator of $ \theta_0 $]
     An estimator for $ \theta_0 \in \Theta $ is a measurable map $ \hat{\theta} : \mathcal{X}^{n} \to \Theta  $.
 \end{definition}
@@ -99,7 +137,7 @@ Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $.
 \begin{definition}[True risk of $ \cl $'th estimator averaged over splits]
     Given the data $ X \in \mathcal{X}^{n} $ and a set of estimators $ \{ \hat{\theta}_{\cl} \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The risks of these estimator averaged over the splits specified by some $ S $ is given as a function of $ \cl $ 
     \begin{align*}
-        \cl \mapsto E_S \int L(x, \hat{\theta}_{\cl}(P_{n,S}^{0}) ) \mathrm{d}P(x) = E_S R( \hat{\theta}_\cl(P_{n,S}^{0})) 
+        \cl \mapsto E_S \int L(x, \hat{\theta}_{\cl}(P_{n,S}^{0}) ) dP(x) = E_S R( \hat{\theta}_\cl(P_{n,S}^{0})) 
     \end{align*}
     Where $ P $ is the true distribution for our data $ X $.
 \end{definition}
@@ -116,7 +154,7 @@ In light of the above definitions, we will define the cross-validation risk and 
 \begin{definition}[Cross-validation risk of $ i $'th estimator averaged over splits]
     Given the data $ X \in \mathcal{X}^{n} $ and a set of estimators $ \{ \hat{\theta}_{\cl} \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The cross-validation risks of these estimator averaged over the splits specified by some $ S $ is given as a function of $ \cl $ 
     \begin{align*}
-        \cl \mapsto E_S \int L(x, \hat{\theta}_{\cl}(P_{n,S}^{0}) ) \mathrm{d}P_{n, s}^{1}(x) = E_S \hat{R}( \hat{\theta}_\cl(P_{n,S}^{0})) 
+        \cl \mapsto E_S \int L(x, \hat{\theta}_{\cl}(P_{n,S}^{0}) ) dP_{n, s}^{1}(x) = E_S \hat{R}( \hat{\theta}_\cl(P_{n,S}^{0})) 
     \end{align*}
     Where $ P_{n,S}^{1} $ is the empircal distribution over the validation set for our data $ X $. We write $ \hat{R} $ for empirical risk over the validation set. 
 \end{definition}
@@ -130,13 +168,13 @@ In light of the above definitions, we will define the cross-validation risk and 
 \end{definition}
 We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \theta_0 $ 
 \begin{align*}
-    R(\theta_0) = \int L(x, \theta_0)  \mathrm{d}P(x),
+    R(\theta_0) = \int L(x, \theta_0)  dP(x),
 \end{align*}
 and clearly it is the case that $ R(\theta_0) \leq R( \hat{\theta}  ) $ for any estimator $ \hat{\theta} $ of $ \theta_0 $.
 Given a set of estimators we define the centered conditional risk as the difference 
 \begin{align*}
     \Delta_{S}( \hat{\theta}_{ \hat{\cl} }, \theta_0 ) &= R( \hat{\theta} _{ \hat{\cl} }(P_{n, S}^{0})) -R(\theta_0) \\
-                                                       &= E_{S} \int L(x, \hat{\theta}_{ \hat{\cl} }(P_{n, S}^{0})) - L(x, \theta_0) \mathrm{d}P(x) 
+                                                       &= E_{S} \int L(x, \hat{\theta}_{ \hat{\cl} }(P_{n, S}^{0})) - L(x, \theta_0) dP(x) 
 \end{align*}
 
 The following result is due to \cite{laan03}: 
