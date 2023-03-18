@@ -2,7 +2,7 @@
 \usepackage[margin=3cm]{geometry} 
 \usepackage[english, science, hyperref]{ku-frontpage}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsmath,amssymb,amsthm,bm}
 \usepackage{mdframed}
 \usepackage{mathtools}
 \usepackage[
@@ -43,7 +43,11 @@
 \setlength\arraycolsep{2 pt}
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{2}
+
 \newcommand{\cl}{q}
+\newcommand{\btheta}{\bm{\theta}}
+\newcommand{\empmod}{\mathcal{P}_{\text{emp}}}
+\DeclareMathOperator{\expit}{expit}
 
 \assignment{A Bachelor of Science thesis}
 \author{Jinyang Liu}
@@ -66,68 +70,70 @@
 
 \section{Introduction}
 Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. 
-Let $ O_1, ..., O_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ O_{i} \in \mathcal{O} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{O} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
+Let $ O_1, \ldots, O_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ O_{i} \in \mathcal{O} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{O} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
 \begin{align*}
     R(\theta) = \int L(x, \theta)  dP(x) = EL(O_1) 
 \end{align*}
 The parameter set $ \Theta $ can be Euclidean, but for the focus of this thesis we will consider it as a collection of functions of the form $ \theta : \mathcal{O} \to \mathbb{R} $. 
 
 \begin{example}[Regression functions $ \Theta $] \label{ex:regfunc}
-    Let $ O_1 = (Y_1 , X_1) ,..., O_n = (Y_n , X_n) \in  \mathcal{O} = \mathbb{R} \times \mathcal{X} $ be i.i.d. observations such that satisfy the model 
+    Let $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) \in  \mathcal{O} = \mathbb{R} \times \mathcal{X} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $ such that they satisfy the model 
     \begin{align*}
         Y_1 = \theta_0(X_1) + \varepsilon,
     \end{align*}
-    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate the \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X} \to \mathbb{R}\}$, is the set of regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
+    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
 \end{example}
 \begin{example}[Parameteric family] \label{ex:parametricfam}
-    Consider the initial setup from example \ref{ex:regfunc}. If $ Y_i $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X_i $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions given that $ \Theta $ is finite-dimensional.
+    Consider the initial setup from example \ref{ex:regfunc}. If $ Y_i $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X_i $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\theta} \mid \theta \in \Theta\} $, given that $ \Theta $ is finite-dimensional.
 
-    First parametrize the conditional distributions of $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\theta(x), \eta} \mid \theta \in \Theta , \eta \in \mathbb{R}^{m} \} $ such that $ Q_{\theta(x), \eta} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ (\theta,\eta) \in \Theta \times \mathbb{R}^{m} $. The parameter $ \theta $ will be a parameter of interest, and $ \eta $ is some nuisance parameter. We have that 
+    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\theta(x)} \mid \theta \in \Theta \} $ such that $ Q_{\theta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \theta \in \Theta $. For a given $ P_{\theta} \in \mathcal{P} $ there will exist a $ Q_{\theta} \in \mathcal{Q} $ such that  
     \begin{align*}
-        P(Y \in A \mid X = x) = Q_{ \theta(x), \eta}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
+        P_{\theta}(Y \in A \mid X = x) = Q_{ \theta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
     \end{align*}
-    Now assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then it is possible to identify a joint distribution $ P_{\theta , \eta} $ over our observations for each $ (\theta , \eta) \in \Theta \times \mathbb{R}^{m} $ such that 
+    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\theta} $ over our observations (the joint over $ Y $ and $ X $) will be
     \begin{align*}
         P_{\theta , \eta }(X \in A, Y \in B ) = \int_{A} Q_{\theta(x), \eta}(B) d H_{0}(x) 
     \end{align*}
-    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. Our parametric model is therefore $ \mathcal{P} = \{P_{\theta , \eta} \mid \theta \in \Theta , \eta \in \mathbb{R}^{m}\} $. \cite{bickel1993efficient}
+    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
 \end{example}
-\begin{example}[Logistic regression model]
-    Let $ O_1 = (Y_1 , X_n) , ..., O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \theta \in \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1]\} $
+\begin{example}[Logistic regression model] \label{logregmod}
+    Let $ O_1 = (Y_1 , X_n) , \ldots, O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations from some distribution $ P_{\theta_0} \in \mathcal{P} $, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \theta_{0} \in \Theta $
 \begin{align*}
-    \theta(x) = E(Y_1 \mid X_1 = x) = P(Y_1 = 1 \mid X_1 = x),
+    \theta_0(x) = E(Y_1 \mid X_1 = x) = P_{\theta_0}(Y_1 = 1 \mid X_1 = x),
 \end{align*}
-In logistic regression we assume that $ \theta(x) = P(Y_1 = 1 \mid X_1 = x) = \operatorname{expit}(\beta x)  $  for some $ \beta \in \mathbb{R}^{k} $, and then the goal becomes to estimate the $ k $-dimensional parameter $ \beta $, in this case the $ \mathbb{R}^{k} $ parameter $ \beta  $ completely determines $ \theta $, so $ \Theta $ is also $ k $-dimensional. 
+In logistic regression we assume that $ \Theta = \{x \mapsto \expit(\beta x) \mid \beta \in \mathbb{R}^{k}\} $, so $ \theta_0(x) = \expit(\beta_0 x) $, then the goal becomes to estimate the $ k $-dimensional parameter $ \beta_0 $, in this case the $ \mathbb{R}^{k} $ parameter $ \beta_0  $ completely determines $ \theta_0 $, so $ \Theta $ is also $ k $-dimensional. % I am not sure if the last is true
 
-The conditional distributions of $ Y_1 $ given $ X_1 = x $ are Bernoulli distributions and can be parametrized as $ \mathcal{Q} = \{\operatorname{Ber}(\operatorname{expit}(\beta x )) \mid \beta \in \mathbb{R}^{k}  \}  $. Now from example \ref{ex:parametricfam} we know that the statistical model of our observations be parametrized through $ \beta $, in particular we have 
+The conditional distributions of $ Y_1 $ given $ X_1 = x $ are Bernoulli distributions and can be parametrized as $ \mathcal{Q} = \{\operatorname{Ber}(\expit(\beta x )) \mid \beta \in \mathbb{R}^{k}  \}  $. Now from example \ref{ex:parametricfam} we know that the statistical model, $ \mathcal{P} $, can be parametrized through $ \beta $, in particular we have 
 \begin{align*}
     P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} Q_{\theta(x)}(\{1\}) dH_{0}(x)\\
- &= \int_{A} \operatorname{expit}(\beta x )  d H_0(x) 
+ &= \int_{A} \expit(\beta x )  d H_0(x) 
 \end{align*}
 If $ H_{0} $ has density $ f $ w.r.t. Lebesgue measure, we can write
 \begin{align*}
-    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \operatorname{expit}(\beta x ) f(x)  d m(x) 
+    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \expit(\beta x ) f(x)  d m(x) 
 \end{align*}
-
 \end{example}
+We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\theta} \in \Theta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \Theta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \Theta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \Theta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \Theta $. 
 
-\begin{definition}[Estimator of $ \theta_0 $]
-    An estimator for $ \theta_0 \in \Theta $ is a measurable map $ \hat{\theta} : \mathcal{X}^{n} \to \Theta  $.
+In the following section we introduce the terminology ``estimator algorithm'' which corresponds to the measurable map $ h $ from our finite sample observation space to our parameter space. 
+\begin{definition}[Estimator algorithm $ \btheta $]
+    An estimator algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
-
-\begin{definition}[Prediction model]
-    %In the context where the estimator is fitted from our observations, we write $ \hat{\theta}(P_n) : \mathcal{X}^{n} \to \Theta $ to denote the estimator fitted on the empirical distribution, $ P_n $, of our observations. This estimator is sometimes known as the \textbf{plug-in} estimator for $ \theta $.  
+\begin{definition}[Statistical Estimator $ \hat{\theta} $]
+    Let $ O_1, \ldots, O_n \in \mathcal{O} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $ for a statistical model $ \mathcal{P} $ on $ \mathcal{O} $. Let $ \btheta : \mathcal{O}^{n} \to \Theta $ be an estimator algorithm. An estimator is the random variable $ \hat{\theta} = \btheta(O_1 ,\ldots , O_n) \in \Theta $. 
 \end{definition}
+There is a one-to-one correspondence between the tuples of i.i.d. observations $ (O_1 , \ldots, O_n) \in \mathcal{O}^{n} $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as  
+\begin{align*}
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} 1_{A}(O_i)\qquad \text{ for } A \in \mathcal{A}.
+\end{align*}
+Note that the empirical measure is a random variable. Thus, we can write $ \btheta(P_n)$ as an alternative representation of the estimator $\btheta(O_1, \ldots, O_n)$, by adjusting the notation without introducing ambiguity. 
 
-% I would like to formulate this better 
-%\begin{example}[The true estimator $ \theta_0 $]
-%    If we have knowledge of the true distribution $ P $ of our observations, then we can define the true estimator $ \theta_0(P) : \mathcal{X}^{n} \to \Theta $ simply as the constant function which that outputs the true value $ \theta_0 $ for any input in $ \mathcal{X}^{n} $.
-%\end{example}
-%
+\begin{example}[Prediction algorithm] 
+    Consider the setup from example \ref{logregmod}, where we have i.i.d. observations $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) $ such that $ Y_i \in \{0,1\} $ and $ \mathcal{X}\in \mathbb{R}^{k} $ and our goal is to estimate the probability $ \theta(x) = P_{\theta}(Y_1 = 1 \mid X_1 = x ) $...
+\end{example}
+We would now like to consider the scenario where we have a library (set) of estimator algorithms, $ \btheta_1 , \ldots, \btheta_n $. From these algorithms, we can define the set of estimators $ \{ \hat{\theta} _{\cl} = \btheta_{\cl}(P_n) | 1 \leq \cl \leq p \} $, where our goal is to find $ \hat{\theta}_{ \hat{\cl} }(P_n) $, which denotes the estimator that minimizes $ R $ and $ \hat{\cl}  $ may depend on the observations. 
 
-We would like to consider a set estimators $ \{ \hat{\theta}_{\cl}(P_n) | 1 \leq \cl \leq p \} $, where we find $ \hat{\theta}_{ \hat{\cl} }(P_n) $, which denotes the estimator that minimizes $ R $ and $ \hat{\cl}  $ may depend on the observations. 
-
-In order to find $ \hat{\cl}  $ we have to proceed via cross validation. In cross validation, we randomly split our data into a training set and a test set. Let $ S = (S_1,...,S_n) \in \{0,1\}^{n} $ independent of $ X_1,..., X_n $ such that $ S_i = 0 $ indicates that $ X_i $ should be in the training set and $ S_i = 1 $ indicates that $ X_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
+In order to find $ \hat{\cl}  $ we have to proceed via cross validation. In cross validation, we randomly split our data into a training set and a test set. Let $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ independent of $ X_1,\ldots, X_n $ such that $ S_i = 0 $ indicates that $ X_i $ should be in the training set and $ S_i = 1 $ indicates that $ X_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
 \begin{align*}
     P_{n,S}^{0} &= \frac{1}{n_0} \sum_{i: S_i = 0} \delta_{X_i} \\
     P_{n,S}^{1} &= \frac{1}{1-n_0} \sum_{i: S_i = 1} \delta_{X_i} 
@@ -143,7 +149,7 @@ Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $.
 \end{definition}
 
 \begin{definition}[Oracle selector]
-    The oracle selector is a function $ \tilde{\cl}: \mathcal{X}^{n} \to \{1,...,p\} $  which finds the estimator that minimizes the true risk given our data $ X \in \mathcal{X}^{n}$. 
+    The oracle selector is a function $ \tilde{\cl}: \mathcal{X}^{n} \to \{1,\ldots,p\} $  which finds the estimator that minimizes the true risk given our data $ X \in \mathcal{X}^{n}$. 
     \begin{align*}
         \tilde{\cl}(X) = \argmin_{1 \leq \cl \leq p} E_S R( \hat{\theta} _\cl (P_{n,S}^0 )) 
     \end{align*}
@@ -160,7 +166,7 @@ In light of the above definitions, we will define the cross-validation risk and 
 \end{definition}
 
 \begin{definition}[Cross-validation selector]
-    The cross-validation selector is a function $ \hat{\cl}: \mathcal{X}^{n} \to \{1,...,p\} $  which finds the estimator that minimizes the cross-validation risk given our data $ X \in \mathcal{X}^{n} $. 
+    The cross-validation selector is a function $ \hat{\cl}: \mathcal{X}^{n} \to \{1,\ldots,p\} $  which finds the estimator that minimizes the cross-validation risk given our data $ X \in \mathcal{X}^{n} $. 
     \begin{align*}
         \hat{\cl}(X) = \argmin_{1 \leq \cl \leq p} E_S \hat{R} ( \hat{\theta} _\cl (P_{n,S}^0 )) 
     \end{align*}
