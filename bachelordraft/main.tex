@@ -45,7 +45,7 @@
 \setcounter{secnumdepth}{2}
 
 \newcommand{\cl}{q}
-\newcommand{\btheta}{\bm{\theta}}
+\newcommand{\btheta}{h}
 \newcommand{\empmod}{\mathcal{P}_{\text{emp}}}
 \DeclareMathOperator{\expit}{expit}
 
@@ -92,7 +92,7 @@ The parameter set $ \Theta $ can be Euclidean, but for the focus of this thesis 
     \end{align*}
     If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\theta} $ over our observations (the joint over $ Y $ and $ X $) will be
     \begin{align*}
-        P_{\theta , \eta }(X \in A, Y \in B ) = \int_{A} Q_{\theta(x), \eta}(B) d H_{0}(x) 
+        P_{\theta }(X \in A, Y \in B ) = \int_{A} Q_{\theta(x)}(B) d H_{0}(x) 
     \end{align*}
     for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
 \end{example}
@@ -124,70 +124,91 @@ In the following section we introduce the terminology ``estimator algorithm'' wh
 \end{definition}
 There is a one-to-one correspondence between the tuples of i.i.d. observations $ (O_1 , \ldots, O_n) \in \mathcal{O}^{n} $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as  
 \begin{align*}
-    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} 1_{A}(O_i)\qquad \text{ for } A \in \mathcal{A}.
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
 \end{align*}
 Note that the empirical measure is a random variable. Thus, we can write $ \btheta(P_n)$ as an alternative representation of the estimator $\btheta(O_1, \ldots, O_n)$, by adjusting the notation without introducing ambiguity. 
 
 \begin{example}[Prediction algorithm] 
     Consider the setup from example \ref{logregmod}, where we have i.i.d. observations $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) $ such that $ Y_i \in \{0,1\} $ and $ \mathcal{X}\in \mathbb{R}^{k} $ and our goal is to estimate the probability $ \theta(x) = P_{\theta}(Y_1 = 1 \mid X_1 = x ) $...
 \end{example}
-We would now like to consider the scenario where we have a library (set) of estimator algorithms, $ \btheta_1 , \ldots, \btheta_n $. From these algorithms, we can define the set of estimators $ \{ \hat{\theta} _{\cl} = \btheta_{\cl}(P_n) | 1 \leq \cl \leq p \} $, where our goal is to find $ \hat{\theta}_{ \hat{\cl} }(P_n) $, which denotes the estimator that minimizes $ R $ and $ \hat{\cl}  $ may depend on the observations. 
+We would now like to consider the scenario where we have a library (set) of learner algorithms, $ \btheta_1 , \ldots, \btheta_n $. From these algorithms, we can define the set of learners $ \{ \hat{\theta} _{\cl} = \btheta_{\cl}(P_n) | 1 \leq \cl \leq p \} $, where our goal is to find $ \hat{\theta}_{ \hat{\cl} }(P_n) $, which denotes the learner that minimizes $ R $ and $ \hat{\cl}  $ may depend on the observations. 
 
-In order to find $ \hat{\cl}  $ we have to proceed via cross validation. In cross validation, we randomly split our data into a training set and a test set. Let $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ independent of $ X_1,\ldots, X_n $ such that $ S_i = 0 $ indicates that $ X_i $ should be in the training set and $ S_i = 1 $ indicates that $ X_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
+In order to find $ \hat{\cl}  $ we have to proceed via cross validation. In cross validation, we randomly split our data into a training set and a test set. Let the random binary vector $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ be independent of $ X_1,\ldots, X_n $ such that $ S_i = 0 $ indicates that $ X_i $ should be in the training set and $ S_i = 1 $ indicates that $ X_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
 \begin{align*}
     P_{n,S}^{0} &= \frac{1}{n_0} \sum_{i: S_i = 0} \delta_{X_i} \\
     P_{n,S}^{1} &= \frac{1}{1-n_0} \sum_{i: S_i = 1} \delta_{X_i} 
 \end{align*}
 Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $. 
 
-\begin{definition}[True risk of $ \cl $'th estimator averaged over splits]
-    Given the data $ X \in \mathcal{X}^{n} $ and a set of estimators $ \{ \hat{\theta}_{\cl} \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The risks of these estimator averaged over the splits specified by some $ S $ is given as a function of $ \cl $ 
+\begin{example}[Random splits]
+    For $ n = 9 $ observations one could for example define the distribution of the random vector $ S $ as 
+   \begin{align*}
+       P(S = (0, 0, 0, 0, 0, 0, 1, 1, 1)) &= \frac{1}{3} \\
+       P(S = (0, 0, 0, 1, 1, 1, 0, 0, 0)) &= \frac{1}{3} \\
+       P(S = (1, 1, 1, 0, 0, 0, 0, 0, 0)) &= \frac{1}{3},
+   \end{align*}
+    i.e. 3-fold cross-validation.
+
+    In general for $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the validation set. It might not be desirable to define the discrete probabilities for $ S $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/validation data, since that would also include the combination where $ n_1 = 0 $. To ensure that we always have $ n_1 > 0 $, then let $ n_1 $ be given, then we see that there are $ \begin{pmatrix}
+        n \\ n_1
+    \end{pmatrix}$ ways of choosing both the validation and training set. We can therefore define the distribution of $ S $ as 
     \begin{align*}
-        \cl \mapsto E_S \int L(x, \hat{\theta}_{\cl}(P_{n,S}^{0}) ) dP(x) = E_S R( \hat{\theta}_\cl(P_{n,S}^{0})) 
+        P \left(S = s \right) = \begin{pmatrix}
+            n \\ n_1
+    \end{pmatrix}^{-1} \qquad \text{for each } s \in \{0,1\}^{n} \text{ where } \sum_{i} s_i = n_1
+    \end{align*}
+
+\end{example}
+
+
+\begin{definition}[True risk of $ \cl $'th learner averaged over splits]
+    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{0}) \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $ applied to our training data $ P_{n, S}^{0} $. The risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
+    \begin{align*}
+        \cl \mapsto E_S \int L(x, \theta_{\cl}(P_{n,S}^{0}) ) dP(x) = E_S R( \theta_\cl(P_{n,S}^{0})) 
     \end{align*}
     Where $ P $ is the true distribution for our data $ X $.
 \end{definition}
 
 \begin{definition}[Oracle selector]
-    The oracle selector is a function $ \tilde{\cl}: \mathcal{X}^{n} \to \{1,\ldots,p\} $  which finds the estimator that minimizes the true risk given our data $ X \in \mathcal{X}^{n}$. 
+    The oracle selector is a function $ \tilde{\cl}: \mathcal{O}^{n} \to \{1,\ldots,p\} $  which finds the learner that minimizes the true risk given our data $ O_1 , \ldots , O_n \in O$. 
     \begin{align*}
-        \tilde{\cl}(X) = \argmin_{1 \leq \cl \leq p} E_S R( \hat{\theta} _\cl (P_{n,S}^0 )) 
+        \tilde{\cl}(O_1 , \ldots, O_n) = \argmin_{1 \leq \cl \leq p} E_S R( \theta _\cl (P_{n,S}^0 )) 
     \end{align*}
-    Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $ X $ as specified by some split-variable $ S $. 
+    Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $O_1 , \ldots, O_n $ as specified by some split-variable $ S $. 
 \end{definition}
-In light of the above definitions, we will define the cross-validation risk and the cross-validation selector for our estimators
+In similar manner to the above the defintions, we can define the cross-validation risk and the cross-validation selector for our learners 
 
-\begin{definition}[Cross-validation risk of $ i $'th estimator averaged over splits]
-    Given the data $ X \in \mathcal{X}^{n} $ and a set of estimators $ \{ \hat{\theta}_{\cl} \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The cross-validation risks of these estimator averaged over the splits specified by some $ S $ is given as a function of $ \cl $ 
+\begin{definition}[Cross-validation risk of $ i $'th learner averaged over splits]
+    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{n}) \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The cross-validation risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
     \begin{align*}
-        \cl \mapsto E_S \int L(x, \hat{\theta}_{\cl}(P_{n,S}^{0}) ) dP_{n, s}^{1}(x) = E_S \hat{R}( \hat{\theta}_\cl(P_{n,S}^{0})) 
+        \cl \mapsto E_S \int L(x, \theta_{\cl}(P_{n,S}^{0}) ) dP_{n, s}^{1}(x) = E_S \hat{R}( \theta_\cl(P_{n,S}^{0})) 
     \end{align*}
-    Where $ P_{n,S}^{1} $ is the empircal distribution over the validation set for our data $ X $. We write $ \hat{R} $ for empirical risk over the validation set. 
+    Where $ P_{n,S}^{1} $ is the empircal distribution over the validation of $ O_1 , \dots, O_n $. We write $ \hat{R} $ for the empirical risk over the validation set. 
 \end{definition}
 
 \begin{definition}[Cross-validation selector]
-    The cross-validation selector is a function $ \hat{\cl}: \mathcal{X}^{n} \to \{1,\ldots,p\} $  which finds the estimator that minimizes the cross-validation risk given our data $ X \in \mathcal{X}^{n} $. 
+    The cross-validation selector is a function $ \hat{\cl}: \mathcal{O}^{n} \to \{1,\ldots,p\} $  which finds the learner that minimizes the cross-validation risk given our data $ O_1 , \dots , O_n \in \mathcal{O} $. 
     \begin{align*}
-        \hat{\cl}(X) = \argmin_{1 \leq \cl \leq p} E_S \hat{R} ( \hat{\theta} _\cl (P_{n,S}^0 )) 
+        \hat{\cl}(O_1 , \dots , O_n) = \argmin_{1 \leq \cl \leq p} E_S \hat{R} ( \theta _\cl (P_{n,S}^0 )) 
     \end{align*}
-    Where $ \hat{R}  $ is the empirical risk over the validation set and $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $ X $ as specified by some split-variable $ S $. 
+    Where $ \hat{R}  $ is the empirical risk over the validation set and $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $ O_1 , \dots , O_n  $ as specified by some split-variable $ S $. 
 \end{definition}
 We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \theta_0 $ 
 \begin{align*}
     R(\theta_0) = \int L(x, \theta_0)  dP(x),
 \end{align*}
-and clearly it is the case that $ R(\theta_0) \leq R( \hat{\theta}  ) $ for any estimator $ \hat{\theta} $ of $ \theta_0 $.
-Given a set of estimators we define the centered conditional risk as the difference 
+and clearly it is the case that $ R(\theta_0) \leq R( \theta  ) $ for any learner $ \theta $ of $ \theta_0 $.
+Given a set of learners we define the centered conditional risk as the difference 
 \begin{align*}
-    \Delta_{S}( \hat{\theta}_{ \hat{\cl} }, \theta_0 ) &= R( \hat{\theta} _{ \hat{\cl} }(P_{n, S}^{0})) -R(\theta_0) \\
-                                                       &= E_{S} \int L(x, \hat{\theta}_{ \hat{\cl} }(P_{n, S}^{0})) - L(x, \theta_0) dP(x) 
+    \Delta_{S}( \theta_{ \hat{\cl} }, \theta_0 ) &= R( \theta _{ \hat{\cl} }(P_{n, S}^{0})) -R(\theta_0) \\
+                                                       &= E_{S} \int L(x, \theta_{ \hat{\cl} }(P_{n, S}^{0})) - L(x, \theta_0) dP(x) 
 \end{align*}
 
 The following result is due to \cite{laan03}: 
 \begin{theorem}[Asymptotic equality]
     The cross validation selector $ \hat{\cl} $ performs asymptotically as well as the oracle selector $ \tilde{\cl} $ in the sense that 
     \begin{align*}
-        \frac{\Delta_{S}( \hat{\theta}_{ \hat{\cl} } , \theta_0 )}{ \Delta_{S}( \hat{\theta}_{ \tilde{\cl} } , \theta_0) } \to 1 \qquad \text{ in probability for } n \to \infty
+        \frac{\Delta_{S}( \theta_{ \hat{\cl} } , \theta_0 )}{ \Delta_{S}( \theta_{ \tilde{\cl} } , \theta_0) } \to 1 \qquad \text{ in probability for } n \to \infty
     \end{align*}
 \end{theorem}
 
