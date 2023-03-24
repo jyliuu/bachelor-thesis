@@ -115,6 +115,9 @@ If $ H_{0} $ has density $ f $ w.r.t. Lebesgue measure, we can write
 \end{example}
 We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\theta} \in \Theta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \Theta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \Theta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \Theta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \Theta $. 
 
+
+\section{The discrete super learner, dSL}
+
 In the following section we introduce the terminology ``estimator algorithm'' which corresponds to the measurable map $ h $ from our finite sample observation space to our parameter space. 
 \begin{definition}[Estimator algorithm $ \btheta $]
     An estimator algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
@@ -160,11 +163,12 @@ Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $.
 
 \end{example}
 
+\subsection{Risks and selectors}
 
 \begin{definition}[True risk of $ \cl $'th learner averaged over splits]
     Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{0}) \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $ applied to our training data $ P_{n, S}^{0} $. The risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
     \begin{align*}
-        \cl \mapsto E_S \int L(x, \theta_{\cl}(P_{n,S}^{0}) ) dP(x) = E_S R( \theta_\cl(P_{n,S}^{0})) 
+        \cl \mapsto E_S \int L(o, \theta_{\cl}(P_{n,S}^{0}) ) dP(o) = E_S R( \theta_\cl(P_{n,S}^{0})) 
     \end{align*}
     Where $ P $ is the true distribution for our data $ X $.
 \end{definition}
@@ -181,7 +185,7 @@ In similar manner to the above the defintions, we can define the cross-validatio
 \begin{definition}[Cross-validation risk of $ i $'th learner averaged over splits]
     Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{n}) \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The cross-validation risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
     \begin{align*}
-        \cl \mapsto E_S \int L(x, \theta_{\cl}(P_{n,S}^{0}) ) dP_{n, s}^{1}(x) = E_S \hat{R}( \theta_\cl(P_{n,S}^{0})) 
+        \cl \mapsto E_S \int L(o, \theta_{\cl}(P_{n,S}^{0}) ) dP_{n, S}^{1}(o) = E_S \hat{R}( \theta_\cl(P_{n,S}^{0})) 
     \end{align*}
     Where $ P_{n,S}^{1} $ is the empircal distribution over the validation of $ O_1 , \dots, O_n $. We write $ \hat{R} $ for the empirical risk over the validation set. 
 \end{definition}
@@ -195,14 +199,30 @@ In similar manner to the above the defintions, we can define the cross-validatio
 \end{definition}
 We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \theta_0 $ 
 \begin{align*}
-    R(\theta_0) = \int L(x, \theta_0)  dP(x),
+    R(\theta_0) = \int L(o, \theta_0)  dP(o),
 \end{align*}
 and clearly it is the case that $ R(\theta_0) \leq R( \theta  ) $ for any learner $ \theta $ of $ \theta_0 $.
 Given a set of learners we define the centered conditional risk as the difference 
 \begin{align*}
     \Delta_{S}( \theta_{ \hat{\cl} }, \theta_0 ) &= R( \theta _{ \hat{\cl} }(P_{n, S}^{0})) -R(\theta_0) \\
-                                                       &= E_{S} \int L(x, \theta_{ \hat{\cl} }(P_{n, S}^{0})) - L(x, \theta_0) dP(x) 
+                                                       &= E_{S} \int L(o, \theta_{ \hat{\cl} }(P_{n, S}^{0})) - L(o, \theta_0) dP(o) 
 \end{align*}
+
+\subsection{Oracle inequalities}
+We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
+
+\begin{lemma}[\cite{vaart06}]
+   fFor $ \delta > 0 $ it holds that
+   \begin{align*}
+       E_{S} \int L(o, \theta_{ \hat{\cl}}(P_{n, S}^{0})) dP(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \theta_{ \tilde{\cl} }(P_{n, S}^{0})) d P(o) \\ 
+                                                                &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq p} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)  \\
+                                                                &-\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq p} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
+   \end{align*}
+\end{lemma}
+\begin{proof}
+    See appendix
+\end{proof}
+
 
 The following result is due to \cite{laan03}: 
 \begin{theorem}[Asymptotic equality]
@@ -212,10 +232,6 @@ The following result is due to \cite{laan03}:
     \end{align*}
 \end{theorem}
 
-
-\section{The discrete super learner, dSL}
-
-\subsection{Finite sample properties}
 
 \section{The ensemble super learner, eSL}
 \section{Simulation results}
