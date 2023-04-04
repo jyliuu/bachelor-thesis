@@ -1,7 +1,8 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
-\contentsline {section}{\numberline {2}The discrete super learner, dSL}{4}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Risks and selectors}{6}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Oracle inequalities}{7}{subsection.2.2}%
-\contentsline {section}{\numberline {3}The ensemble super learner, eSL}{7}{section.3}%
-\contentsline {section}{\numberline {4}Simulation results}{7}{section.4}%
-\contentsline {section}{\numberline {5}Discussion}{7}{section.5}%
+\contentsline {section}{\numberline {2}Background}{3}{section.2}%
+\contentsline {section}{\numberline {3}The discrete super learner, dSL}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Risks and selectors}{7}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Oracle inequalities}{8}{subsection.3.2}%
+\contentsline {section}{\numberline {4}The ensemble super learner, eSL}{9}{section.4}%
+\contentsline {section}{\numberline {5}Simulation results}{9}{section.5}%
+\contentsline {section}{\numberline {6}Discussion}{9}{section.6}%

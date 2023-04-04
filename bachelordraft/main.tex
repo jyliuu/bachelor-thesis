@@ -69,6 +69,18 @@
 
 
 \section{Introduction}
+In the context of prediction, the goal is to estimate the conditional expectation $ E(Y \mid X = x) $ for i.i.d. observation pairs $ (Y_1 , X_1) , \dots , (Y_n , X_n) $. Depending on the data structure, a variety of standard statistical models can be employed. For instance, if Y is binary, a parametric model like logistic regression might be suitable.
+The task of identifying true statistical model $ \mathcal{P} $ for which $ (Y, X) \sim P \in \mathcal{P} $, is challenging, and perhaps infeasible when we only have a limited amount data. It may therefore be motivating ot utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests to estimate the conditional mean. However, the underlying assumptions of tree-ensemble methods regarding the data generating process are not explicit, and they may not have probabilistic interpretations. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accompishes our goal, for example prediction. 
+
+The 'super learner' is the answer to how we can effectively select the 'best' learner (method or algorithm) among the learners that we have in our library of learners. The cross-validation selector, which evaluates learners on their cross-validated (empirical) risk and chooses the one with the lowest risk, is asymptotically equivalent to the oracle selector. The oracle selector finds the learner with the lowest true risk -- the risk obtained by knowing the true distribution. 
+
+The discrete super learner is obtained by applying the cross-validation selector on our data. The asymptotic result shows that the cross-validation selector will select the same learner as the oracle selector when the number of observations goes to $ \infty $. The discrete super learner is not a fixed learner from our library, but rather depends on the available data. It represents the learner chosen by the cross-validation selector, which can vary depending on the amount of data at hand.
+
+We first present the general theory and our goal, which is to estimate the conditional expectation $ E(Y \mid X = x) $ for $ Y, X $ being some outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $.
+
+
+\section{Background}
+
 Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. 
 Let $ O_1, \ldots, O_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ O_{i} \in \mathcal{O} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{O} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
 \begin{align*}
@@ -166,7 +178,7 @@ Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $.
 \subsection{Risks and selectors}
 
 \begin{definition}[True risk of $ \cl $'th learner averaged over splits]
-    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{0}) \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $ applied to our training data $ P_{n, S}^{0} $. The risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
+    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{0}) \mid 1 \leq \cl \leq k \}, k \in \mathbb{N} $ applied to our training data $ P_{n, S}^{0} $. The risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
     \begin{align*}
         \cl \mapsto E_S \int L(o, \theta_{\cl}(P_{n,S}^{0}) ) dP(o) = E_S R( \theta_\cl(P_{n,S}^{0})) 
     \end{align*}
@@ -174,16 +186,16 @@ Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $.
 \end{definition}
 
 \begin{definition}[Oracle selector]
-    The oracle selector is a function $ \tilde{\cl}: \mathcal{O}^{n} \to \{1,\ldots,p\} $  which finds the learner that minimizes the true risk given our data $ O_1 , \ldots , O_n \in O$. 
+    The oracle selector is a function $ \tilde{\cl}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the true risk given our data $ O_1 , \ldots , O_n \in O$. 
     \begin{align*}
-        \tilde{\cl}(O_1 , \ldots, O_n) = \argmin_{1 \leq \cl \leq p} E_S R( \theta _\cl (P_{n,S}^0 )) 
+        \tilde{\cl}(O_1 , \ldots, O_n) = \argmin_{1 \leq \cl \leq k} E_S R( \theta _\cl (P_{n,S}^0 )) 
     \end{align*}
     Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $O_1 , \ldots, O_n $ as specified by some split-variable $ S $. 
 \end{definition}
 In similar manner to the above the defintions, we can define the cross-validation risk and the cross-validation selector for our learners 
 
-\begin{definition}[Cross-validation risk of $ i $'th learner averaged over splits]
-    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{n}) \mid 1 \leq \cl \leq p \}, p \in \mathbb{N} $. The cross-validation risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
+\begin{definition}[Cross-validation risk of $ \cl $'th learner averaged over splits]
+    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \theta_{\cl}(P_{n, S}^{n}) \mid 1 \leq \cl \leq k \}, k \in \mathbb{N} $. The cross-validation risks of these learners averaged over some split-variable $ S $ is given as a function of $ \cl $ 
     \begin{align*}
         \cl \mapsto E_S \int L(o, \theta_{\cl}(P_{n,S}^{0}) ) dP_{n, S}^{1}(o) = E_S \hat{R}( \theta_\cl(P_{n,S}^{0})) 
     \end{align*}
@@ -191,9 +203,9 @@ In similar manner to the above the defintions, we can define the cross-validatio
 \end{definition}
 
 \begin{definition}[Cross-validation selector]
-    The cross-validation selector is a function $ \hat{\cl}: \mathcal{O}^{n} \to \{1,\ldots,p\} $  which finds the learner that minimizes the cross-validation risk given our data $ O_1 , \dots , O_n \in \mathcal{O} $. 
+    The cross-validation selector is a function $ \hat{\cl}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the cross-validation risk given our data $ O_1 , \dots , O_n \in \mathcal{O} $. 
     \begin{align*}
-        \hat{\cl}(O_1 , \dots , O_n) = \argmin_{1 \leq \cl \leq p} E_S \hat{R} ( \theta _\cl (P_{n,S}^0 )) 
+        \hat{\cl}(O_1 , \dots , O_n) = \argmin_{1 \leq \cl \leq k} E_S \hat{R} ( \theta _\cl (P_{n,S}^0 )) 
     \end{align*}
     Where $ \hat{R}  $ is the empirical risk over the validation set and $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $ O_1 , \dots , O_n  $ as specified by some split-variable $ S $. 
 \end{definition}
@@ -211,17 +223,37 @@ Given a set of learners we define the centered conditional risk as the differenc
 \subsection{Oracle inequalities}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
 
-\begin{lemma}[\cite{vaart06}]
-   fFor $ \delta > 0 $ it holds that
+\begin{lemma}[Lemma 2.1 in \cite{vaart06}]
+   For $ \delta > 0 $ it holds that
    \begin{align*}
        E_{S} \int L(o, \theta_{ \hat{\cl}}(P_{n, S}^{0})) dP(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \theta_{ \tilde{\cl} }(P_{n, S}^{0})) d P(o) \\ 
-                                                                &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq p} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)  \\
-                                                                &-\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq p} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
+                                                                &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)  \\
+                                                                &-\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
    \end{align*}
 \end{lemma}
 \begin{proof}
     See appendix
 \end{proof}
+\begin{theorem}[Theorem 2.3 in \cite{vaart06}] \label{finitesample}
+   For $ \theta \in \Theta $ let $ (M(\theta) , v(\theta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \theta) $ and assume that $ R(\theta) = \int L(o, \theta) d P(o) \geq 0 $ for every $ \theta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+   \begin{align*}
+       ER(\theta_{\hat{\cl}}(P_{n, S}^{0})) \leq&(1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\\
+                                              &(1 + \delta) E \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\theta \in \Theta} \left[ \frac{M(\theta)}{n_1^{1-1/p}} +  \left( \frac{v(\theta)}{R(\theta)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
+   \end{align*}
+   where $ k $ is the number of learners in our library $ \{\theta_{q}(P_{n, S}^{0}) \mid 1 \leq p \leq k\} $. 
+\end{theorem}
+
+\begin{example}[Binary regression]
+    Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots , O_n = (Y_n , X_n) $ such that $ Y_i \in \{0, 1\} $ and $ X \in \mathbb{R}^{d} $ distributed according some $ P \in \mathcal{P} $. We would like to estimate the conditional expectation $ \theta_0(x) = E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  Let $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1] \}  $ and choose the quadratic loss function $ L((Y, X), \theta) = (Y - \theta(X))^2 $.
+
+    We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \theta \in \Theta $ and $ O \in \mathcal{O} $, it follows that for every $ \theta \in \Theta $ that $ M(\theta) = 1 $ and $ v(\theta) = 1 $ is a valid Bernstein pair for the function $ o \mapsto L(o, \theta)$. It is clear that $ R(\theta) = \int L(o , \theta) d P(o) \geq 0  $, if we plug these numbers in theorem \ref{finitesample}, then we have 
+    \begin{align*}
+       ER(\theta_{\hat{\cl}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\\
+                                                &(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\theta \in \Theta} \left[ 1+ \frac{1}{R(\theta)} \frac{1 + \delta}{\delta}\right]\right)\\
+                                                &= (1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\\
+&(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\theta \in \Theta} \left[ 1 + \frac{1}{R(\theta)} \frac{1 + \delta}{\delta}\right]\right)
+    \end{align*}
+\end{example}
 
 
 The following result is due to \cite{laan03}: 
