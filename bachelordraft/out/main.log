@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.3)  4 APR 2023 20:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  19 APR 2023 13:52
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -775,12 +775,12 @@ File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 LaTeX Font Warning: Font shape `T1/lmr/sb/n' undefined
 (Font)              using `T1/lmr/b/n' instead on input line 65.
 
-<logos/ku-logo.pdf, id=36, 597.23125pt x 845.1575pt>
+<logos/ku-logo.pdf, id=40, 597.23125pt x 845.1575pt>
 File: logos/ku-logo.pdf Graphic file (type pdf)
 <use logos/ku-logo.pdf>
 Package pdftex.def Info: logos/ku-logo.pdf  used on input line 65.
 (pdftex.def)             Requested size: 597.22978pt x 845.15544pt.
-<logos/science-english.pdf, id=38, 597.23125pt x 845.1575pt>
+<logos/science-english.pdf, id=42, 597.23125pt x 845.1575pt>
 File: logos/science-english.pdf Graphic file (type pdf)
 <use logos/science-english.pdf>
 Package pdftex.def Info: logos/science-english.pdf  used on input line 65.
@@ -827,22 +827,24 @@ Overfull \hbox (4.17334pt too wide) detected at line 242
 []
  []
 
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 246.
-[8] [9] (out/main.aux)
+
+Overfull \hbox (12.97447pt too wide) detected at line 253
+[]
+ []
+
+[8] [9] [10] (out/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: AF2C855716E4F0277BFBE6C37F49EBA2;1158.
+(rerunfilecheck)             Checksum: 5905350DE499CFD9972F8A26788B04B3;1351.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20156 strings out of 476025
- 349626 string characters out of 5796533
- 1873388 words of memory out of 5000000
+ 20154 strings out of 476025
+ 349615 string characters out of 5796532
+ 1872388 words of memory out of 5000000
  40311 multiletter control sequences out of 15000+600000
- 533954 words of font info for 70 fonts, out of 8000000 for 9000
+ 533253 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  90i,15n,90p,905b,1430s stack positions out of 5000i,500n,10000p,200000b,80000s
 
@@ -852,10 +854,10 @@ pdfTeX warning (dest): name{cite.0@laan03} has been referenced but does not exis
 pdfTeX warning (dest): name{cite.0@vaart06} has been referenced but does not exist, replaced by a fixed one
 
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (9 pages, 403124 bytes).
+Output written on out/main.pdf (10 pages, 409811 bytes).
 PDF statistics:
- 238 PDF objects out of 1000 (max. 8388607)
- 177 compressed objects within 2 object streams
+ 246 PDF objects out of 1000 (max. 8388607)
+ 184 compressed objects within 2 object streams
  36 named destinations out of 1000 (max. 500000)
- 87 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 95 words of extra memory for PDF output out of 10000 (max. 10000000)
 

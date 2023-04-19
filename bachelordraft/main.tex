@@ -155,7 +155,7 @@ In order to find $ \hat{\cl}  $ we have to proceed via cross validation. In cros
 \end{align*}
 Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $. 
 
-\begin{example}[Random splits]
+\begin{example}[Random splits] \label{splits}
     For $ n = 9 $ observations one could for example define the distribution of the random vector $ S $ as 
    \begin{align*}
        P(S = (0, 0, 0, 0, 0, 0, 1, 1, 1)) &= \frac{1}{3} \\
@@ -234,35 +234,63 @@ We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable fun
 \begin{proof}
     See appendix
 \end{proof}
-\begin{theorem}[Theorem 2.3 in \cite{vaart06}] \label{finitesample}
+\begin{theorem}[Finite Sample Result: Theorem 2.3 in \cite{vaart06}] \label{finitesample}
    For $ \theta \in \Theta $ let $ (M(\theta) , v(\theta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \theta) $ and assume that $ R(\theta) = \int L(o, \theta) d P(o) \geq 0 $ for every $ \theta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
        ER(\theta_{\hat{\cl}}(P_{n, S}^{0})) \leq&(1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\\
                                               &(1 + \delta) E \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\theta \in \Theta} \left[ \frac{M(\theta)}{n_1^{1-1/p}} +  \left( \frac{v(\theta)}{R(\theta)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
    \end{align*}
-   where $ k $ is the number of learners in our library $ \{\theta_{q}(P_{n, S}^{0}) \mid 1 \leq p \leq k\} $. 
+   where $ k $ is the number of learners in our library $ \{\theta_{\cl}(P_{n, S}^{0}) \mid 1 \leq \cl \leq k\} $. 
 \end{theorem}
 
-\begin{example}[Binary regression]
-    Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots , O_n = (Y_n , X_n) $ such that $ Y_i \in \{0, 1\} $ and $ X \in \mathbb{R}^{d} $ distributed according some $ P \in \mathcal{P} $. We would like to estimate the conditional expectation $ \theta_0(x) = E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  Let $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1] \}  $ and choose the quadratic loss function $ L((Y, X), \theta) = (Y - \theta(X))^2 $.
-
-    We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \theta \in \Theta $ and $ O \in \mathcal{O} $, it follows that for every $ \theta \in \Theta $ that $ M(\theta) = 1 $ and $ v(\theta) = 1 $ is a valid Bernstein pair for the function $ o \mapsto L(o, \theta)$. It is clear that $ R(\theta) = \int L(o , \theta) d P(o) \geq 0  $, if we plug these numbers in theorem \ref{finitesample}, then we have 
-    \begin{align*}
-       ER(\theta_{\hat{\cl}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\\
-                                                &(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\theta \in \Theta} \left[ 1+ \frac{1}{R(\theta)} \frac{1 + \delta}{\delta}\right]\right)\\
-                                                &= (1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\\
-&(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\theta \in \Theta} \left[ 1 + \frac{1}{R(\theta)} \frac{1 + \delta}{\delta}\right]\right)
-    \end{align*}
-\end{example}
+\subsection{Example: Binary Regression}
+Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots , O_n = (Y_n , X_n) $ such that $ Y_i \in \{0, 1\} $ and $ X \in \mathbb{R}^{d} $ distributed according some $ P \in \mathcal{P} $. We would like to estimate the conditional expectation $ \theta_0(x) = E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  Let $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1] \text{ measurable} \}  $ and choose the quadratic loss function $ L((Y, X), \theta) = (Y - \theta(X))^2 $.
 
 
-The following result is due to \cite{laan03}: 
-\begin{theorem}[Asymptotic equality]
-    The cross validation selector $ \hat{\cl} $ performs asymptotically as well as the oracle selector $ \tilde{\cl} $ in the sense that 
-    \begin{align*}
-        \frac{\Delta_{S}( \theta_{ \hat{\cl} } , \theta_0 )}{ \Delta_{S}( \theta_{ \tilde{\cl} } , \theta_0) } \to 1 \qquad \text{ in probability for } n \to \infty
-    \end{align*}
-\end{theorem}
+We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \theta \in \Theta $ and $ O \in \mathcal{O} $. It is stated in \cite[7]{vaart06} that $ M(\theta) = 1 $ and $ v(\theta) = \frac{3}{2} \int L(o, \theta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \theta)$. It is also clear that $ R(\theta) = \int L(o , \theta) d P(o) \geq 0  $ since the loss function is positive. If we plug these numbers in theorem \ref{finitesample}, then by using $ p = 1 $ and 
+\begin{align*}
+   ER(\theta_{\hat{\cl}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\theta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta)} \frac{1 + \delta}{\delta}\right]\right)
+\end{align*}
+In the equation provided, we observe that we can manipulate the following variables: sample size $n$, validation set size $n_1$, parameter $\delta > 0$, and the number of learners $k$. Assuming $k$ remains constant, the validation set size $n_1$ could be either stochastic, depending on the split variable $S$, or fixed as a constant, as illustrated in example \ref{splits}. For instance, we can set $n_1 = n/2$. By establishing a fixed value for $n_1$, we can drop the expectation in the second term. 
+
+The supremum on the left side of the equation might increase significantly because $R(\theta)$ could be very small. However, by carefully selecting the value of $v(\theta)$, we can avoid the fraction from growing too large. Note that for any $ \theta \in \Theta $:
+\begin{align*}
+    \frac{v(\theta)}{R(\theta)} = \frac{3}{2} \frac{\int L(o, \theta)^2 d P(o)}{\int L(o, \theta) dP(o)  } \leq \frac{3}{2} \frac{\int L(o, \theta) \cdot 1 dP(o) }{\int L(o, \theta) dP(o) } = \frac{3}{2},
+\end{align*}
+by using $ 0 \leq L(o, \theta) \leq 1 $ almost surely. Since $ M(\theta) $ is constant for all $ \theta \in \Theta $, it is possible to drop the supremum. Combining all the information above we obtain 
+\begin{align*}
+   ER(\theta_{\hat{\cl}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +(1 + \delta) \frac{16}{n_1} \log (1 +k) \left[ 1 + \frac{3}{2} \frac{1 + \delta}{\delta}\right]\\
+                                        &= (1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 5\delta}{2\delta}(1 + \delta) \frac{16}{n_1} \\
+                                        &= (1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 8\delta + 5 \delta^2}{2\delta}\frac{16}{n_1} \\\
+                                        &= (1 + 2 \delta) ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\log (1 +k) \left( \frac{3}{2\delta} + 4 + \frac{5}{2} \delta \right) \frac{16}{n_1},
+\end{align*}
+We can now adjust for the precision in our bound by choosing $ \delta $ and $ n $. Note that a small delta will mean that the first term $ (1 + 2 \delta) E R(\theta_{ \tilde{q} }(P_{n, S}^{0})) $ will become smaller, but this is at the expense that the remainder term becomes larger due to the $ \frac{1 + \delta}{ \delta} $ fraction at the end. By choosing $ n $ to be large, we can partially compensate for a smaller delta.
+
+Nonetheless, obtaining a useful bound could be challenging unless $n$ is considerably large. In that case, the oracle risk might be extremely close to the true risk. Unless the remainder constitutes only a minuscule portion of the oracle risk, the finite sample result may not be of significant interest.
+
+To illustrate the problem, consider a concrete example where we might model $ ER(\theta_{ \tilde{\cl} }(P_{n, S}^{0})) $ as a simple function, $ f(n) $, that is monotonically decreasing for $ n \to \infty $. For example
+\begin{align*}
+    f(n)= \frac{1}{2\sqrt{n}} \qquad \text{for }  n \in \mathbb{N} 
+\end{align*}
+which steadily decreases to $ 0 $, but is bounded by $ 0.5 $. 
+
+We now have the choice of solving for $ \delta $ given $ n $, or vice-versa. We might for example be interested in our cross-validation risk to be at most $ 2\% $ more than our oracle risk, which amounts to selecting $ \delta = 0.01 $, we will then solve for $ n $ for an acceptable size on the remainder. For some $ \gamma \in (0, 1) $ which represents the tolerable proportion of our oracle risk that our remainder term can at most attain, and $ \delta = 0.01$, we wish to solve  $ n $ in the following 
+\begin{align*}
+    1.02  \gamma \cdot f(n) \geq \log (1 + k) \frac{154.025 \cdot 16 }{n_1} =  \log (1 + k) \frac{154.025 \cdot 16 }{\frac{n}{2}} = \log (1 + k) \frac{4928.8}{n},
+\end{align*}
+which is equivalent to 
+\begin{align*}
+    \frac{\log (1 + k) \cdot 4928.8}{1.02 \gamma } \leq f(n) \cdot n = \frac{n}{2 \sqrt{n}} = \frac{\sqrt{n}}{ 2} .
+\end{align*}
+For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multiplying this number by 3 and then squaring it yields us $n = 2998480118544 $. 
+
+%The following result is due to \cite{laan03}: 
+%\begin{theorem}[Asymptotic equality]
+%    The cross validation selector $ \hat{\cl} $ performs asymptotically as well as the oracle selector $ \tilde{\cl} $ in the sense that 
+%    \begin{align*}
+%        \frac{\Delta_{S}( \theta_{ \hat{\cl} } , \theta_0 )}{ \Delta_{S}( \theta_{ \tilde{\cl} } , \theta_0) } \to 1 \qquad \text{ in probability for } n \to \infty
+%    \end{align*}
+%\end{theorem}
 
 
 \section{The ensemble super learner, eSL}
