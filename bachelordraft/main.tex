@@ -223,17 +223,27 @@ Given a set of learners we define the centered conditional risk as the differenc
 \subsection{Oracle inequalities}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
 
-\begin{lemma}[Lemma 2.1 in \cite{vaart06}]
-   For $ \delta > 0 $ it holds that
+In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
+\begin{lemma}[Lemma 2.1 in \cite{vaart06}] \label{finitesampledecomp}
+    Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P. For $ \delta > 0 $ it holds that
    \begin{align*}
        E_{S} \int L(o, \theta_{ \hat{\cl}}(P_{n, S}^{0})) dP(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \theta_{ \tilde{\cl} }(P_{n, S}^{0})) d P(o) \\ 
                                                                 &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)  \\
-                                                                &-\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
+                                                                &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int-L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
    \end{align*}
 \end{lemma}
 \begin{proof}
     See appendix
 \end{proof}
+
+\begin{lemma}[Lemma 2.2 in \cite{vaart06}] \label{finitesamplebound}
+    Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$. Then, for any Bernstein pairs $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
+    \begin{align*}
+    E \max_{f \in \mathcal{F}}(G_n-\delta \sqrt{n} P) f \leq \frac{8}{n^{1 / p-1 / 2}} \log (1+\# \mathcal{F}) \max _{f \in \mathcal{F}}\left[\frac{M(f)}{n^{1-1 / p}}+\left(\frac{v(f)}{(\delta P f)^{2-p}}\right)^{1 / p}\right].
+    \end{align*}
+    The same upper bound is valid for $ E \max_{f \in \mathcal{F}}(G_n+\delta \sqrt{n} P)(-f) $  
+\end{lemma}
+
 \begin{theorem}[Finite Sample Result: Theorem 2.3 in \cite{vaart06}] \label{finitesample}
    For $ \theta \in \Theta $ let $ (M(\theta) , v(\theta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \theta) $ and assume that $ R(\theta) = \int L(o, \theta) d P(o) \geq 0 $ for every $ \theta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
@@ -242,6 +252,31 @@ We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable fun
    \end{align*}
    where $ k $ is the number of learners in our library $ \{\theta_{\cl}(P_{n, S}^{0}) \mid 1 \leq \cl \leq k\} $. 
 \end{theorem}
+
+\begin{proof}
+    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \theta_{\cl}(P_{n,S}^{0})) \mid 1 \leq \cl \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our libary of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \theta) \mid \theta \in \Theta\} $, and since $ R(\theta) \geq 0 $ for every $ \theta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
+   
+For the second term we have 
+\begin{align*}
+&\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)\\
+&= 
+\frac{1 + \delta}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o),
+\end{align*}
+applying lemma \ref{finitesamplebound} to the expression above yields 
+\begin{align*}
+&\frac{1 + \delta}{\sqrt{n_1} } E_{S} \max_{1 \leq \cl \leq k} \int L(o, \theta_{\cl}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
+&\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{1 \leq \cl \leq k} \left[ \frac{M(\theta_{\cl}(P_{n,S}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\theta_{ \cl}(P_{n,S}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\theta_{\cl}(P_{n,S}^{0}))^{2-p}} \right)^{1/p} \right] \right)\\
+&\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\theta \in \Theta} \left[ \frac{M(\theta)}{n_1^{1-1/p}} + \left( \frac{v(\theta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\theta)^{2-p}} \right)^{1/p} \right] \right)\\
+&= (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\theta \in \Theta} \left[ \frac{M(\theta)}{n_1^{1-1/p}} + \left( \frac{v(\theta)}{R(\theta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]  
+\end{align*}
+Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above. It is now immediate from lemma \ref{finitesampledecomp} that 
+\begin{align*}
+    E_{S} \int L(o, \theta_{ \hat{\cl} }(P_{n, S}^{0})) d P(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \theta_{ \tilde{\cl} }(P_{n, S}^{0})) d P(o) \\
+                                                               &+ 2 \cdot (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\theta \in \Theta} \left[ \frac{M(\theta)}{n_1^{1-1/p}} + \left( \frac{v(\theta)}{R(\theta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right],
+\end{align*}
+which was exactly what we set out to prove. 
+\end{proof}
+
 
 \subsection{Example: Binary Regression}
 Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots , O_n = (Y_n , X_n) $ such that $ Y_i \in \{0, 1\} $ and $ X \in \mathbb{R}^{d} $ distributed according some $ P \in \mathcal{P} $. We would like to estimate the conditional expectation $ \theta_0(x) = E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  Let $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1] \text{ measurable} \}  $ and choose the quadratic loss function $ L((Y, X), \theta) = (Y - \theta(X))^2 $.
@@ -282,7 +317,7 @@ which is equivalent to
 \begin{align*}
     \frac{\log (1 + k) \cdot 4928.8}{1.02 \gamma } \leq f(n) \cdot n = \frac{n}{2 \sqrt{n}} = \frac{\sqrt{n}}{ 2} .
 \end{align*}
-For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multiplying this number by 3 and then squaring it yields us $n = 2998480118544 $. 
+For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multiplying this number by 3 and then squaring it yields us $n = 2998480118544 $, at this point, the oracle risk is $ f(n) \approx 5 \cdot 10^{-26}$. 
 
 %The following result is due to \cite{laan03}: 
 %\begin{theorem}[Asymptotic equality]

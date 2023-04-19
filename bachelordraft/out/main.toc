@@ -3,7 +3,7 @@
 \contentsline {section}{\numberline {3}The discrete super learner, dSL}{5}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Risks and selectors}{7}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Oracle inequalities}{8}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Example: Binary Regression}{8}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.3}Example: Binary Regression}{9}{subsection.3.3}%
 \contentsline {section}{\numberline {4}The ensemble super learner, eSL}{10}{section.4}%
 \contentsline {section}{\numberline {5}Simulation results}{10}{section.5}%
 \contentsline {section}{\numberline {6}Discussion}{10}{section.6}%
