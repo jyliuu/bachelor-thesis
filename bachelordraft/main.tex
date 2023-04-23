@@ -81,22 +81,58 @@ We first present the general theory and our goal, which is to estimate the condi
 
 \section{Background}
 
-Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. 
-Let $ O_1, \ldots, O_n $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ O_{i} \in \mathcal{O} $ for each $ i $ and $ \mathcal{P} $ is our statistical model. For a parameter set $ \Theta $ we define the corresponding loss function $ L : \mathcal{O} \times \Theta \to [0, \infty) $ as a measurable map such that our goal is to find an estimator $ \hat{\theta}  $ that minimizes the true risk function $ R: \Theta \to \mathbb{R} $ given as
+Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. Unless specified otherwise, our setup is as follows:
+Let statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space. 
+%Let $ O_1 = (Y_1 , X_1), \ldots, O_n = (Y_n, X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $.
+We will consider the parameter set $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1]\} $, which represents the set of regression functions that map from our covariates to the probability interval. We will consider the quadratic loss function
+\begin{definition}[Quadratic loss]
+    Let $ \mathcal{O}  $ be our sample space, and $ \Theta $ be the set of regression functions. Then the quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \theta \in \Theta $ is defined as 
 \begin{align*}
-    R(\theta) = \int L(x, \theta)  dP(x) = EL(O_1) 
+    L(o, \theta) = L((y,x), \theta) = (y - \theta(x))^2.
 \end{align*}
-The parameter set $ \Theta $ can be Euclidean, but for the focus of this thesis we will consider it as a collection of functions of the form $ \theta : \mathcal{O} \to \mathbb{R} $. 
+\end{definition}
 
-\begin{example}[Regression functions $ \Theta $] \label{ex:regfunc}
-    Let $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) \in  \mathcal{O} = \mathbb{R} \times \mathcal{X} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $ such that they satisfy the model 
+We aim to find the optimal parameter value $\theta^* \in \Theta$ that minimizes the $L^2$-risk function $R: \Theta \to \mathbb{R}$
+\begin{align*}
+    R(\theta) = \int L(o, \theta)  dP(o) = EL(O_1, \theta),
+\end{align*}
+but this task is challenging as it requires us to know the data-generating process, $ P $, which we do not have accesss to. It can be shown that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
+\begin{theorem}
+    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions of the form $ \theta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \theta) = (y - \theta(x))^2 $, then for the optimimum $ \theta^* $ defined as 
     \begin{align*}
-        Y_1 = \theta_0(X_1) + \varepsilon,
+        \theta^* := \argmin_{\theta \in \Theta} R(\theta)= \argmin_{\theta \in \Theta} \int L(o, \theta)  dP(o),
     \end{align*}
-    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
-\end{example}
-\begin{example}[Parameteric family] \label{ex:parametricfam}
-    Consider the initial setup from example \ref{ex:regfunc}. If $ Y_i $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X_i $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\theta} \mid \theta \in \Theta\} $, given that $ \Theta $ is finite-dimensional.
+    it holds for an observation $ O = (Y, X) \sim P $ that
+    \begin{align*}
+        \theta^{*}(x) = E(Y \mid X = x) 
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    See \cite{gyorfi2002distribution}[ch. 1]
+\end{proof}
+It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  
+In the case where we do not have access to the data-generating process, we would instead want to provide an estimate $ \hat{\theta} $ of $ \theta^*$ as a function of the data that we have observed. Let $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) \in  \mathcal{O} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $. Denote our data as $ D_n = (O_1, \dots , O_n)$. An estimate is the outcome of applying an estimator to the data 
+\begin{align*}
+    D_n \mapsto \hat{\theta}(D_n) \in \Theta,   
+\end{align*}
+The estimate is a regression function, that is 
+\begin{align*}
+    \mathcal{X} \ni x \mapsto \hat{\theta}(D_n)(x) \in [0,1].
+\end{align*}
+In the context of super learners we will refer the estimators as learners, in the sense that they learn from the data, the resulting regression function is then the fit of the learner to the data. We formalize these notions in the subsequent section. 
+
+
+%\begin{example}[Regression functions $ \Theta $] \label{ex:regfunc}
+%    Let $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) \in  \mathcal{O} = \mathbb{R} \times \mathcal{X} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $ such that they satisfy the model 
+%    \begin{align*}
+%        Y_1 = \theta_0(X_1) + \varepsilon,
+%    \end{align*}
+%    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \theta_0 \in \Theta $ where $ \Theta = \{\theta \mid \theta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
+%\end{example}
+\begin{example}[Parameteric statistical model] \label{ex:parametricfam}
+    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
+
+We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\theta} \mid \theta \in \Theta\} $, given that $ \Theta $ is finite-dimensional.
 
     We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\theta(x)} \mid \theta \in \Theta \} $ such that $ Q_{\theta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \theta \in \Theta $. For a given $ P_{\theta} \in \mathcal{P} $ there will exist a $ Q_{\theta} \in \mathcal{Q} $ such that  
     \begin{align*}
@@ -301,23 +337,47 @@ by using $ 0 \leq L(o, \theta) \leq 1 $ almost surely. Since $ M(\theta) $ is co
 \end{align*}
 We can now adjust for the precision in our bound by choosing $ \delta $ and $ n $. Note that a small delta will mean that the first term $ (1 + 2 \delta) E R(\theta_{ \tilde{q} }(P_{n, S}^{0})) $ will become smaller, but this is at the expense that the remainder term becomes larger due to the $ \frac{1 + \delta}{ \delta} $ fraction at the end. By choosing $ n $ to be large, we can partially compensate for a smaller delta.
 
-Nonetheless, obtaining a useful bound could be challenging unless $n$ is considerably large. In that case, the oracle risk might be extremely close to the true risk. Unless the remainder constitutes only a minuscule portion of the oracle risk, the finite sample result may not be of significant interest.
+We might, therefore, for each $ n $, choose the $ \delta_n $ that minimizes the left-hand side for the given $ n $. By substituting $ n_1 = n/2 $ into the the left hand side expression and then expanding it we obtain 
+\begin{align*}
+ ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) + 2 \delta ER(\theta_{ \tilde{\cl}}(P_{n,S}^{0})) +\frac{3}{2\delta}\log (1 +k) \frac{32}{n} + 4\log (1 +k) \frac{32}{n} + \frac{5\delta}{2} \log (1 +k)   \frac{32}{n},
+\end{align*}
+we observe that when $n$ is fixed, two terms remain constant, specifically the first and fourth terms, as they do not depend on $\delta$. The optimal $\delta_n$ can be determined as follows:
+\begin{align*}
+    \delta_n &= \argmin_{\delta} \frac{1}{\delta} \cdot \frac{3 \cdot 32}{2n} \log(1 + k) + \delta \cdot \left(2ER(\theta_{ \tilde{\cl} }(P_{n, S}^{0})) + \frac{5 \cdot 32}{2n} \log(1 + k) \right) \\
+    &= \argmin_{\delta} \frac{1}{\delta} \cdot \frac{48}{n} \log(1 + k) + \delta \cdot \left(2ER(\theta_{ \tilde{\cl} }(P_{n, S}^{0})) + \frac{80}{n} \log(1 + k) \right) \\
+    &= \argmin_{\delta} \frac{1}{\delta} a(n) + \delta b(n),
+\end{align*}
+Essentially, solving for the minimum is a convex optimization problem, with the terms $a(n) = \frac{48}{n} \log(1 + k)$ and $b(n) = 2ER(\theta_{ \tilde{\cl} }(P_{n, S}^{0})) + \frac{80}{n} \log(1 + k)$ remaining constant with respect to $n$. By differentiating the expression above and setting it equal to zero we obtain 
+\begin{align*}
+    0 &= \left( \frac{1}{\delta} a(n) + \delta b(n) \right)' = - \frac{1}{\delta^2} a(n) + b(n),
+\end{align*}
+and so we obtain the optimum by isolating $ \delta $ 
+\begin{align*}
+    \delta_n = \sqrt{\frac{a(n)}{b(n)}},
+\end{align*}
 
-To illustrate the problem, consider a concrete example where we might model $ ER(\theta_{ \tilde{\cl} }(P_{n, S}^{0})) $ as a simple function, $ f(n) $, that is monotonically decreasing for $ n \to \infty $. For example
-\begin{align*}
-    f(n)= \frac{1}{2\sqrt{n}} \qquad \text{for }  n \in \mathbb{N} 
-\end{align*}
-which steadily decreases to $ 0 $, but is bounded by $ 0.5 $. 
 
-We now have the choice of solving for $ \delta $ given $ n $, or vice-versa. We might for example be interested in our cross-validation risk to be at most $ 2\% $ more than our oracle risk, which amounts to selecting $ \delta = 0.01 $, we will then solve for $ n $ for an acceptable size on the remainder. For some $ \gamma \in (0, 1) $ which represents the tolerable proportion of our oracle risk that our remainder term can at most attain, and $ \delta = 0.01$, we wish to solve  $ n $ in the following 
-\begin{align*}
-    1.02  \gamma \cdot f(n) \geq \log (1 + k) \frac{154.025 \cdot 16 }{n_1} =  \log (1 + k) \frac{154.025 \cdot 16 }{\frac{n}{2}} = \log (1 + k) \frac{4928.8}{n},
-\end{align*}
-which is equivalent to 
-\begin{align*}
-    \frac{\log (1 + k) \cdot 4928.8}{1.02 \gamma } \leq f(n) \cdot n = \frac{n}{2 \sqrt{n}} = \frac{\sqrt{n}}{ 2} .
-\end{align*}
-For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multiplying this number by 3 and then squaring it yields us $n = 2998480118544 $, at this point, the oracle risk is $ f(n) \approx 5 \cdot 10^{-26}$. 
+
+
+
+
+%Nonetheless, obtaining a useful bound could be challenging unless $n$ is considerably large. In that case, the oracle risk might be extremely close to the true risk. Unless the remainder constitutes only a minuscule portion of the oracle risk, the finite sample result may not be of significant interest.
+%
+%To illustrate the problem, consider a concrete example where we might model $ ER(\theta_{ \tilde{\cl} }(P_{n, S}^{0})) $ as a simple function, $ f(n) $, that is monotonically decreasing for $ n \to \infty $. For example
+%\begin{align*}
+%    f(n)= \frac{1}{2\sqrt{n}} \qquad \text{for }  n \in \mathbb{N} 
+%\end{align*}
+%which steadily decreases to $ 0 $, but is bounded by $ 0.5 $. 
+%
+%We now have the choice of solving for $ \delta $ given $ n $, or vice-versa. We might for example be interested in our cross-validation risk to be at most $ 2\% $ more than our oracle risk, which amounts to selecting $ \delta = 0.01 $, we will then solve for $ n $ for an acceptable size on the remainder. For some $ \gamma \in (0, 1) $ which represents the tolerable proportion of our oracle risk that our remainder term can at most attain, and $ \delta = 0.01$, we wish to solve  $ n $ in the following 
+%\begin{align*}
+%    1.02  \gamma \cdot f(n) \geq \log (1 + k) \frac{154.025 \cdot 16 }{n_1} =  \log (1 + k) \frac{154.025 \cdot 16 }{\frac{n}{2}} = \log (1 + k) \frac{4928.8}{n},
+%\end{align*}
+%which is equivalent to 
+%\begin{align*}
+%    \frac{\log (1 + k) \cdot 4928.8}{1.02 \gamma } \leq f(n) \cdot n = \frac{n}{2 \sqrt{n}} = \frac{\sqrt{n}}{ 2} .
+%\end{align*}
+%For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multiplying this number by 3 and then squaring it yields us $n = 2998480118544 $, at this point, the oracle risk is $ f(n) \approx 5 \cdot 10^{-26}$. 
 
 %The following result is due to \cite{laan03}: 
 %\begin{theorem}[Asymptotic equality]
@@ -333,6 +393,6 @@ For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multip
 \section{Discussion}
 Pellentesque tincidunt sodales risus, vulputate iaculis odio dictum vitae. Ut ligula tortor, porta a consequat ac, commodo non risus. Nullam sagittis luctus pretium. Integer vel nibh at justo convallis imperdiet sit amet ut lorem. Sed in gravida turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed in massa vitae ligula pellentesque feugiat vitae in risus. Cras iaculis tempus mi, sit amet viverra nulla viverra pellentesque.
 
-
+\printbibliography
 
 \end{document}
