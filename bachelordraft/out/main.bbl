@@ -1,0 +1,143 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global}
+    \entry{gyorfi2002distribution}{book}{}
+      \name{author}{4}{}{%
+        {{hash=061a8bd3ce48199196d6a7141f513d18}{%
+           family={Györfi},
+           familyi={G\bibinitperiod},
+           given={László},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ad0655c93b1e15f5fa920e7ed7172f31}{%
+           family={Köhler},
+           familyi={K\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=eff13ca6cc3b59df347b35b7ccbb2518}{%
+           family={Krzyżak},
+           familyi={K\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1672b836b63ac12b7c35dcdeb30cc577}{%
+           family={Walk},
+           familyi={W\bibinitperiod},
+           given={Harro},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{81cff394754d5e884dc3ca1b810fdb9d}
+      \strng{fullhash}{b8129fee60f6f0f3cb8bacccdd28bec3}
+      \strng{bibnamehash}{81cff394754d5e884dc3ca1b810fdb9d}
+      \strng{authorbibnamehash}{81cff394754d5e884dc3ca1b810fdb9d}
+      \strng{authornamehash}{81cff394754d5e884dc3ca1b810fdb9d}
+      \strng{authorfullhash}{b8129fee60f6f0f3cb8bacccdd28bec3}
+      \field{labelalpha}{Gyö+02}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A distribution-free theory of nonparametric regression}
+      \field{volume}{1}
+      \field{year}{2002}
+    \endentry
+    \entry{laan03}{article}{}
+      \name{author}{2}{}{%
+        {{hash=b8bfac411a7c4927b3369cdd78f928f6}{%
+           family={Laan},
+           familyi={L\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod}}}%
+        {{hash=4f4bdc5ca1ab91ef2d9ae8c6222c8136}{%
+           family={Dudoit},
+           familyi={D\bibinitperiod},
+           given={Sandrine},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{44be659ebd681bdc2ae0a6f1f01a2051}
+      \strng{fullhash}{44be659ebd681bdc2ae0a6f1f01a2051}
+      \strng{bibnamehash}{44be659ebd681bdc2ae0a6f1f01a2051}
+      \strng{authorbibnamehash}{44be659ebd681bdc2ae0a6f1f01a2051}
+      \strng{authornamehash}{44be659ebd681bdc2ae0a6f1f01a2051}
+      \strng{authorfullhash}{44be659ebd681bdc2ae0a6f1f01a2051}
+      \field{labelalpha}{LD03}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{UC Berkeley Division of Biostatistics Working Paper Series}
+      \field{month}{01}
+      \field{title}{Unified Cross-Validation Methodology For Selection Among Estimators and a General Cross-Validated Adaptive Epsilon-Net Estimator: Finite Sample Oracle Inequalities and Examples}
+      \field{year}{2003}
+    \endentry
+    \entry{vaart06}{article}{}
+      \name{author}{3}{}{%
+        {{hash=50ecd82941206d166c646a1aa82a4871}{%
+           family={Vaart},
+           familyi={V\bibinitperiod},
+           given={Aad\bibnamedelima W.},
+           giveni={A\bibinitperiod\bibinitdelim W\bibinitperiod},
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=4f4bdc5ca1ab91ef2d9ae8c6222c8136}{%
+           family={Dudoit},
+           familyi={D\bibinitperiod},
+           given={Sandrine},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d1d9714d48a0b28418307c19bfd94c0e}{%
+           family={Laan},
+           familyi={L\bibinitperiod},
+           given={Mark\bibnamedelima J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+      }
+      \strng{namehash}{e91d5a89cca74db08010015e6628ddb5}
+      \strng{fullhash}{e91d5a89cca74db08010015e6628ddb5}
+      \strng{bibnamehash}{e91d5a89cca74db08010015e6628ddb5}
+      \strng{authorbibnamehash}{e91d5a89cca74db08010015e6628ddb5}
+      \strng{authornamehash}{e91d5a89cca74db08010015e6628ddb5}
+      \strng{authorfullhash}{e91d5a89cca74db08010015e6628ddb5}
+      \field{labelalpha}{VDL06}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{journaltitle}{Statistics \& Decisions}
+      \field{number}{3}
+      \field{volume}{24}
+      \field{year}{2006}
+      \field{pages}{351\bibrangedash 371}
+      \range{pages}{21}
+      \verb{doi}
+      \verb doi:10.1524/stnd.2006.24.3.351
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1524/stnd.2006.24.3.351
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1524/stnd.2006.24.3.351
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
