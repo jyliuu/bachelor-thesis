@@ -45,7 +45,7 @@
 \setcounter{secnumdepth}{2}
 
 \newcommand{\cl}{q}
-\newcommand{\btheta}{h}
+\newcommand{\btheta}{\theta}
 \newcommand{\empmod}{\mathcal{P}_{\text{emp}}}
 \DeclareMathOperator{\expit}{expit}
 
@@ -82,17 +82,16 @@ We first present the general theory and our goal, which is to estimate the condi
 \section{Background}
 
 Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. Unless specified otherwise, our setup is as follows:
-Let statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space. 
+Let statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
 %Let $ O_1 = (Y_1 , X_1), \ldots, O_n = (Y_n, X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $.
-We will consider the parameter set $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1]\} $, which represents the set of regression functions that map from our covariates to the probability interval. We will consider the quadratic loss function
+We will consider the parameter set $ \Theta = \{\theta \mid \theta : \mathcal{X} \to [0,1]\} $, which represents the set of regression functions that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize 
 \begin{definition}[Quadratic loss]
     Let $ \mathcal{O}  $ be our sample space, and $ \Theta $ be the set of regression functions. Then the quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \theta \in \Theta $ is defined as 
 \begin{align*}
     L(o, \theta) = L((y,x), \theta) = (y - \theta(x))^2.
 \end{align*}
 \end{definition}
-
-We aim to find the optimal parameter value $\theta^* \in \Theta$ that minimizes the $L^2$-risk function $R: \Theta \to \mathbb{R}$
+Our natural aim would be to find the optimal parameter value $\theta^* \in \Theta$ that minimizes the $L^2$-risk $R: \Theta \to \mathbb{R}$ given as 
 \begin{align*}
     R(\theta) = \int L(o, \theta)  dP(o) = EL(O_1, \theta),
 \end{align*}
@@ -161,18 +160,23 @@ If $ H_{0} $ has density $ f $ w.r.t. Lebesgue measure, we can write
     P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \expit(\beta x ) f(x)  d m(x) 
 \end{align*}
 \end{example}
-We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\theta} \in \Theta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \Theta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \Theta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \Theta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \Theta $. 
+%We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\theta} \in \Theta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \Theta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \Theta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \Theta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \Theta $. 
 
 
-\section{The discrete super learner, dSL}
+\section{The Discrete Super Learner}
 
-In the following section we introduce the terminology ``estimator algorithm'' which corresponds to the measurable map $ h $ from our finite sample observation space to our parameter space. 
-\begin{definition}[Estimator algorithm $ \btheta $]
-    An estimator algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
+In the following section we introduce the terminology ``learning algorithm'' which corresponds to the map from our data to our parameter space. 
+\begin{definition}[Learning algorithm $ \btheta $]
+    An learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
-\begin{definition}[Statistical Estimator $ \hat{\theta} $]
-    Let $ O_1, \ldots, O_n \in \mathcal{O} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $ for a statistical model $ \mathcal{P} $ on $ \mathcal{O} $. Let $ \btheta : \mathcal{O}^{n} \to \Theta $ be an estimator algorithm. An estimator is the random variable $ \hat{\theta} = \btheta(O_1 ,\ldots , O_n) \in \Theta $. 
-\end{definition}
+We hereby refer to the result of applying the learner algorithm to our data as the fitted learner.
+
+We slightly abuse the notation by denoting the learning algorithm as $ \theta $. Let $ D_n = (O_1 , \dots , O_n) $ be our data, then the fitted learner $\theta(D_n) $ is formally represented as a stochastic variable since $ D_n $ is stochastic, it is formally a map from the background space. 
+
+But by observing A fitted learner The abuse of notation is similar to 
+
+
+
 There is a one-to-one correspondence between the tuples of i.i.d. observations $ (O_1 , \ldots, O_n) \in \mathcal{O}^{n} $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as  
 \begin{align*}
     P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.

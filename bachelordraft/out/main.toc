@@ -1,6 +1,6 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
 \contentsline {section}{\numberline {2}Background}{3}{section.2}%
-\contentsline {section}{\numberline {3}The discrete super learner, dSL}{6}{section.3}%
+\contentsline {section}{\numberline {3}The Discrete Super Learner}{6}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Risks and selectors}{7}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Oracle inequalities}{8}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Example: Binary Regression}{9}{subsection.3.3}%

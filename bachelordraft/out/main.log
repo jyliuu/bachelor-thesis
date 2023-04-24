@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  22 APR 2023 17:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  24 APR 2023 08:54
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -802,57 +802,57 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [2] [3]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 132.
+(mdframed)              on input line 131.
  [4]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 147.
+(mdframed)              on input line 146.
  [5]
-Overfull \hbox (7.31647pt too wide) in paragraph at lines 176--177
+Overfull \hbox (7.31647pt too wide) in paragraph at lines 180--181
 []\OT1/cmr/m/n/10.95 There is a one-to-one cor-re-spon-dence be-tween the tu-ples of i.i.d. ob-ser-va-tions $(\OML/cmm/m/it/10.95 O[]; [] ; O[]\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 2
  []
 
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 182.
+(mdframed)              on input line 186.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 194.
+(mdframed)              on input line 198.
 [6] [7]
-Overfull \hbox (4.17334pt too wide) detected at line 288
+Overfull \hbox (4.17334pt too wide) detected at line 292
 []
  []
 
 [8]
-Overfull \hbox (48.89246pt too wide) detected at line 312
+Overfull \hbox (48.89246pt too wide) detected at line 316
 []
  []
 
 [9]
-Overfull \hbox (12.97447pt too wide) detected at line 324
+Overfull \hbox (12.97447pt too wide) detected at line 328
 []
  []
 
 [10] [11] (out/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 5905350DE499CFD9972F8A26788B04B3;1351.
+(rerunfilecheck)             Checksum: 4EE6565C5B025F3732AE704CD564B56C;1323.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20179 strings out of 476025
- 350158 string characters out of 5796532
+ 20178 strings out of 476025
+ 350148 string characters out of 5796532
  1875388 words of memory out of 5000000
  40329 multiletter control sequences out of 15000+600000
  533722 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,15n,90p,905b,1435s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 90i,15n,90p,888b,1435s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (11 pages, 446443 bytes).
+Output written on out/main.pdf (11 pages, 445209 bytes).
 PDF statistics:
- 276 PDF objects out of 1000 (max. 8388607)
- 208 compressed objects within 3 object streams
- 41 named destinations out of 1000 (max. 500000)
+ 275 PDF objects out of 1000 (max. 8388607)
+ 207 compressed objects within 3 object streams
+ 40 named destinations out of 1000 (max. 500000)
  95 words of extra memory for PDF output out of 10000 (max. 10000000)
 
