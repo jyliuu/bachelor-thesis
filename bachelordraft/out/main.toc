@@ -7,6 +7,6 @@
 \contentsline {subsection}{\numberline {3.4}Risks and selectors}{6}{subsection.3.4}%
 \contentsline {subsection}{\numberline {3.5}Oracle inequalities}{7}{subsection.3.5}%
 \contentsline {subsection}{\numberline {3.6}Example: Binary Regression}{9}{subsection.3.6}%
-\contentsline {section}{\numberline {4}The ensemble super learner, eSL}{10}{section.4}%
+\contentsline {section}{\numberline {4}The Ensemble Super Learner}{10}{section.4}%
 \contentsline {section}{\numberline {5}Simulation results}{10}{section.5}%
 \contentsline {section}{\numberline {6}Discussion}{10}{section.6}%

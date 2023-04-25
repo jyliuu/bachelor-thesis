@@ -71,8 +71,8 @@
 
 
 \section{Introduction}
-In the context of prediction, the goal is to estimate the conditional expectation $ E(Y \mid X = x) $ for i.i.d. observation pairs $ (Y_1 , X_1) , \dots , (Y_n , X_n) $. Depending on the data structure, a variety of standard statistical models can be employed. For instance, if Y is binary, a parametric model like logistic regression might be suitable.
-The task of identifying true statistical model $ \mathcal{P} $ for which $ (Y, X) \sim P \in \mathcal{P} $, is challenging, and perhaps infeasible when we only have a limited amount data. It may therefore be motivating ot utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests to estimate the conditional mean. However, the underlying assumptions of tree-ensemble methods regarding the data generating process are not explicit, and they may not have probabilistic interpretations. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accompishes our goal, for example prediction. 
+In the context of regression, the goal is to estimate the conditional expectation $ E(Y \mid X = x) $ for i.i.d. observations $ (Y_1 , X_1) , \dots , (Y_n , X_n) $. Depending on the data structure, a variety of standard statistical models can be employed. For instance, if Y is binary, a parametric model like logistic regression might be suitable.
+The task of identifying true statistical model $ \mathcal{P} $ for which $ (Y, X) \sim P \in \mathcal{P} $, is challenging, and perhaps infeasible when we only have a limited amount data. It may therefore be motivating to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests to estimate the conditional mean. However, the underlying assumptions of tree-ensemble methods regarding the data generating process are not explicit, and they may not have probabilistic interpretations. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal, for example prediction. 
 
 The 'super learner' is the answer to how we can effectively select the 'best' learner (method or algorithm) among the learners that we have in our library of learners. The cross-validation selector, which evaluates learners on their cross-validated (empirical) risk and chooses the one with the lowest risk, is asymptotically equivalent to the oracle selector. The oracle selector finds the learner with the lowest true risk -- the risk obtained by knowing the true distribution. 
 
@@ -97,9 +97,9 @@ Our natural aim would be to find the optimal parameter value $\btheta^* \in \bth
 \begin{equation} \label{l2risk}
     R(\btheta) := \int L(o, \btheta)  dP(o) = EL(O, \btheta),
 \end{equation}
-but this task is challenging as it requires us to know the data-generating process, $ P $, which we do not have accesss to. It can be shown that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
+but this task is challenging as it requires us to know the data-generating process, $ P $, which we do not have access to. It can be shown that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
 \begin{theorem}
-    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \btheta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimimum $ \btheta^* $ defined as 
+    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \btheta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
         \btheta^* := \argmin_{\btheta \in \btheta} R(\btheta)= \argmin_{\btheta \in \btheta} \int L(o, \btheta)  dP(o),
     \end{align*}
@@ -178,7 +178,7 @@ We use the notation $ \btheta $ for the learning algorithm, which coincides with
 
 However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. It is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \btheta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific omega, and subsequently, we can fit our learning algorithm on $ D_n(\omega) $, which is a particular instance of a dataset. The fitted learner, $ \btheta(D_n(\omega)) $, is a regression function in $ \btheta $. The abuse in notation is analogous to stating that ``$ X \in \mathbb{R} $'' for a real random variable $ X $, even though this is not technically correct since $ X $ is a measurable map rather than a real number.
 \begin{example}[Parametric and nonparametric learning algorithms]
-    An example of a parametric learner is logistic regression, and an example of a nonparametric learner is the tree-based gradient boosting algorithm XGBoost, which has many hyperparametrs that can be tuned, and the fitted parameters are not directly interpretable.  
+    An example of a parametric learner is logistic regression, and an example of a nonparametric learner is the tree-based gradient boosting algorithm XGBoost, which has many hyperparameters that can be tuned, and the fitted parameters are not directly interpretable.  
 \end{example}
 There is a one-to-one correspondence between our data $ D_n = (O_1 , \ldots, O_n) $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
 \begin{align*}
@@ -227,8 +227,7 @@ We now provide the formal definitions for the risks associated with our learners
      \hat{R}_S(\theta) :=  \int L(o, \btheta) d P_{n,S}^{1}(o).
  \end{align*}
  
-
-
+ The following definitions are analogous to what is stated in section 1 and 2 of  \cite{laan03}
 \begin{definition}[True risk of $ \q $'th learner averaged over splits]
     Given the data $ D_n $ and some split-variable $ S $. The risk of each learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ and averaged over each possible split can be calculated by
     \begin{align*}
@@ -250,7 +249,7 @@ The expectation $ E_S $ is a simple average since $ S $ is discrete. Therefore, 
     \end{align*}
     Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $D_n $ as specified by some split-variable $ S $. 
 \end{definition}
-In similar manner to the above the defintions, we can define the cross-validation risk and the cross-validation selector for our learners 
+In a similar fashion to the oracle risk and selector, we can define the cross-validation risk and the cross-validation selector for our learners.
 
 \begin{definition}[Cross-validation risk]
     Given the data $ D_n $ and some split-variable $ S $. The cross-validation risk of a learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k \}, k \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is  
@@ -310,7 +309,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{theorem}
 
 \begin{proof}
-    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our libary of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \btheta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \btheta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
+    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \btheta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \btheta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
    
 For the second term we have 
 \begin{align*}
@@ -357,7 +356,7 @@ by using $ 0 \leq L(o, \btheta) \leq 1 $ almost surely. Since $ M(\btheta) $ is 
 \end{align*}
 We can now adjust for the precision in our bound by choosing $ \delta $ and $ n $. Note that a small delta will mean that the first term $ (1 + 2 \delta) E R(\btheta_{ \tilde{q} }(P_{n, S}^{0})) $ will become smaller, but this is at the expense that the remainder term becomes larger due to the $ \frac{1 + \delta}{ \delta} $ fraction at the end. By choosing $ n $ to be large, we can partially compensate for a smaller delta.
 
-We might, therefore, for each $ n $, choose the $ \delta_n $ that minimizes the left-hand side for the given $ n $. By substituting $ n_1 = n/2 $ into the the left hand side expression and then expanding it we obtain 
+We might, therefore, for each $ n $, choose the $ \delta_n $ that minimizes the left-hand side for the given $ n $. By substituting $ n_1 = n/2 $ into the left hand side expression and then expanding it we obtain 
 \begin{align*}
  ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) + 2 \delta ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\frac{3}{2\delta}\log (1 +k) \frac{32}{n} + 4\log (1 +k) \frac{32}{n} + \frac{5\delta}{2} \log (1 +k)   \frac{32}{n},
 \end{align*}
@@ -408,11 +407,9 @@ and so we obtain the optimum by isolating $ \delta $
 %\end{theorem}
 
 
-\section{The ensemble super learner, eSL}
+\section{The Ensemble Super Learner}
 \section{Simulation results}
 \section{Discussion}
-Pellentesque tincidunt sodales risus, vulputate iaculis odio dictum vitae. Ut ligula tortor, porta a consequat ac, commodo non risus. Nullam sagittis luctus pretium. Integer vel nibh at justo convallis imperdiet sit amet ut lorem. Sed in gravida turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed in massa vitae ligula pellentesque feugiat vitae in risus. Cras iaculis tempus mi, sit amet viverra nulla viverra pellentesque.
-
 \printbibliography
 
 \end{document}
