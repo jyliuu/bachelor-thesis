@@ -179,7 +179,11 @@ We use the notation $ \btheta $ for the learning algorithm, which coincides with
 
 However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. It is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \btheta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific omega, and subsequently, we can fit our learning algorithm on $ D_n(\omega) = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. The fitted learner, $ \btheta(D_n(\omega)) $, is a regression function in $ \btheta $. The abuse in notation is analogous to stating that ``$ X \in \mathbb{R} $'' for a real random variable $ X $, even though this is not technically correct since $ X $ is a measurable map rather than a real number.
 \begin{example}[Parametric and nonparametric learning algorithms]
-    An example of a parametric learner is logistic regression, and an example of a nonparametric learner is the tree-based gradient boosting algorithm XGBoost, which has many hyperparameters that can be tuned, and the fitted parameters are not directly interpretable.  
+    An example of a parametric learner is logistic regression. In logistic regression we assume that conditional probability can be expressed as $ x \mapsto P(Y = 1 \mid X = x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
+
+    Nonparametric learning algorithms such as gradient boosting, for example XGBoost, can also be used to estimate the regression function. These methods have a number of hyperparameters that can be tuned. These could include, number of boosted trees, depth of each tree, learning rates, etc. Gradient boosting seeks to iteratively optimize the algorithm approximating the data $ x \mapsto f_m(x) $ at each step $ m $ by adding a new tree $ h_m(x) $ such that $ f_{m + 1}(x) = f_{m}(x) + h_{m}(x) $ such that the mean squared error loss of the new learner, $ f_{m + 1} $, is less than the previous, $ f_{m} $. \cite{chen2016xgboost}
+
+    Gradient boosting algorithms internally evaluate the loss of the fitted learner at each iterative step, seeking to minimize the loss by adding new trees that compensate for the loss of the previous trees. The fitted parameters of the resulting tree do not have probabilistic interpretations. Regardless, algorithms such as XGBoost have demonstrated that they are indeed capable of fitting on very complex datasets.  
 \end{example}
 There is a one-to-one correspondence between our data $ D_n = (O_1 , \ldots, O_n) $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
 \begin{align*}
@@ -285,7 +289,7 @@ We are now ready to give the definition of the discrete super learner
 \subsection{Oracle inequalities}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
 
-In the following results we assume that a proper loss function $ L: \mathcal{O} \times \btheta \to \mathbb{R} $ has been given.  
+In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
 \begin{lemma}[Lemma 2.1 in \cite{vaart06}] \label{finitesampledecomp}
     Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P. For $ \delta > 0 $ it holds that
    \begin{align*}
@@ -307,7 +311,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{lemma}
 
 \begin{theorem}[Finite Sample Result: Theorem 2.3 in \cite{vaart06}] \label{finitesample}
-   For $ \btheta \in \btheta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta) = \int L(o, \btheta) d P(o) \geq 0 $ for every $ \btheta \in \btheta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+   For $ \btheta \in \Theta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta) = \int L(o, \btheta) d P(o) \geq 0 $ for every $ \btheta \in \btheta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
        ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) \leq&(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\\
                                               &(1 + \delta) E \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
@@ -316,7 +320,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{theorem}
 
 \begin{proof}
-    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \btheta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \btheta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
+    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \btheta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
    
 For the second term we have 
 \begin{align*}
@@ -331,7 +335,7 @@ applying lemma \ref{finitesamplebound} to the expression above yields
 &\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta)^{2-p}} \right)^{1/p} \right] \right)\\
 &= (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]  
 \end{align*}
-Where for the third inequality we take the $ \sup $ over $ \btheta $. We can also bound the third term with the same expression above. It is now immediate from lemma \ref{finitesampledecomp} that 
+Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above. It is now immediate from lemma \ref{finitesampledecomp} that 
 \begin{align*}
     E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) d P(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \btheta_{ \tilde{\q} }(P_{n, S}^{0})) d P(o) \\
                                                                &+ 2 \cdot (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right],
@@ -344,7 +348,7 @@ which was exactly what we set out to prove.
 Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots , O_n = (Y_n , X_n) $ such that $ Y_i \in \{0, 1\} $ and $ X \in \mathbb{R}^{d} $ distributed according some $ P \in \mathcal{P} $. We would like to estimate the conditional expectation $ \btheta_0(x) = E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  Let $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable} \}  $ and choose the quadratic loss function $ L((Y, X), \btheta) = (Y - \btheta(X))^2 $.
 
 
-We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \btheta \in \btheta $ and $ O \in \mathcal{O} $. It is stated in \cite[7]{vaart06} that $ M(\btheta) = 1 $ and $ v(\btheta) = \frac{3}{2} \int L(o, \btheta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \btheta)$. It is also clear that $ R(\btheta) = \int L(o , \btheta) d P(o) \geq 0  $ since the loss function is positive. If we plug these numbers in theorem \ref{finitesample}, then by using $ p = 1 $ and 
+We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \btheta \in \Theta $ and $ O \in \mathcal{O} $. It is stated in \cite[7]{vaart06} that $ M(\btheta) = 1 $ and $ v(\btheta) = \frac{3}{2} \int L(o, \btheta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \btheta)$. It is also clear that $ R(\btheta) = \int L(o , \btheta) d P(o) \geq 0  $ since the loss function is positive. If we plug these numbers in theorem \ref{finitesample}, then by using $ p = 1 $ and 
 \begin{align*}
    ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \btheta} \left[ M(\btheta) + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta}\right]\right)
 \end{align*}
@@ -354,7 +358,7 @@ The supremum on the left side of the equation might increase significantly becau
 \begin{align*}
     \frac{v(\btheta)}{R(\btheta)} = \frac{3}{2} \frac{\int L(o, \btheta)^2 d P(o)}{\int L(o, \btheta) dP(o)  } \leq \frac{3}{2} \frac{\int L(o, \btheta) \cdot 1 dP(o) }{\int L(o, \btheta) dP(o) } = \frac{3}{2},
 \end{align*}
-by using $ 0 \leq L(o, \btheta) \leq 1 $ almost surely. Since $ M(\btheta) $ is constant for all $ \btheta \in \btheta $, it is possible to drop the supremum. Combining all the information above we obtain 
+by using $ 0 \leq L(o, \btheta) \leq 1 $ almost surely. Since $ M(\btheta) $ is constant for all $ \btheta \in \Theta $, it is possible to drop the supremum. Combining all the information above we obtain 
 \begin{align*}
    ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) \frac{16}{n_1} \log (1 +k) \left[ 1 + \frac{3}{2} \frac{1 + \delta}{\delta}\right]\\
                                         &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 5\delta}{2\delta}(1 + \delta) \frac{16}{n_1} \\
