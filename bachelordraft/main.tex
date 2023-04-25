@@ -80,8 +80,7 @@ The ``super learner'' is the answer to how we can effectively select the `best' 
 
 The discrete super learner is then obtained by applying the cross-validation selector on our library of learners. The asymptotic result shows that the risk of the super learner will be the same as the learner selected by the oracle selector when the number of observations goes to $ \infty $. The discrete super learner is not a fixed learner from our library, but rather depends on the available data. It represents the learner chosen by the cross-validation selector, which can vary depending on the amount of data at hand.
 
-We first present the general theory and our goal, which is to estimate the conditional mean $ E(Y \mid X = x) $ for a observation $ Y, X $ being a outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $.
-
+We first present the general theory and our goal, which is to estimate the conditional mean $ E(Y \mid X = x) $ for a observation $ Y, X $ being a outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
 
 \section{Background}
 
