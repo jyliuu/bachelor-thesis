@@ -177,7 +177,7 @@ In the following section we introduce the terminology \textbf{learning algorithm
 
 We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function that resides in $ \btheta $. Indeed, it makes sense in our context since for $ D_n = (O_1 , \dots , O_n) $ being our data, we would like to express the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, we refer to that as the \textbf{fitted learner} which is in $ \btheta $.  
 
-However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. It is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \btheta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific omega, and subsequently, we can fit our learning algorithm on $ D_n(\omega) $, which is a particular instance of a dataset. The fitted learner, $ \btheta(D_n(\omega)) $, is a regression function in $ \btheta $. The abuse in notation is analogous to stating that ``$ X \in \mathbb{R} $'' for a real random variable $ X $, even though this is not technically correct since $ X $ is a measurable map rather than a real number.
+However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. It is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \btheta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific omega, and subsequently, we can fit our learning algorithm on $ D_n(\omega) = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. The fitted learner, $ \btheta(D_n(\omega)) $, is a regression function in $ \btheta $. The abuse in notation is analogous to stating that ``$ X \in \mathbb{R} $'' for a real random variable $ X $, even though this is not technically correct since $ X $ is a measurable map rather than a real number.
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learner is logistic regression, and an example of a nonparametric learner is the tree-based gradient boosting algorithm XGBoost, which has many hyperparameters that can be tuned, and the fitted parameters are not directly interpretable.  
 \end{example}
@@ -229,40 +229,37 @@ We now provide the formal definitions for the risks associated with our learners
  \end{align*}
  
  The following definitions are analogous to what is stated in section 1 and 2 of  \cite{laan03}
-\begin{definition}[True risk of $ \q $'th learner averaged over splits]
-    Given the data $ D_n $ and some split-variable $ S $. The risk of each learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ and averaged over each possible split can be calculated by
+ \begin{definition}[Conditional risk averaged over splits \cite{vaart06}]
+    Given the data $ D_n $ and some split-variable $ S $. The averaged conditional risk of each learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is 
     \begin{align*}
-        \q \mapsto E_S \int L(o, \btheta_{\q}(P_{n,S}^{0}) ) dP(o) = E_S R( \btheta_\q(P_{n,S}^{0})) 
+        \q \mapsto E_S R( \btheta_\q(P_{n,S}^{0})).
     \end{align*}
-    Where $ P $ is the true distribution for our data $ X $.
 \end{definition}
 The expectation $ E_S $ is a simple average since $ S $ is discrete. Therefore, for a given $ \q $ we have 
 \begin{align*}
-    E_S R( \btheta_\q(P_{n,S}^{0})) &= \frac{1}{| \operatorname{supp}(S)|} \sum_{s \in \operatorname{supp}(S)} R(\theta_{q}(P_{n, S = s}^{0}))
+    E_S R( \btheta_\q(P_{n,S}^{0})) &= \sum_{s \in \operatorname{supp}(S)} R(\theta_{q}(P_{n, S = s}^{0})) \cdot P(S = s) 
 \end{align*}
 
 
 
 \begin{definition}[Oracle selector]
-    The oracle selector is a function $ \tilde{\q}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the true risk given our data $ D_n $. 
+    Given the data $ D_n $ and some split variable $ S $. The oracle selector depends on our data and is the index of the learner with the lowest averaged conditional risk given our data 
     \begin{align*}
-        \tilde{\q}(D_n) := \argmin_{1 \leq \q \leq \ml} E_S R( \btheta _\q (P_{n,S}^0 )) 
+        \tilde{\q} := \argmin_{1 \leq \q \leq \ml} E_S R( \btheta _\q (P_{n,S}^0 ) .
     \end{align*}
-    Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $D_n $ as specified by some split-variable $ S $. 
 \end{definition}
-In a similar fashion to the oracle risk and selector, we can define the cross-validation risk and the cross-validation selector for our learners.
-
+As we are unable to calculate the true conditional risk, we must proceed via cross-validation. Cross-validation replaces $ R $ with $ \hat{R}_{S} $.
 \begin{definition}[Cross-validation risk]
-    Given the data $ D_n $ and some split-variable $ S $. The cross-validation risk of a learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k \}, k \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is  
+    Given the data $ D_n $ and some split-variable $ S $. The cross-validation risk of a learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is  
     \begin{align*}
         \q \mapsto E_S \hat{R}_S( \btheta_\q(P_{n,S}^{0})).
     \end{align*}
 \end{definition}
 
-\begin{definition}[Cross-validation selector]
-    The cross-validation selector is a function $ \hat{\q}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the cross-validation risk given our data $ D_n $
+\begin{definition}[Cross-validation selector \cite{laan03}]
+    Given the data $ D_n $ and some split variable $ S $. The cross validation selector depends on our data and is the index of the learner with the lowest cross-validation risk given our data 
     \begin{align*}
-        \hat{\q}(D_n) := \argmin_{1 \leq \q \leq k} E_S \hat{R}_S ( \btheta _\q (P_{n,S}^0 )). 
+        \hat{\q} := \argmin_{1 \leq \q \leq k} E_S \hat{R}_S ( \btheta _\q (P_{n,S}^0 )). 
     \end{align*}
 \end{definition}
 %We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \btheta_0 $ 
@@ -276,6 +273,15 @@ In a similar fashion to the oracle risk and selector, we can define the cross-va
 %                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
 %\end{align*}
 %
+We are now ready to give the definition of the discrete super learner
+\begin{definition}[Discrete super learner]
+    Let $ (O, \mathcal{A}, P)  $ be a measure space for some $ P \in \mathcal{P} $ where $ \mathcal{P} $ is our statistical model. Let $ D_n = (O_1 , \dots , O_n) $ be our data for each $ O_i = (Y_i , X_i) \sim P $. For a split-variable $ S $ that specifies the cross-validation procedure, the \textbf{discrete super learner} created from some library of learners $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $ is the learner chosen by the cross-validation selector fitted on the entire dataset
+    \begin{align*}
+        \mathcal{X} \ni x \mapsto \theta_{\hat{\q}}(P_n)(x). 
+    \end{align*}
+\end{definition}
+\textbf{Remark:} An alternative way of defining the super learner is $ x \mapsto E_S \theta_{ \hat{\q} }(P_{n,S}^{0})(x) $, it might be that this definition is better since $ \theta_{ \hat{\q} }(P_n) $ is technically a new learner in our library. It may, therefore, not be possible to fit the learning algorithm $ \theta_{\hat{\q}}$ on $ D_n $ due to the difference in the number of observations.
+
 \subsection{Oracle inequalities}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
 
