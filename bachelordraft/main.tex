@@ -94,9 +94,9 @@ We will consider the parameter set $ \btheta = \{\btheta \mid \btheta : \mathcal
 \end{align*}
 \end{definition}
 Our natural aim would be to find the optimal parameter value $\btheta^* \in \btheta$ that minimizes the $L^2$-risk $R: \btheta \to \mathbb{R}$ given as 
-\begin{align*}
-    R(\btheta) = \int L(o, \btheta)  dP(o) = EL(O_1, \btheta),
-\end{align*}
+\begin{equation} \label{l2risk}
+    R(\btheta) := \int L(o, \btheta)  dP(o) = EL(O, \btheta),
+\end{equation}
 but this task is challenging as it requires us to know the data-generating process, $ P $, which we do not have accesss to. It can be shown that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
 \begin{theorem}
     Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \btheta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimimum $ \btheta^* $ defined as 
@@ -114,7 +114,7 @@ but this task is challenging as it requires us to know the data-generating proce
 It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  
 In the case where we do not have access to the data-generating process, we would instead want to provide an estimate $ \hat{\btheta} $ of $ \btheta^*$ as a function of the data that we have observed. Let $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) \in  \mathcal{O} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $. Denote our data as $ D_n = (O_1, \dots , O_n)$. An estimate is the outcome of applying an estimator to the data 
 \begin{align*}
-    D_n \mapsto \hat{\btheta}(D_n) \in \btheta,   
+    D_n \mapsto \hat{\btheta}(D_n) \in \Theta,   
 \end{align*}
 The estimate is a regression function, that is 
 \begin{align*}
@@ -130,38 +130,38 @@ In the context of super learners we will refer the estimators as learners, in th
 %    \end{align*}
 %    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \btheta_0 \in \btheta $ where $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
 %\end{example}
-\begin{example}[Parameteric statistical model] \label{ex:parametricfam}
-    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
-
-We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \btheta\} $, given that $ \btheta $ is finite-dimensional.
-
-    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\btheta(x)} \mid \btheta \in \btheta \} $ such that $ Q_{\btheta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \btheta \in \btheta $. For a given $ P_{\btheta} \in \mathcal{P} $ there will exist a $ Q_{\btheta} \in \mathcal{Q} $ such that  
-    \begin{align*}
-        P_{\btheta}(Y \in A \mid X = x) = Q_{ \btheta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
-    \end{align*}
-    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\btheta} $ over our observations (the joint over $ Y $ and $ X $) will be
-    \begin{align*}
-        P_{\btheta }(X \in A, Y \in B ) = \int_{A} Q_{\btheta(x)}(B) d H_{0}(x) 
-    \end{align*}
-    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
-\end{example}
-\begin{example}[Logistic regression model] \label{logregmod}
-    Let $ O_1 = (Y_1 , X_n) , \ldots, O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations from some distribution $ P_{\btheta_0} \in \mathcal{P} $, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \btheta_{0} \in \btheta $
-\begin{align*}
-    \btheta_0(x) = E(Y_1 \mid X_1 = x) = P_{\btheta_0}(Y_1 = 1 \mid X_1 = x),
-\end{align*}
-In logistic regression we assume that $ \btheta = \{x \mapsto \expit(\beta x) \mid \beta \in \mathbb{R}^{k}\} $, so $ \btheta_0(x) = \expit(\beta_0 x) $, then the goal becomes to estimate the $ k $-dimensional parameter $ \beta_0 $, in this case the $ \mathbb{R}^{k} $ parameter $ \beta_0  $ completely determines $ \btheta_0 $, so $ \btheta $ is also $ k $-dimensional. % I am not sure if the last is true
-
-The conditional distributions of $ Y_1 $ given $ X_1 = x $ are Bernoulli distributions and can be parametrized as $ \mathcal{Q} = \{\operatorname{Ber}(\expit(\beta x )) \mid \beta \in \mathbb{R}^{k}  \}  $. Now from example \ref{ex:parametricfam} we know that the statistical model, $ \mathcal{P} $, can be parametrized through $ \beta $, in particular we have 
-\begin{align*}
-    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} Q_{\btheta(x)}(\{1\}) dH_{0}(x)\\
- &= \int_{A} \expit(\beta x )  d H_0(x) 
-\end{align*}
-If $ H_{0} $ has density $ f $ w.r.t. Lebesgue measure, we can write
-\begin{align*}
-    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \expit(\beta x ) f(x)  d m(x) 
-\end{align*}
-\end{example}
+%\begin{example}[Parametric statistical model] \label{ex:parametricfam}
+%    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
+%
+%We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \btheta\} $, given that $ \btheta $ is finite-dimensional.
+%
+%    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\btheta(x)} \mid \btheta \in \btheta \} $ such that $ Q_{\btheta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \btheta \in \btheta $. For a given $ P_{\btheta} \in \mathcal{P} $ there will exist a $ Q_{\btheta} \in \mathcal{Q} $ such that  
+%    \begin{align*}
+%        P_{\btheta}(Y \in A \mid X = x) = Q_{ \btheta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
+%    \end{align*}
+%    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\btheta} $ over our observations (the joint over $ Y $ and $ X $) will be
+%    \begin{align*}
+%        P_{\btheta }(X \in A, Y \in B ) = \int_{A} Q_{\btheta(x)}(B) d H_{0}(x) 
+%    \end{align*}
+%    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
+%\end{example}
+%\begin{example}[Logistic regression model] \label{logregmod}
+%    Let $ O_1 = (Y_1 , X_n) , \ldots, O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations from some distribution $ P_{\btheta_0} \in \mathcal{P} $, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \btheta_{0} \in \btheta $
+%\begin{align*}
+%    \btheta_0(x) = E(Y_1 \mid X_1 = x) = P_{\btheta_0}(Y_1 = 1 \mid X_1 = x),
+%\end{align*}
+%In logistic regression we assume that $ \btheta = \{x \mapsto \expit(\beta x) \mid \beta \in \mathbb{R}^{k}\} $, so $ \btheta_0(x) = \expit(\beta_0 x) $, then the goal becomes to estimate the $ k $-dimensional parameter $ \beta_0 $, in this case the $ \mathbb{R}^{k} $ parameter $ \beta_0  $ completely determines $ \btheta_0 $, so $ \btheta $ is also $ k $-dimensional. % I am not sure if the last is true
+%
+%The conditional distributions of $ Y_1 $ given $ X_1 = x $ are Bernoulli distributions and can be parametrized as $ \mathcal{Q} = \{\operatorname{Ber}(\expit(\beta x )) \mid \beta \in \mathbb{R}^{k}  \}  $. Now from example \ref{ex:parametricfam} we know that the statistical model, $ \mathcal{P} $, can be parametrized through $ \beta $, in particular we have 
+%\begin{align*}
+%    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} Q_{\btheta(x)}(\{1\}) dH_{0}(x)\\
+% &= \int_{A} \expit(\beta x )  d H_0(x) 
+%\end{align*}
+%If $ H_{0} $ has density $ f $ w.r.t. Lebesgue measure, we can write
+%\begin{align*}
+%    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \expit(\beta x ) f(x)  d m(x) 
+%\end{align*}
+%\end{example}
 %We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\btheta} \in \btheta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \btheta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \btheta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \btheta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \btheta $. 
 
 
@@ -180,23 +180,23 @@ However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learner is logistic regression, and an example of a nonparametric learner is the tree-based gradient boosting algorithm XGBoost, which has many hyperparametrs that can be tuned, and the fitted parameters are not directly interpretable.  
 \end{example}
-There is a one-to-one correspondence between our data $ D_n = (O_1 , \ldots, O_n) $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as  
+There is a one-to-one correspondence between our data $ D_n = (O_1 , \ldots, O_n) $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
 \begin{align*}
     P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
 \end{align*}
 We can, therefore, write $ \btheta(P_n)$ as an alternative representation of the learner $\btheta(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the cross-validation selector.
 
 \subsection{Library of learners}
-We would now like to consider the scenario where we have a library (set) of learning algorithms, $ \btheta_1 , \ldots, \btheta_n $. From these algorithms, we can define the library of learners $ \lib = \{ \hat{\btheta}_\q = \btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $. Once again, our natural goal is to find $ \btheta_{\q}(P_n) $, that achieves the lowest risk among our learners, that is to find $ \q $ such that $ R(\btheta_{\q}(P_n)) = \min_{ \hat{\btheta}  \in \hat{\Theta} } R( \hat{\btheta} ) $. But as we have remarked before, this is not possible unless we know the data-generating process $ P $, instead we can only provide an estimate $ \hat{\q} $ of $ q $ that is based on our data.
+We would now like to consider the scenario where we have a library (set) of learning algorithms, $ \btheta_1 , \ldots, \btheta_n $. From these algorithms, we can define the library of learners $ \lib = \{ \hat{\btheta}_\q = \btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $. Once again, our natural goal is to find $ \hat{\btheta} $, that achieves the lowest risk among our learners, that is to find $ \q $ such that $ R( \hat{\btheta_{\q}} ) = \min_{ \hat{\btheta}  \in \hat{\Theta} } R( \hat{\btheta} ) $. But as we have remarked before, this is not possible unless we know the data-generating process $ P $, instead we can only provide an estimate $ \hat{\q} $ of $ q $ that is based on our data.
 
 
 \subsection{Cross-validation methodology}
 To provide the estimate $ \hat{\q} $ we have proceed via cross validation. In cross validation, we randomly split our data into a training set and a test set. Let the random binary vector $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ S_i = 0 $ indicates that $ O_i $ should be in the training set and $ S_i = 1 $ indicates that $ O_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
 \begin{align*}
     P_{n,S}^{0} &= \frac{1}{n_0} \sum_{i: S_i = 0} \delta_{O_i} \\
-    P_{n,S}^{1} &= \frac{1}{1-n_0} \sum_{i: S_i = 1} \delta_{O_i} 
+    P_{n,S}^{1} &= \frac{1}{n_1} \sum_{i: S_i = 1} \delta_{O_i} 
 \end{align*}
-Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $. 
+Where $ n_0, n_1 $ would be the number of $ S_i $'s that are marked $ 0 $ and $ 1 $ respectively. 
 
 \begin{example}[Random splits] \label{splits}
     For $ n = 9 $ observations one could for example define the distribution of the random vector $ S $ as 
@@ -218,7 +218,17 @@ Where $ n_0 $ would be the number of $ S_i $'s that are marked $ 0 $.
 \end{example}
 
 \subsection{Risks and selectors}
-We now give the formal definitions for the risk of our learners. 
+We now provide the formal definitions for the risks associated with our learners. Recall that the $L^2$-risk (\ref{l2risk}) was the integral of the loss with respect to data-generating process $P$. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
+\begin{align*}
+    \hat{R}(\btheta) := \int L(o, \btheta) d P_{n}(o).
+\end{align*}
+ Now let some split variable $ S $ be given for our data $ D_n $, we are also interested in how our learner performs on the cross-validation data. Denote the risk of our learner on the cross-validation data as 
+ \begin{align*}
+     \hat{R}_S(\theta) :=  \int L(o, \btheta) d P_{n,S}^{1}(o).
+ \end{align*}
+ 
+
+
 \begin{definition}[True risk of $ \q $'th learner averaged over splits]
     Given the data $ D_n $ and some split-variable $ S $. The risk of each learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ and averaged over each possible split can be calculated by
     \begin{align*}
@@ -234,40 +244,38 @@ The expectation $ E_S $ is a simple average since $ S $ is discrete. Therefore, 
 
 
 \begin{definition}[Oracle selector]
-    The oracle selector is a function $ \tilde{\q}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the true risk given our data $ O_1 , \ldots , O_n \in O$. 
+    The oracle selector is a function $ \tilde{\q}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the true risk given our data $ D_n $. 
     \begin{align*}
-        \tilde{\q}(O_1 , \ldots, O_n) = \argmin_{1 \leq \q \leq k} E_S R( \btheta _\q (P_{n,S}^0 )) 
+        \tilde{\q}(D_n) := \argmin_{1 \leq \q \leq \ml} E_S R( \btheta _\q (P_{n,S}^0 )) 
     \end{align*}
-    Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $O_1 , \ldots, O_n $ as specified by some split-variable $ S $. 
+    Where $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $D_n $ as specified by some split-variable $ S $. 
 \end{definition}
 In similar manner to the above the defintions, we can define the cross-validation risk and the cross-validation selector for our learners 
 
-\begin{definition}[Cross-validation risk of $ \q $'th learner averaged over splits]
-    Given the data $ O_1, \ldots, O_n \in \mathcal{O} $ and a set of learners $ \{ \btheta_{\q}(P_{n, S}^{n}) \mid 1 \leq \q \leq k \}, k \in \mathbb{N} $. The cross-validation risks of these learners averaged over some split-variable $ S $ is given as a function of $ \q $ 
+\begin{definition}[Cross-validation risk]
+    Given the data $ D_n $ and some split-variable $ S $. The cross-validation risk of a learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k \}, k \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is  
     \begin{align*}
-        \q \mapsto E_S \int L(o, \btheta_{\q}(P_{n,S}^{0}) ) dP_{n, S}^{1}(o) = E_S \hat{R}( \btheta_\q(P_{n,S}^{0})) 
+        \q \mapsto E_S \hat{R}_S( \btheta_\q(P_{n,S}^{0})).
     \end{align*}
-    Where $ P_{n,S}^{1} $ is the empircal distribution over the validation of $ O_1 , \dots, O_n $. We write $ \hat{R} $ for the empirical risk over the validation set. 
 \end{definition}
 
 \begin{definition}[Cross-validation selector]
-    The cross-validation selector is a function $ \hat{\q}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the cross-validation risk given our data $ O_1 , \dots , O_n \in \mathcal{O} $. 
+    The cross-validation selector is a function $ \hat{\q}: \mathcal{O}^{n} \to \{1,\ldots,k\} $  which finds the learner that minimizes the cross-validation risk given our data $ D_n $
     \begin{align*}
-        \hat{\q}(O_1 , \dots , O_n) = \argmin_{1 \leq \q \leq k} E_S \hat{R} ( \btheta _\q (P_{n,S}^0 )) 
+        \hat{\q}(D_n) := \argmin_{1 \leq \q \leq k} E_S \hat{R}_S ( \btheta _\q (P_{n,S}^0 )). 
     \end{align*}
-    Where $ \hat{R}  $ is the empirical risk over the validation set and $ P_{n ,s}^{0} $ is the empirical distribution over the training set of $ O_1 , \dots , O_n  $ as specified by some split-variable $ S $. 
 \end{definition}
-We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \btheta_0 $ 
-\begin{align*}
-    R(\btheta_0) = \int L(o, \btheta_0)  dP(o),
-\end{align*}
-and clearly it is the case that $ R(\btheta_0) \leq R( \btheta  ) $ for any learner $ \btheta $ of $ \btheta_0 $.
-Given a set of learners we define the centered conditional risk as the difference 
-\begin{align*}
-    \Delta_{S}( \btheta_{ \hat{\q} }, \btheta_0 ) &= R( \btheta _{ \hat{\q} }(P_{n, S}^{0})) -R(\btheta_0) \\
-                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
-\end{align*}
-
+%We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \btheta_0 $ 
+%\begin{align*}
+%    R(\btheta_0) = \int L(o, \btheta_0)  dP(o),
+%\end{align*}
+%and clearly it is the case that $ R(\btheta_0) \leq R( \btheta  ) $ for any learner $ \btheta $ of $ \btheta_0 $.
+%Given a set of learners we define the centered conditional risk as the difference 
+%\begin{align*}
+%    \Delta_{S}( \btheta_{ \hat{\q} }, \btheta_0 ) &= R( \btheta _{ \hat{\q} }(P_{n, S}^{0})) -R(\btheta_0) \\
+%                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
+%\end{align*}
+%
 \subsection{Oracle inequalities}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
 
