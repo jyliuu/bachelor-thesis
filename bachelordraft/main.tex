@@ -71,7 +71,7 @@
 
 
 \section{Introduction}
-In the context of regression, a natural goal is to obtain an regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for  n observation $ O = (Y, X) $ is minimal. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the task of identifying the conditional mean is challenging unless we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ s a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O(1/n) $. 
+In the context of regression, a natural goal is to obtain an regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for  n observation $ O = (Y, X) $ is minimal. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the task of identifying the conditional mean is challenging unless we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O(1/n) $. 
 
 However, under certain circumstances we might not be able to make such assumptions.
 For example, if we have limited data, identifying the model as an exponential family might not be appropriate. In such cases, it may be more suitable to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests, to estimate the conditional mean. However, the assumptions of these data-driven methods regarding $ \mathcal{P} $ are not explicit, and they may not have probabilistic interpretations. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal. 
@@ -89,12 +89,12 @@ Let statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathc
 %Let $ O_1 = (Y_1 , X_1), \ldots, O_n = (Y_n, X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $.
 We will consider the parameter set $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which represents the set of regression functions that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize 
 \begin{definition}[Quadratic loss]
-    Let $ \mathcal{O}  $ be our sample space, and $ \btheta $ be the set of regression functions. Then the quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \btheta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \btheta $ is defined as 
+    Let $ \mathcal{O}  $ be our sample space, and $ \btheta $ be the set of regression functions. Then the quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \btheta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
     L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
 \end{align*}
 \end{definition}
-Our natural aim would be to find the optimal parameter value $\btheta^* \in \btheta$ that minimizes the $L^2$-risk $R: \btheta \to \mathbb{R}$ given as 
+Our natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the $L^2$-risk $R: \btheta \to \mathbb{R}$ given as 
 \begin{equation} \label{l2risk}
     R(\btheta) := \int L(o, \btheta)  dP(o) = EL(O, \btheta),
 \end{equation}
@@ -102,7 +102,7 @@ but this task is challenging as it requires us to know the data-generating proce
 \begin{theorem}
     Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \btheta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
-        \btheta^* := \argmin_{\btheta \in \btheta} R(\btheta)= \argmin_{\btheta \in \btheta} \int L(o, \btheta)  dP(o),
+        \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta)= \argmin_{\btheta \in \Theta} \int L(o, \btheta)  dP(o),
     \end{align*}
     it holds for an observation $ O = (Y, X) \sim P $ that
     \begin{align*}
@@ -129,25 +129,25 @@ In the context of super learners we will refer the estimators as learners, in th
 %    \begin{align*}
 %        Y_1 = \btheta_0(X_1) + \varepsilon,
 %    \end{align*}
-%    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \btheta_0 \in \btheta $ where $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
+%    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \btheta_0 \in \Theta $ where $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
 %\end{example}
-%\begin{example}[Parametric statistical model] \label{ex:parametricfam}
-%    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
-%
-%We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \btheta\} $, given that $ \btheta $ is finite-dimensional.
-%
-%    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\btheta(x)} \mid \btheta \in \btheta \} $ such that $ Q_{\btheta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \btheta \in \btheta $. For a given $ P_{\btheta} \in \mathcal{P} $ there will exist a $ Q_{\btheta} \in \mathcal{Q} $ such that  
-%    \begin{align*}
-%        P_{\btheta}(Y \in A \mid X = x) = Q_{ \btheta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
-%    \end{align*}
-%    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\btheta} $ over our observations (the joint over $ Y $ and $ X $) will be
-%    \begin{align*}
-%        P_{\btheta }(X \in A, Y \in B ) = \int_{A} Q_{\btheta(x)}(B) d H_{0}(x) 
-%    \end{align*}
-%    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
-%\end{example}
+\begin{example}[Parametric statistical model] \label{ex:parametricfam}
+    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
+
+We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \Theta\} $, given that $ \btheta $ is finite-dimensional.
+
+    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\btheta(x)} \mid \btheta \in \Theta \} $ such that $ Q_{\btheta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \btheta \in \Theta $. For a given $ P_{\btheta} \in \mathcal{P} $ there will exist a $ Q_{\btheta} \in \mathcal{Q} $ such that  
+    \begin{align*}
+        P_{\btheta}(Y \in A \mid X = x) = Q_{ \btheta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
+    \end{align*}
+    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\btheta} $ over our observations (the joint over $ Y $ and $ X $) will be
+    \begin{align*}
+        P_{\btheta }(X \in A, Y \in B ) = \int_{A} Q_{\btheta(x)}(B) d H_{0}(x) 
+    \end{align*}
+    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
+\end{example}
 %\begin{example}[Logistic regression model] \label{logregmod}
-%    Let $ O_1 = (Y_1 , X_n) , \ldots, O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations from some distribution $ P_{\btheta_0} \in \mathcal{P} $, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \btheta_{0} \in \btheta $
+%    Let $ O_1 = (Y_1 , X_n) , \ldots, O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations from some distribution $ P_{\btheta_0} \in \mathcal{P} $, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \btheta_{0} \in \Theta $
 %\begin{align*}
 %    \btheta_0(x) = E(Y_1 \mid X_1 = x) = P_{\btheta_0}(Y_1 = 1 \mid X_1 = x),
 %\end{align*}
@@ -163,7 +163,7 @@ In the context of super learners we will refer the estimators as learners, in th
 %    P_{\beta}(Y_1= 1 , X_1 \in A) &= \int_{A} \expit(\beta x ) f(x)  d m(x) 
 %\end{align*}
 %\end{example}
-%We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\btheta} \in \btheta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \btheta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \btheta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \btheta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \btheta $. 
+%We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\btheta} \in \Theta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \btheta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \btheta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \btheta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \btheta $. 
 
 
 \section{The Discrete Super Learner}
@@ -175,7 +175,7 @@ In the following section we introduce the terminology \textbf{learning algorithm
     An learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \btheta $ for $ n \in \mathbb{N} $. 
 \end{definition}
 
-We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function that resides in $ \btheta $. Indeed, it makes sense in our context since for $ D_n = (O_1 , \dots , O_n) $ being our data, we would like to express the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, we refer to that as the \textbf{fitted learner} which is in $ \btheta $.  
+We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function that resides in $ \btheta $. Indeed, it makes sense in our context since for $ D_n = (O_1 , \dots , O_n) $ being our data, we would like to express the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, we refer to that as the \textbf{fitted learner} which is in $ \btheta $. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
 
 However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. It is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \btheta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific omega, and subsequently, we can fit our learning algorithm on $ D_n(\omega) = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. The fitted learner, $ \btheta(D_n(\omega)) $, is a regression function in $ \btheta $. The abuse in notation is analogous to stating that ``$ X \in \mathbb{R} $'' for a real random variable $ X $, even though this is not technically correct since $ X $ is a measurable map rather than a real number.
 \begin{example}[Parametric and nonparametric learning algorithms]
@@ -303,7 +303,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{proof}
 
 \begin{lemma}[Lemma 2.2 in \cite{vaart06}] \label{finitesamplebound}
-    Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$. Then, for any Bernstein pairs $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
+    Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$ in some set of measurable functions $ \mathcal{F} $. Then, for any Bernstein pairs $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
     \begin{align*}
     E \max_{f \in \mathcal{F}}(G_n-\delta \sqrt{n} P) f \leq \frac{8}{n^{1 / p-1 / 2}} \log (1+\# \mathcal{F}) \max _{f \in \mathcal{F}}\left[\frac{M(f)}{n^{1-1 / p}}+\left(\frac{v(f)}{(\delta P f)^{2-p}}\right)^{1 / p}\right].
     \end{align*}
@@ -311,16 +311,16 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{lemma}
 
 \begin{theorem}[Finite Sample Result: Theorem 2.3 in \cite{vaart06}] \label{finitesample}
-   For $ \btheta \in \Theta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta) = \int L(o, \btheta) d P(o) \geq 0 $ for every $ \btheta \in \btheta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+   For $ \btheta \in \Theta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta) = \int L(o, \btheta) d P(o) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
        ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) \leq&(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\\
-                                              &(1 + \delta) E \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
+                                              &(1 + \delta) E \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
    \end{align*}
    where $ k $ is the number of learners in our library $ \{\btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k\} $. 
 \end{theorem}
 
 \begin{proof}
-    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \btheta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
+    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
    
 For the second term we have 
 \begin{align*}
@@ -332,13 +332,13 @@ applying lemma \ref{finitesamplebound} to the expression above yields
 \begin{align*}
 &\frac{1 + \delta}{\sqrt{n_1} } E_{S} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
 &\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{1 \leq \q \leq k} \left[ \frac{M(\btheta_{\q}(P_{n,S}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\btheta_{ \q}(P_{n,S}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta_{\q}(P_{n,S}^{0}))^{2-p}} \right)^{1/p} \right] \right)\\
-&\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta)^{2-p}} \right)^{1/p} \right] \right)\\
-&= (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]  
+&\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta)^{2-p}} \right)^{1/p} \right] \right)\\
+&= (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]  
 \end{align*}
 Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above. It is now immediate from lemma \ref{finitesampledecomp} that 
 \begin{align*}
     E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) d P(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \btheta_{ \tilde{\q} }(P_{n, S}^{0})) d P(o) \\
-                                                               &+ 2 \cdot (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \btheta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right],
+                                                               &+ 2 \cdot (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right],
 \end{align*}
 which was exactly what we set out to prove. 
 \end{proof}
@@ -350,11 +350,11 @@ Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots ,
 
 We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \btheta \in \Theta $ and $ O \in \mathcal{O} $. It is stated in \cite[7]{vaart06} that $ M(\btheta) = 1 $ and $ v(\btheta) = \frac{3}{2} \int L(o, \btheta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \btheta)$. It is also clear that $ R(\btheta) = \int L(o , \btheta) d P(o) \geq 0  $ since the loss function is positive. If we plug these numbers in theorem \ref{finitesample}, then by using $ p = 1 $ and 
 \begin{align*}
-   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \btheta} \left[ M(\btheta) + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta}\right]\right)
+   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\btheta) + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta}\right]\right)
 \end{align*}
 In the equation provided, we observe that we can manipulate the following variables: sample size $n$, validation set size $n_1$, parameter $\delta > 0$, and the number of learners $k$. Assuming $k$ remains constant, the validation set size $n_1$ could be either stochastic, depending on the split variable $S$, or fixed as a constant, as illustrated in example \ref{splits}. For instance, we can set $n_1 = n/2$. By establishing a fixed value for $n_1$, we can drop the expectation in the second term. 
 
-The supremum on the left side of the equation might increase significantly because $R(\btheta)$ could be very small. However, by carefully selecting the value of $v(\btheta)$, we can avoid the fraction from growing too large. Note that for any $ \btheta \in \btheta $:
+The supremum on the left side of the equation might increase significantly because $R(\btheta)$ could be very small. However, by carefully selecting the value of $v(\btheta)$, we can avoid the fraction from growing too large. Note that for any $ \btheta \in \Theta $:
 \begin{align*}
     \frac{v(\btheta)}{R(\btheta)} = \frac{3}{2} \frac{\int L(o, \btheta)^2 d P(o)}{\int L(o, \btheta) dP(o)  } \leq \frac{3}{2} \frac{\int L(o, \btheta) \cdot 1 dP(o) }{\int L(o, \btheta) dP(o) } = \frac{3}{2},
 \end{align*}

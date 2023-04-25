@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  25 APR 2023 15:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  25 APR 2023 16:15
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -799,7 +799,11 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [2] [3] [4]
+ [2] [3]
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 134.
+ [4]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 181.
@@ -807,12 +811,12 @@ Package mdframed Info: mdframed detected package amsthm
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 206.
- [6] [7]
+ [6] [7] [8]
 Overfull \hbox (4.17334pt too wide) detected at line 318
 []
  []
 
-[8]
+[9]
 Overfull \hbox (48.89246pt too wide) detected at line 342
 []
  []
@@ -822,7 +826,7 @@ Overfull \hbox (12.97447pt too wide) detected at line 354
 []
  []
 
-[9] [10] [11] (out/main.aux)
+[10] [11] [12] (out/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 1C055BCA3F08E482160CE7D608A7D90F;1806.
 Package logreq Info: Writing requests to 'main.run.xml'.
@@ -830,18 +834,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20189 strings out of 476025
- 350413 string characters out of 5796532
+ 20192 strings out of 476025
+ 350447 string characters out of 5796532
  1877388 words of memory out of 5000000
- 40336 multiletter control sequences out of 15000+600000
+ 40337 multiletter control sequences out of 15000+600000
  533722 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,15n,90p,894b,1457s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 90i,15n,90p,893b,1457s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (11 pages, 437858 bytes).
+Output written on out/main.pdf (12 pages, 443600 bytes).
 PDF statistics:
- 289 PDF objects out of 1000 (max. 8388607)
- 223 compressed objects within 3 object streams
- 44 named destinations out of 1000 (max. 500000)
+ 295 PDF objects out of 1000 (max. 8388607)
+ 228 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
  119 words of extra memory for PDF output out of 10000 (max. 10000000)
 
