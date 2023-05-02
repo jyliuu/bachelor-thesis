@@ -218,7 +218,7 @@ Given a split variable $S$ for our data $D_n$, the risk of our learner on the cr
  \end{align*}
  The following definitions are analogous to what is stated in section 1 and 2 of  \cite{laan03}.
  \begin{definition}[Expected loss averaged over splits \cite{vaart06}]
-     Given the data $ D_n $ and some split-variable $ S $, the averaged expected loss of some learner, $ \theta_{q}(P_{n,s}^{0}) $, in a library, $ \lib_{\ml}(P_n) $, applied to our training data $ P_{n, S}^{0} $ is 
+     Given data $D_n$ and a split-variable $S$, the average expected loss for a learner, $\theta_q(P_{n,s}^0)$, from a library $\lib_{\ml}(P_n)$ applied to the training data $P_{n,S}^0$ is
     \begin{align*}
         E_S R( \btheta_\q(P_{n,S}^{0}), P),
     \end{align*}
@@ -232,23 +232,23 @@ The expectation $ E_S $ is a simple average since $ S $ is discrete. Therefore, 
 
 
 \begin{definition}[Oracle selector]
-    Given the data $ D_n $ and some split variable $ S $. The oracle selector depends on our data and is the index of the learner with the lowest averaged conditional risk given our data 
+    Given the data $ D_n $ and a split variable $ S $, the oracle selector depends on our data and is the index of the learner with the lowest averaged expected loss 
     \begin{align*}
-        \tilde{\q} := \argmin_{1 \leq \q \leq \ml} E_S R( \btheta _\q (P_{n,S}^0 ) .
+        \tilde{\q} := \argmin_{1 \leq \q \leq \ml} E_S R( \btheta _\q (P_{n,S}^0 ) , P).
     \end{align*}
 \end{definition}
-As we are unable to calculate the true conditional risk, we must proceed via cross-validation. Cross-validation replaces $ R $ with $ \hat{R}_{S} $.
-\begin{definition}[Cross-validation risk]
-    Given the data $ D_n $ and some split-variable $ S $. The cross-validation risk of a learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is  
+As we are never able to know the oracle, we must proceed via cross-validation to estimate $ \tilde{q}  $. Cross-validation replaces $ P $ with $ P_{n, S}^{1} $ in the second argument of $ R $.
+\begin{definition}[Cross-validation expected loss] Given data $D_n$ and a split-variable $S$, the cross-validation expected loss for a learner, $\theta_q(P_{n,s}^0)$, from a library $\lib_{\ml}(P_n)$ applied to the training data $P_{n,S}^0$ is
     \begin{align*}
-        \q \mapsto E_S \hat{R}_S( \btheta_\q(P_{n,S}^{0})).
+         E_S R( \btheta_\q(P_{n,S}^{0}), P_{n, S}^{1}),
     \end{align*}
+    where $ P_{n,S}^{1} $ is the test data as specified by the split-variable.
 \end{definition}
 
 \begin{definition}[Cross-validation selector \cite{laan03}]
-    Given the data $ D_n $ and some split variable $ S $. The cross validation selector depends on our data and is the index of the learner with the lowest cross-validation risk given our data 
+    Given the data $ D_n $ and a split variable $ S $, the cross validation selector depends on our data and is the index of the learner with the lowest cross-validation expected loss 
     \begin{align*}
-        \hat{\q} := \argmin_{1 \leq \q \leq k} E_S \hat{R}_S ( \btheta _\q (P_{n,S}^0 )). 
+        \hat{\q} := \argmin_{1 \leq \q \leq k}  E_S R( \btheta_\q(P_{n,S}^{0}), P_{n, S}^{1}).
     \end{align*}
 \end{definition}
 %We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \btheta_0 $ 
@@ -264,23 +264,23 @@ As we are unable to calculate the true conditional risk, we must proceed via cro
 %
 We are now ready to give the definition of the discrete super learner
 \begin{definition}[Discrete super learner]
-    Let $ (O, \mathcal{A}, P)  $ be a measure space for some $ P \in \mathcal{P} $ where $ \mathcal{P} $ is our statistical model. Let $ D_n = (O_1 , \dots , O_n) $ be our data for each $ O_i = (Y_i , X_i) \sim P $. For a split-variable $ S $ that specifies the cross-validation procedure, the \textbf{discrete super learner} created from some library of learners $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $ is the learner chosen by the cross-validation selector fitted on the entire dataset
+    The \textbf{discrete super learner}, $ \btheta_{ \hat{\q} }(P_n) $, created from a library of learners $ \lib_{k}(P_n) = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}$ is the learner chosen by the cross-validation selector applied to $ D_n $  
     \begin{align*}
         \mathcal{X} \ni x \mapsto \theta_{\hat{\q}}(P_n)(x). 
     \end{align*}
 \end{definition}
-\textbf{Remark:} An alternative way of defining the super learner is $ x \mapsto E_S \theta_{ \hat{\q} }(P_{n,S}^{0})(x) $, it might be that this definition is better since $ \theta_{ \hat{\q} }(P_n) $ is technically a new learner in our library. It may, therefore, not be possible to fit the learning algorithm $ \theta_{\hat{\q}}$ on $ D_n $ due to the difference in the number of observations.
+Formally, the map above is a random map as $ P_n $ is stochastic. Note that in the definition above, $ \hat{q}  $ depends on our data. The discrete super learner is not one specific leaerner among the learners in the library, but the result of after applying the cross-validation selector to the library. 
 
 \subsection{Oracle inequalities}
-We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training sample or validation sample.
+We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ i = 0 $ or $ i = 1 $.
 
 In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
 \begin{lemma}[Lemma 2.1 in \cite{vaart06}] \label{finitesampledecomp}
     Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P. For $ \delta > 0 $ it holds that
    \begin{align*}
        E_{S} \int L(o, \btheta_{ \hat{\q}}(P_{n, S}^{0})) dP(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \btheta_{ \tilde{\q} }(P_{n, S}^{0})) d P(o) \\ 
-                                                                &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)  \\
-                                                                &+\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \q \leq k} \int-L(o, \btheta_{\q}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
+                                                                &+E_{S} \frac{1}{\sqrt{n_1} } \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)  \\
+                                                                &+E_{S} \frac{1}{\sqrt{n_1} } \max_{1 \leq \q \leq k} \int-L(o, \btheta_{\q}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} + \delta \sqrt{n_1} P)(o)  \\
    \end{align*}
 \end{lemma}
 \begin{proof}
@@ -288,44 +288,51 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{proof}
 
 \begin{lemma}[Lemma 2.2 in \cite{vaart06}] \label{finitesamplebound}
-    Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$ in some set of measurable functions $ \mathcal{F} $. Then, for any Bernstein pairs $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
+    Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$ in some set of measurable functions $ \mathcal{F} $ on $ \mathcal{O} $. Then, for any Bernstein pair $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
     \begin{align*}
-    E \max_{f \in \mathcal{F}}(G_n-\delta \sqrt{n} P) f \leq \frac{8}{n^{1 / p-1 / 2}} \log (1+\# \mathcal{F}) \max _{f \in \mathcal{F}}\left[\frac{M(f)}{n^{1-1 / p}}+\left(\frac{v(f)}{(\delta P f)^{2-p}}\right)^{1 / p}\right].
+        E_{D_n} \max_{f \in \mathcal{F}}(G_n-\delta \sqrt{n} P) f \leq \frac{8}{n^{1 / p-1 / 2}} \log (1+\# \mathcal{F}) \max _{f \in \mathcal{F}}\left[\frac{M(f)}{n^{1-1 / p}}+\left(\frac{v(f)}{(\delta P f)^{2-p}}\right)^{1 / p}\right].
     \end{align*}
-    The same upper bound is valid for $ E \max_{f \in \mathcal{F}}(G_n+\delta \sqrt{n} P)(-f) $  
+    The same upper bound is valid for $ E_{D_n} \max_{f \in \mathcal{F}}(G_n+\delta \sqrt{n} P)(-f) $  
 \end{lemma}
+The expectation above is wrt. the joint probability measure over our observations, $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
 
-\begin{theorem}[Finite Sample Result: Theorem 2.3 in \cite{vaart06}] \label{finitesample}
-   For $ \btheta \in \Theta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta) = \int L(o, \btheta) d P(o) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+\begin{theorem}[Theorem 2.3 in \cite{vaart06}] \label{finitesample}
+   For $ \btheta \in \Theta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
-       ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) \leq&(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\\
-                                              &(1 + \delta) E \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
+       E_{D_n} E_{S} R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P) \leq&(1 + 2 \delta) E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P) +\\
+                                                                &(1 + \delta) E_S \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
    \end{align*}
-   where $ k $ is the number of learners in our library $ \{\btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k\} $. 
+   where $ k $ is the number of learners in our library $ \{\btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k\} $ and $ S $ is a split-variable. 
 \end{theorem}
+In the expectations above, we are taking the expectation wrt. the random split-variable $ S $ as well as the joint distribution of our observations. In a more verbose manner one would write 
+\begin{align*}
+     E_{S} E_{D_n}  R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P) = \int R(\btheta_{ \hat{q} }(P_{n, S}^{0}), P) d (P_S \otimes  P^{n}_O ).
+\end{align*}
 
-\begin{proof}
-    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq k\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ k $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $. 
-   
-For the second term we have 
+\begin{proof}[Proof]
+    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \btheta_{\q}(P_{n,S}^{0})) \mid 1 \leq \q \leq \ml\}$, be the collection of functions obtained by applying the loss $ L $ to each learner in our library of $ \ml $ learners. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
+
+First, we take the expectation wrt. $ D_n $ on both sides in lemma \ref{finitesampledecomp}. For the second term we have 
 \begin{align*}
-&\frac{1}{\sqrt{n_1} } E_{S} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)\\
+&E_{D_n} E_{S} \frac{1}{\sqrt{n_1} } \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d ((1 + \delta) G_{n,S}^{1} - \delta \sqrt{n_1} P)(o)\\
 &= 
-\frac{1 + \delta}{\sqrt{n_1} } E_{S} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o),
+E_{D_n}E_{S} \frac{1 + \delta}{\sqrt{n_1} } \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o)\\
+&=E_{S} \frac{1 + \delta}{\sqrt{n_1} } E_{D_n}\max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o).
 \end{align*}
-applying lemma \ref{finitesamplebound} to the expression above yields 
+Where we use Fubini in the last equality. Applying lemma \ref{finitesamplebound} to the expression above yields 
 \begin{align*}
-&\frac{1 + \delta}{\sqrt{n_1} } E_{S} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
-&\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{1 \leq \q \leq k} \left[ \frac{M(\btheta_{\q}(P_{n,S}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\btheta_{ \q}(P_{n,S}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta_{\q}(P_{n,S}^{0}))^{2-p}} \right)^{1/p} \right] \right)\\
-&\leq  \frac{1 + \delta}{\sqrt{n_1}}\left( \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta)^{2-p}} \right)^{1/p} \right] \right)\\
-&= (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]  
+&E_S\frac{1 + \delta}{\sqrt{n_1} } E_{D_n} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
+&\leq E_S \frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{1 \leq \q \leq k} \left[ \frac{M(\btheta_{\q}(P_{n,S}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\btheta_{ \q}(P_{n,S}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta_{\q}(P_{n,S}^{0}), P)^{2-p}} \right)^{1/p} \right] \\
+&\leq E_S\frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta,P)^{2-p}} \right)^{1/p} \right] \\
+&= (1 + \delta) E_S\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta,P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]  
 \end{align*}
-Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above. It is now immediate from lemma \ref{finitesampledecomp} that 
+Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above as lemma \ref{finitesamplebound} is also valid for $ -L $. It is now immediate from lemma \ref{finitesampledecomp} that 
 \begin{align*}
-    E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) d P(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \btheta_{ \tilde{\q} }(P_{n, S}^{0})) d P(o) \\
-                                                               &+ 2 \cdot (1 + \delta) \frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right],
+    E_{D_n} E_{S} &\int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) d P(o) \leq (1 + 2 \delta) E_{D_n} E_{S} \int L(o, \btheta_{ \tilde{\q} }(P_{n, S}^{0})) d P(o) \\
+                                                               &+ (1 + \delta) E_S\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]\\
+                                                               &+ (1 + \delta) E_S\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right],
 \end{align*}
-which was exactly what we set out to prove. 
+The second and third terms above are identical, meaning that they can be combined into one term where the numerator in the first fraction is $ 16 $ instead of $ 8 $. 
 \end{proof}
 
 
