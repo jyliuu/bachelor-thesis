@@ -1,11 +1,10 @@
 # Fdb version 4
-["biber out/main"] 1682430917 "out/main.bcf" "out/main.bbl" "out/main" 1682432142 0
-  "out/main.bcf" 1682432142 108571 d12598f2833cd348502e7b6438e3a6cc "pdflatex"
+["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1683019372 0
   (generated)
-  "out/main.bbl"
-  "out/main.blg"
+  "main.bbl"
+  "main.blg"
   (rewritten before read)
-["pdflatex"] 1682432142 "main.tex" "out/main.pdf" "main" 1682432142 0
+["pdflatex"] 1683019371 "main.tex" "out/main.pdf" "main" 1683019372 0
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1680514707 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1680514707 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -151,12 +150,12 @@
   "ku-frontpage.sty" 1675700558 12953 e3c53e811029855cafc8ad2244872529 ""
   "logos/ku-logo.pdf" 1675697292 93879 31d1db24936015ee9fe960c856f01525 ""
   "logos/science-english.pdf" 1675697292 71141 827ec2c5d6f797163b848e34358df682 ""
-  "main.tex" 1682432140 39465 821e7282e975d2dd01c8c3be3a53ae22 ""
-  "out/main.aux" 1682432142 3630 41ea17750ac191033182ef5259b09b74 "pdflatex"
-  "out/main.bbl" 1682430918 6665 0c525eb5f8a5d6cfad1accf9b30645ee "biber out/main"
-  "out/main.out" 1682432142 1806 1c055bca3f08e482160ce7d608a7d90f "pdflatex"
-  "out/main.run.xml" 1682432142 2311 be769915957fbf504b291cf0394a7670 "pdflatex"
-  "out/main.toc" 1682432142 967 8f0a51fefa5b7fb48b6f18f7dedf07ec "pdflatex"
+  "main.bbl" 1682673403 7594 1f524fa7af01060d7a430690ff5a4e73 "bibtex main"
+  "main.tex" 1683019370 38341 b7fe33dc7438cd1bba922c81099c5615 ""
+  "out/main.aux" 1683019371 3815 8c5306ffe6278eb6afeaa70f4042b317 "pdflatex"
+  "out/main.out" 1683019371 1882 8fff3d48f680e2cba704e15ab4f25fec "pdflatex"
+  "out/main.run.xml" 1683019371 2311 be769915957fbf504b291cf0394a7670 "pdflatex"
+  "out/main.toc" 1683019371 980 bade3c725c3f38c1c41dd134253812bd "pdflatex"
   (generated)
   "out/main.aux"
   "out/main.bcf"

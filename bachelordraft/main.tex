@@ -47,7 +47,7 @@
 \newcommand{\q}{q}
 \newcommand{\ml}{k}
 \newcommand{\btheta}{\theta}
-\newcommand{\lib}{\hat{\Theta}}
+\newcommand{\lib}{\Theta}
 \newcommand{\empmod}{\mathcal{P}_{\text{emp}}}
 \DeclareMathOperator{\expit}{expit}
 
@@ -71,38 +71,37 @@
 
 
 \section{Introduction}
-In the context of regression, a natural goal is to obtain an regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for  n observation $ O = (Y, X) $ is minimal. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the task of identifying the conditional mean is challenging unless we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O(1/n) $. 
+In the context of regression, a natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for  n observation $ O = (Y, X) $ is minimized. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the conditional mean can only be identified if we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O(1/n) $. \cite{lauritzen2022statistics}[ch. 5]
 
-However, under certain circumstances we might not be able to make such assumptions.
-For example, if we have limited data, identifying the model as an exponential family might not be appropriate. In such cases, it may be more suitable to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests, to estimate the conditional mean. However, the assumptions of these data-driven methods regarding $ \mathcal{P} $ are not explicit, and they may not have probabilistic interpretations. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal. 
+However, if we are dealing with highly complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be biased. In such situations, it is more appropriate to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests, to estimate the conditional mean. On the other hand, the assumptions of these data-driven methods regarding $ \mathcal{P} $ are not explicit. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal. 
 
-The ``super learner'' is the answer to how we can effectively select the `best' learner among the learners that we have in our library of learners. We will demonstrate that the cross-validation selector, which evaluates learners based on their cross-validated (empirical) risk and chooses the one with the lowest risk, is asymptotically equivalent to the oracle selector. The oracle selector identifies the learner with the lowest true risk – the theoretical risk achieved by knowing the true distribution.
+The ``super learner'' is the answer to how we can effectively select the `best' learner -- regression estimate -- among the learners that we have in our library of learners. We will demonstrate that the cross-validation selector, which evaluates learners based on their cross-validated (empirical) risk and chooses the one with the lowest risk, is asymptotically equivalent to the oracle selector. The oracle selector identifies the learner with the lowest true risk – the theoretical risk achieved by the true distribution.
 
-The discrete super learner is then obtained by applying the cross-validation selector on our library of learners. The asymptotic result shows that the risk of the super learner will be the same as the learner selected by the oracle selector when the number of observations goes to $ \infty $. The discrete super learner is not a fixed learner from our library, but rather depends on the available data. It represents the learner chosen by the cross-validation selector, which can vary depending on the amount of data at hand.
+The discrete super learner is then obtained by applying the cross-validation selector to a library of learners. The asymptotic result shows that the risk of the super learner will be the same as the learner selected by the oracle selector when the number of observations goes to $ \infty $. The discrete super learner is not a fixed learner from our library, but rather depends on the available data. It represents the learner chosen by the cross-validation selector, which can vary depending on the amount of data at hand.
 
-We first present the general theory and our goal, which is to estimate the conditional mean $ E(Y \mid X = x) $ for a observation $ Y, X $ being a outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
+We first present the general theory and our goal, which is to estimate the conditional mean $ E(Y \mid X = x) $ for a observation  $ (Y, X) $ being a outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
 
 \section{Background}
 
-Our setup closely models what is described in \cite{vaart06} and \cite{laan03}. Unless specified otherwise, our setup is as follows:
-Let statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
+Our setup and notation is similar to \cite{vaart06} and \cite{laan03}:
+Let a statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
 %Let $ O_1 = (Y_1 , X_1), \ldots, O_n = (Y_n, X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $.
-We will consider the parameter set $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which represents the set of regression functions that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize 
+We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which represents the set of \textbf{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize 
 \begin{definition}[Quadratic loss]
-    Let $ \mathcal{O}  $ be our sample space, and $ \btheta $ be the set of regression functions. Then the quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \btheta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
+    The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
     L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
 \end{align*}
 \end{definition}
-Our natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the $L^2$-risk $R: \btheta \to \mathbb{R}$ given as 
+A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected $L^2$-loss, or conditional risk \cite{laan03}[p. 2] $R: \btheta \to \mathbb{R}$ given by 
 \begin{equation} \label{l2risk}
-    R(\btheta) := \int L(o, \btheta)  dP(o) = EL(O, \btheta),
+    R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
-but this task is challenging as it requires us to know the data-generating process, $ P $, which we do not have access to. It can be shown that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
-\begin{theorem}
-    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \btheta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
+Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
+\begin{theorem} \label{minrisk}
+    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
-        \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta)= \argmin_{\btheta \in \Theta} \int L(o, \btheta)  dP(o),
+        \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta, P)= \argmin_{\btheta \in \Theta} \int L(o, \btheta)  dP(o),
     \end{align*}
     it holds for an observation $ O = (Y, X) \sim P $ that
     \begin{align*}
@@ -112,16 +111,34 @@ but this task is challenging as it requires us to know the data-generating proce
 \begin{proof}
     See \cite{gyorfi2002distribution}[ch. 1]
 \end{proof}
-It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  
-In the case where we do not have access to the data-generating process, we would instead want to provide an estimate $ \hat{\btheta} $ of $ \btheta^*$ as a function of the data that we have observed. Let $ O_1 = (Y_1 , X_1) ,\ldots, O_n = (Y_n , X_n) \in  \mathcal{O} $ be i.i.d. observations distributed according to some $ P \in \mathcal{P} $. Denote our data as $ D_n = (O_1, \dots , O_n)$. An estimate is the outcome of applying an estimator to the data 
+It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. 
+
+
+As we do not have access to the data-generating process $ P $, our goal is to estimate $ \btheta^{*} $, this means to \textbf{learn} the true regression function from our data. 
+We will therefore introduce the terminology \textbf{learning algorithm} and \textbf{learner} in the context of learning from our data.  
+
+\subsection{Learning algorithms and learners}
+Moving forward, we will denote $ O_1 , \dots , O_n \in \mathcal{O} $ as our \textbf{observations}, and $ D_n = (O_1 , \dots , O_n) $ as our \textbf{data}. 
+\begin{definition}[Learning algorithm $ \btheta $]
+    An learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
+\end{definition}
+
+We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function. Indeed, it makes sense in this context since we would like to emphasize that the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, is a regression function. We refer to that outcome as a \textbf{learner}. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
+
+However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. A learner is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \Theta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific $ \omega $, and subsequently, we can apply our learning algorithm on $ D_n(\omega) = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \btheta(D_n(\omega)) $, as a \textbf{fitted learner}. 
+\begin{example}[Parametric and nonparametric learning algorithms]
+    An example of a parametric learner is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
+
+Nonparametric learning algorithms such as gradient boosting, for example XGBoost, can also be used to estimate the regression function. The gradient boosting algorithm, XGBoost, has a number of hyperparameters that can be tuned. These include, number of boosted trees, depth of each tree, learning rates, etc., but most importantly the internal loss objective which could for example be log-loss or mean squared error. XGBoost aims to iteratively refine the fitted learner by approximating the data $x \mapsto f_m(x)$ at each step $m$. It does so by introducing a new tree $h_m(x)$, which is trained on the error of $ f_m(x)$, such that $f_{m + 1}(x) = f_m(x) + h_m(x)$. The internal loss of the updated learner, $f_{m + 1}$, evaluated on the training data, is lower than that of the previous learner due to the inclusion of the new tree \cite{chen2016xgboost}.
+
+The parameters of the resulting fit are not directly interpretable. Despite this, XGBoost has demonstrated its ability to model very complex datasets \cite{chen2016xgboost}.
+
+\end{example}
+There is a one-to-one correspondence between our data $ D_n $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
 \begin{align*}
-    D_n \mapsto \hat{\btheta}(D_n) \in \Theta,   
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
 \end{align*}
-The estimate is a regression function, that is 
-\begin{align*}
-    \mathcal{X} \ni x \mapsto \hat{\btheta}(D_n)(x) \in [0,1].
-\end{align*}
-In the context of super learners we will refer the estimators as learners, in the sense that they learn from the data, the resulting regression function is then the fit of the learner to the data. We formalize these notions in the subsequent section. 
+We can, therefore, write $ \btheta(P_n)$ as an alternative representation of the learner $\btheta(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
 
 
 %\begin{example}[Regression functions $ \btheta $] \label{ex:regfunc}
@@ -131,21 +148,21 @@ In the context of super learners we will refer the estimators as learners, in th
 %    \end{align*}
 %    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \btheta_0 \in \Theta $ where $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
 %\end{example}
-\begin{example}[Parametric statistical model] \label{ex:parametricfam}
-    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
-
-We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \Theta\} $, given that $ \btheta $ is finite-dimensional.
-
-    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\btheta(x)} \mid \btheta \in \Theta \} $ such that $ Q_{\btheta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \btheta \in \Theta $. For a given $ P_{\btheta} \in \mathcal{P} $ there will exist a $ Q_{\btheta} \in \mathcal{Q} $ such that  
-    \begin{align*}
-        P_{\btheta}(Y \in A \mid X = x) = Q_{ \btheta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
-    \end{align*}
-    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\btheta} $ over our observations (the joint over $ Y $ and $ X $) will be
-    \begin{align*}
-        P_{\btheta }(X \in A, Y \in B ) = \int_{A} Q_{\btheta(x)}(B) d H_{0}(x) 
-    \end{align*}
-    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
-\end{example}
+%\begin{example}[Parametric statistical model] \label{ex:parametricfam}
+%    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
+%
+%We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \Theta\} $, given that $ \btheta $ is finite-dimensional.
+%
+%    We can parametrize the conditional probability distributions for $ Y_1 $ given $ X_1 = x $ as $ \mathcal{Q} = \{Q_{\btheta(x)} \mid \btheta \in \Theta \} $ such that $ Q_{\btheta(x)} $ is a valid probability distribution on $ \mathcal{B}(\mathbb{R}) $ for each $ x \in X $ and $ \btheta \in \Theta $. For a given $ P_{\btheta} \in \mathcal{P} $ there will exist a $ Q_{\btheta} \in \mathcal{Q} $ such that  
+%    \begin{align*}
+%        P_{\btheta}(Y \in A \mid X = x) = Q_{ \btheta(x)}(A) \qquad \text{for all } A \in \mathcal{B}(\mathbb{R}).
+%    \end{align*}
+%    If we assume that $ X_1 $ is distributed according to some $ H_0 $ on $ \mathcal{X} $, then the distribution $ P_{\btheta} $ over our observations (the joint over $ Y $ and $ X $) will be
+%    \begin{align*}
+%        P_{\btheta }(X \in A, Y \in B ) = \int_{A} Q_{\btheta(x)}(B) d H_{0}(x) 
+%    \end{align*}
+%    for every $ A \in \mathcal{F} $ and $ B \in \mathcal{B}(\mathbb{R}) $. 
+%\end{example}
 %\begin{example}[Logistic regression model] \label{logregmod}
 %    Let $ O_1 = (Y_1 , X_n) , \ldots, O_n = (Y_n , X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be i.i.d. observations from some distribution $ P_{\btheta_0} \in \mathcal{P} $, where $ Y_i $ is binary and $ \mathcal{X} \subseteq \mathbb{R}^{k} $. We would like to estimate the parameter function $ \btheta_{0} \in \Theta $
 %\begin{align*}
@@ -167,53 +184,21 @@ We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mat
 
 
 \section{The Discrete Super Learner}
-
-In the following section we introduce the terminology \textbf{learning algorithm} and \textbf{learners} in the context of learning from our data.  
-
-\subsection{Learning algorithm}
-\begin{definition}[Learning algorithm $ \btheta $]
-    An learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \btheta $ for $ n \in \mathbb{N} $. 
-\end{definition}
-
-We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function that resides in $ \btheta $. Indeed, it makes sense in our context since for $ D_n = (O_1 , \dots , O_n) $ being our data, we would like to express the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, we refer to that as the \textbf{fitted learner} which is in $ \btheta $. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
-
-However, we must remark that formally, $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. It is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \btheta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific omega, and subsequently, we can fit our learning algorithm on $ D_n(\omega) = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. The fitted learner, $ \btheta(D_n(\omega)) $, is a regression function in $ \btheta $. The abuse in notation is analogous to stating that ``$ X \in \mathbb{R} $'' for a real random variable $ X $, even though this is not technically correct since $ X $ is a measurable map rather than a real number.
-\begin{example}[Parametric and nonparametric learning algorithms]
-    An example of a parametric learner is logistic regression. In logistic regression we assume that conditional probability can be expressed as $ x \mapsto P(Y = 1 \mid X = x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
-
-    Nonparametric learning algorithms such as gradient boosting, for example XGBoost, can also be used to estimate the regression function. These methods have a number of hyperparameters that can be tuned. These could include, number of boosted trees, depth of each tree, learning rates, etc. Gradient boosting seeks to iteratively optimize the algorithm approximating the data $ x \mapsto f_m(x) $ at each step $ m $ by adding a new tree $ h_m(x) $ such that $ f_{m + 1}(x) = f_{m}(x) + h_{m}(x) $ such that the mean squared error loss of the new learner, $ f_{m + 1} $, is less than the previous, $ f_{m} $. \cite{chen2016xgboost}
-
-    Gradient boosting algorithms internally evaluate the loss of the fitted learner at each iterative step, seeking to minimize the loss by adding new trees that compensate for the loss of the previous trees. The fitted parameters of the resulting tree do not have probabilistic interpretations. Regardless, algorithms such as XGBoost have demonstrated that they are indeed capable of fitting on very complex datasets.  
-\end{example}
-There is a one-to-one correspondence between our data $ D_n = (O_1 , \ldots, O_n) $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
-\begin{align*}
-    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
-\end{align*}
-We can, therefore, write $ \btheta(P_n)$ as an alternative representation of the learner $\btheta(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the cross-validation selector.
-
 \subsection{Library of learners}
-We would now like to consider the scenario where we have a library (set) of learning algorithms, $ \btheta_1 , \ldots, \btheta_n $. From these algorithms, we can define the library of learners $ \lib = \{ \hat{\btheta}_\q = \btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $. Once again, our natural goal is to find $ \hat{\btheta} $, that achieves the lowest risk among our learners, that is to find $ \q $ such that $ R( \hat{\btheta_{\q}} ) = \min_{ \hat{\btheta}  \in \hat{\Theta} } R( \hat{\btheta} ) $. But as we have remarked before, this is not possible unless we know the data-generating process $ P $, instead we can only provide an estimate $ \hat{\q} $ of $ q $ that is based on our data.
-
+We would now like to consider the scenario where we have a set of learning algorithms, $ \btheta_1 , \ldots, \btheta_\ml $. From these algorithms, we can define the \textbf{library of learners} $ \lib_{k}(P_n) = \{\btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $ of size $ \ml $. Our goal is to find $ \btheta_{\q}(P_n) $, that achieves the lowest risk among our learners -- that is to provide an estimate of $ \q $ for which $ \q = \argmin_{1 \leq \q \leq \ml} R(\theta_{\q}(P_n) , P) $, we will denote this estimate as $ \hat{q} $.
 
 \subsection{Cross-validation methodology}
-To provide the estimate $ \hat{\q} $ we have proceed via cross validation. In cross validation, we randomly split our data into a training set and a test set. Let the random binary vector $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ S_i = 0 $ indicates that $ O_i $ should be in the training set and $ S_i = 1 $ indicates that $ O_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
+To provide $ \hat{\q} $ we have proceed via cross validation. In cross validation, we randomly split our data into a \textbf{training set} and a \textbf{test set}. Let the random binary vector $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ S_i = 0 $ indicates that $ O_i $ should be in the training set and $ S_i = 1 $ indicates that $ O_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
 \begin{align*}
     P_{n,S}^{0} &= \frac{1}{n_0} \sum_{i: S_i = 0} \delta_{O_i} \\
-    P_{n,S}^{1} &= \frac{1}{n_1} \sum_{i: S_i = 1} \delta_{O_i} 
+    P_{n,S}^{1} &= \frac{1}{n_1} \sum_{i: S_i = 1} \delta_{O_i},
 \end{align*}
-Where $ n_0, n_1 $ would be the number of $ S_i $'s that are marked $ 0 $ and $ 1 $ respectively. 
+where $ n_1 = \sum_{i = 1}^{n} S_i, n_0 = 1-n_1$ identifies the number of observations in the test and training set respectively.
 
 \begin{example}[Random splits] \label{splits}
-    For $ n = 9 $ observations one could for example define the distribution of the random vector $ S $ as 
-   \begin{align*}
-       P(S = (0, 0, 0, 0, 0, 0, 1, 1, 1)) &= \frac{1}{3}, \\
-       P(S = (0, 0, 0, 1, 1, 1, 0, 0, 0)) &= \frac{1}{3}, \\
-       P(S = (1, 1, 1, 0, 0, 0, 0, 0, 0)) &= \frac{1}{3},
-   \end{align*}
-    i.e. 3-fold cross-validation.
-    In general for $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the validation set. It might not be desirable to define the discrete probabilities for $ S $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/validation data, since that would also include the combination where $ n_1 = 0 $. To ensure that we always have a certain amount of observations in our validation set, let $ n_1 > 0 $ be given, we see that there are $ \begin{pmatrix}
+   For $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the test set. It might not be desirable to define the discrete probabilities for $ S $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/test data, since that would also include the combination where $ n_1 = 0 $. To ensure that there is always a certain amount of observations in our test set, let $ n_1 > 0 $ be given, we see that there are $ \begin{pmatrix}
         n \\ n_1
-    \end{pmatrix}$ ways of choosing both the validation and training set. We can therefore define the distribution of $ S $ as 
+    \end{pmatrix}$ ways of choosing both the test and training set. We can therefore define the distribution of $ S $ as 
     \begin{align*}
         P \left(S = s \right) = \begin{pmatrix}
             n \\ n_1
@@ -223,25 +208,25 @@ Where $ n_0, n_1 $ would be the number of $ S_i $'s that are marked $ 0 $ and $ 
 \end{example}
 
 \subsection{Risks and selectors}
-We now provide the formal definitions for the risks associated with our learners. Recall that the $L^2$-risk (\ref{l2risk}) was the integral of the loss with respect to data-generating process $P$. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
+We now provide the formal definitions for the expected loss associated with our learners. Recall that the expected $L^2$-loss (\ref{l2risk}) was the integral of the loss with respect to data-generating process $P$. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
 \begin{align*}
-    \hat{R}(\btheta) := \int L(o, \btheta) d P_{n}(o).
+    R(\theta , P_n) = \int L(o, \btheta) d P_{n}(o).
 \end{align*}
- Now let some split variable $ S $ be given for our data $ D_n $, we are also interested in how our learner performs on the cross-validation data. Denote the risk of our learner on the cross-validation data as 
+Given a split variable $S$ for our data $D_n$, the risk of our learner on the cross-validation test data can be expressed as
  \begin{align*}
-     \hat{R}_S(\theta) :=  \int L(o, \btheta) d P_{n,S}^{1}(o).
+     R(\theta, P_{n, S}^{1}) =  \int L(o, \btheta) d P_{n,S}^{1}(o).
  \end{align*}
- 
- The following definitions are analogous to what is stated in section 1 and 2 of  \cite{laan03}
- \begin{definition}[Conditional risk averaged over splits \cite{vaart06}]
-    Given the data $ D_n $ and some split-variable $ S $. The averaged conditional risk of each learner in a specified library, $ \hat{\Theta} = \{ \btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq \ml \}, \ml \in \mathbb{N} $, applied to our training data $ P_{n, S}^{0} $ is 
+ The following definitions are analogous to what is stated in section 1 and 2 of  \cite{laan03}.
+ \begin{definition}[Expected loss averaged over splits \cite{vaart06}]
+     Given the data $ D_n $ and some split-variable $ S $, the averaged expected loss of some learner, $ \theta_{q}(P_{n,s}^{0}) $, in a library, $ \lib_{\ml}(P_n) $, applied to our training data $ P_{n, S}^{0} $ is 
     \begin{align*}
-        \q \mapsto E_S R( \btheta_\q(P_{n,S}^{0})).
+        E_S R( \btheta_\q(P_{n,S}^{0}), P),
     \end{align*}
+    where $ P $ is the data-generating process.
 \end{definition}
 The expectation $ E_S $ is a simple average since $ S $ is discrete. Therefore, for a given $ \q $ we have 
 \begin{align*}
-    E_S R( \btheta_\q(P_{n,S}^{0})) &= \sum_{s \in \operatorname{supp}(S)} R(\theta_{q}(P_{n, S = s}^{0})) \cdot P(S = s) 
+    E_S R( \btheta_\q(P_{n,S}^{0}), P) &= \sum_{s \in \operatorname{supp}(S)} R(\theta_{q}(P_{n, s}^{0}), P) \cdot P(S = s) 
 \end{align*}
 
 
@@ -383,9 +368,12 @@ Essentially, solving for the minimum is a convex optimization problem, with the 
 \end{align*}
 and so we obtain the optimum by isolating $ \delta $ 
 \begin{align*}
-    \delta_n = \sqrt{\frac{a(n)}{b(n)}},
+    \delta_n = \sqrt{\frac{a(n)}{b(n)}}. 
 \end{align*}
-
+We see that $ a(n) $ converges at a rate of order $ 1/n $ to 0 and the rate of $ b(n) $ depends on the unknown oracle risk. For $ n \to \infty $, the risk term $ 2ER(\theta_{ \tilde{q} }(P_{n, S}^{0})) $ converges to the lowest possible risk achievable by any of the learners, it might be the case that the convergence is fast, i.e. it converges at a rate of order $ 1/n^{-1/2} $. That is if  
+\begin{align*}
+    \delta_n = \sqrt{\frac{a(n)}{b(n)}} = \sqrt{\frac{\frac{48}{n} \log(1 + k)}{O(\frac{1}{\sqrt{n}}) + \frac{80}{n} \log(1 + k) }} = \sqrt{\frac{48 \log(1 + k)}{O(\sqrt{n}) + 80 \log(1 + k)}}
+\end{align*}
 
 
 

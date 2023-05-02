@@ -1,0 +1,17 @@
+- Where the loss function attain its minimum and is it unique? For what loss functions is this true
+- Bound of loss 
+- theta hat is not an estimator
+- Example 1 does not make sense
+- Make more clear we have distribution over S
+- newcommand for index
+- Write about different CV-methods
+- Begin citing articles  
+
+Notes:
+- Write about formalism for parametric statistical model
+- Write about parametric and nonparametric learning algorithms
+- Monte carlo Cross-validation 
+- Compare CV risk with Oracle risk
+- Let (O, Omega, P) be probability space?
+- oracle selected learner?
+- Write integral instead of E

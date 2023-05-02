@@ -90,6 +90,28 @@
       \field{volume}{1}
       \field{year}{2002}
     \endentry
+    \entry{lauritzen2022statistics}{book}{}
+      \name{author}{1}{}{%
+        {{hash=767d1fd28490bcd9783ef6e5d677c984}{%
+           family={Lauritzen},
+           familyi={L\bibinitperiod},
+           given={Steffen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{767d1fd28490bcd9783ef6e5d677c984}
+      \strng{fullhash}{767d1fd28490bcd9783ef6e5d677c984}
+      \strng{bibnamehash}{767d1fd28490bcd9783ef6e5d677c984}
+      \strng{authorbibnamehash}{767d1fd28490bcd9783ef6e5d677c984}
+      \strng{authornamehash}{767d1fd28490bcd9783ef6e5d677c984}
+      \strng{authorfullhash}{767d1fd28490bcd9783ef6e5d677c984}
+      \field{labelalpha}{Lau22}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Mathematical Statistics: A Concise Course}
+      \field{year}{2022}
+    \endentry
     \entry{laan03}{article}{}
       \name{author}{2}{}{%
         {{hash=b8bfac411a7c4927b3369cdd78f928f6}{%
