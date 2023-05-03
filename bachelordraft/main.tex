@@ -14,6 +14,8 @@
 \setlength\parindent{0pt}
 \DeclareMathOperator*{\argmax}{arg\,max} 
 \DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\newcommand\norm[1]{\lVert#1\rVert}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{claim}[theorem]{Claim}
@@ -286,6 +288,26 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{proof}
     See appendix
 \end{proof}
+To control the bounds for the expected loss we introduce Bernstein pairs 
+\begin{definition}[Bernstein pair \cite{vaart06}]
+    Given a measurable function $ f: O \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
+    \begin{equation} \label{bernstein}
+        M(f)^2 P\left( e^{|f|/M(f)} -1 - \frac{|f|}{|M(f)|}\right) \leq \frac{1}{2}v(f) 
+    \end{equation}
+\end{definition}
+\begin{proposition}
+    $ (\norm{f}_{\infty}, \frac{3}{2} Pf^2 ) $ is a Bernstein pair. 
+\end{proposition}
+\begin{proof}
+    Following proof is due to \cite{vaart06}[ch. 8.1]. 
+    \begin{align*}
+        \norm{f}_{\infty}^2 P\left( e^{|f|/\norm{f}_{\infty}} -1 - \frac{|f|}{\norm{f}_{\infty}}\right) &= \norm{f}_{\infty}^{2} \sum_{k \geq 2}^{\infty} P \frac{|f|^{k}}{\norm{f}^{k}_{\infty}k!} = Pf^2 \sum_{k \geq 2}^{\infty} P\frac{|f|^{k-2}}{\norm{f}^{k-2}_{\infty} k! } \\
+                                                                                                        &\leq P f^2 \sum_{k \geq 2}^{\infty} \frac{\norm{f}_{\infty}^{k-2}}{\norm{f}^{k-2}_{\infty} k! } = P f^2 \sum_{k \geq 2}^{\infty} \frac{1}{k !}\\
+                                                                                                        &= P f^2 (e-2)\leq \frac{3}{4} P f^2 = \frac{1}{2} \left(\frac{3}{2} Pf^2\right). 
+    \end{align*}
+   In the first inequality we replace the absolute value of $ f $ with the uniform norm, which is larger. we also have   
+\end{proof}
+
 
 \begin{lemma}[Lemma 2.2 in \cite{vaart06}] \label{finitesamplebound}
     Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$ in some set of measurable functions $ \mathcal{F} $ on $ \mathcal{O} $. Then, for any Bernstein pair $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
@@ -319,7 +341,7 @@ First, we take the expectation wrt. $ D_n $ on both sides in lemma \ref{finitesa
 E_{D_n}E_{S} \frac{1 + \delta}{\sqrt{n_1} } \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o)\\
 &=E_{S} \frac{1 + \delta}{\sqrt{n_1} } E_{D_n}\max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o).
 \end{align*}
-Where we use Fubini in the last equality. Applying lemma \ref{finitesamplebound} to the expression above yields 
+Where we use Fubini in the last equality. Recall that $ S \indep D_n $, so we can always consider $ n_1 $ as fixed given $ D_n $, now applying lemma \ref{finitesamplebound} to the expression above with $ n = n_1 $ yields 
 \begin{align*}
 &E_S\frac{1 + \delta}{\sqrt{n_1} } E_{D_n} \max_{1 \leq \q \leq k} \int L(o, \btheta_{\q}(P_{n, S}^{0})) d (G_{n,S}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
 &\leq E_S \frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{1 \leq \q \leq k} \left[ \frac{M(\btheta_{\q}(P_{n,S}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\btheta_{ \q}(P_{n,S}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta_{\q}(P_{n,S}^{0}), P)^{2-p}} \right)^{1/p} \right] \\
