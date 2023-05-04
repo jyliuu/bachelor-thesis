@@ -5,6 +5,7 @@ library(caret)
 library(patchwork)
 
 expit <- function(x){exp(x)/(1+exp(x))}
+set.seed(10)
 trueModel <- function(Age, Parasites) expit(-3.5-.3*Age+.85*Parasites+0.35*Age*Parasites)
 simulateMalariaData <- function(N){
     Age <- runif(N,.5,15)
@@ -104,7 +105,6 @@ xgboostmodplot
 fit_logreg <- function(dat) glm(y ~ Age + Parasites, family=binomial(), data=dat)
 fit_logreg_intercept <- function(dat) glm(y ~ 1, family=binomial(), data=dat)
 fit_logreg_true <- function(dat) glm(y ~ Age + Parasites + Age*Parasites, family=binomial(), data=dat)
-
 fit_xgboost <- function(dat) xgboost(data = as.matrix(dat[c('Age', 'Parasites')]), 
                      verbose = 0,
                      label = dat$y,
@@ -127,6 +127,7 @@ MSE <- function(y, y_hat) mean((y-y_hat)^2)
 logloss <- function(y, p) mean(-(y*log(p)+(1-y)*log(1-p)))
 
 # CV method
+# Returns losses on k splits
 cross_validate <- function(model_fun, predict_fun, dataset, k=5, loss_fun=logloss) {
     folds <- createFolds(dataset$y, k = k, list = TRUE)     
     losses <- c()
@@ -152,7 +153,7 @@ predict(fit, newdata=simDat)
 predict(bstSparse, as.matrix(grid[c('Age', 'Parasites')]))
 
 # Multiple CV
-
+# Cross validate multiple return losses in matrix
 cross_validate_multiple <- function(models_fit_predict, dataset, k=5, loss_fun=logloss) {
     folds <- createFolds(dataset$y, k = k, list = TRUE)     
     p <- length(models_fit_predict)
@@ -228,8 +229,9 @@ dSL <- function (candidates, dataset, k=5, loss_fun=logloss) {
 }
 
 candidatesLogReg <- list(logReg = c(fit_logreg, predict_logreg), 
-                   logRegIntercept = c(fit_logreg_intercept, predict_logreg),
-                   logRegTrue = c(fit_logreg_true, predict_logreg))
+                   logRegIntercept = c(fit_logreg_intercept, predict_logreg)
+#                   logRegTrue = c(fit_logreg_true, predict_logreg)
+)
 
 candidatesTree <- list(xgboost = c(fit_xgboost, predict_xgboost))
 
@@ -249,15 +251,16 @@ res10k
 
 
 # Insane currying 
-fit_dSL_with_candidates <- function(candidates) function(dat) {
-    cv_res <- dSL(candidates, dat)
+fit_dSL_with_candidates <- function(candidates, k=10) function(dat) {
+    cv_res <- dSL(candidates, dat, k=k)
     selected <- candidates[[ cv_res[[3]] ]] # return the candidate with lowest CV error
     selected_fitted <- selected[[1]](dat)
     list(fitted_mod = selected_fitted, predict_fun = selected[[2]])
 }
 
 fit_dSL <- fit_dSL_with_candidates(candidates)
-predict_dSL <- function(sl, dat) sl[[2]](sl[[1]], dat)
+predict_dSL <- function(sl, dat) sl$predict_fun(sl$fitted_mod, dat)
+candidates_with_dSL <- c(candidates, list(dSL = c(fit_dSL, predict_dSL)))
 
 # Test this way of fitting works
 dSL_mod <- fit_dSL(simDat)
@@ -265,10 +268,56 @@ dSL_mod
 predict_dSL(dSL_mod, simDat)
 
 # Cross validation of discrete super learner
-candidates_with_dSL <- c(candidates, list(dSL = c(fit_dSL, predict_dSL)))
-
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(100), k=100))
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(2000), k=30))
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(10000), k=10))
 
 # Seems like the discrete super learner is at least as good as the best learner
+
+# Plot losses of super learner vs other learners
+#get_losses_incl_dsl <- function(obs_count, k) {
+#    print(paste('Getting losses for', obs_count))
+#    rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(obs_count), k=k))
+#}
+
+#losses_dsl <- sapply(1:200*500, function (obs) get_losses_incl_dsl(obs, 2))
+#losses_dsl
+#
+#x <- t(t(1:ncol(losses_dsl)))
+#
+## Plot each row of the matrix as a line graph
+#matplot(t(losses_dsl), type='l', lty=1, lwd=2, xlab='Column index', ylab='Loss')
+#legend('topright', legend=1:nrow(losses_dsl), col=1:nrow(losses_dsl), lty=1, lwd=2)
+
+get_losses_incl_dsl2 <- function(obs_counts, models_fit_predict, test_count = 5000, loss_fun=) {
+    test_set <- simulateMalariaData(test_count)
+    train_set <- simulateMalariaData(1)
+
+    p  <- length(models_fit_predict)
+    preds <- foreach (j = obs_counts, .combine = 'rbind') %do% { 
+        train_set <- rbind(train_set, simulateMalariaData(j))
+        print(paste('Getting losses with train set of size', nrow(train_set)))
+
+        losses <- foreach(i = 1:p, .combine = 'cbind') %do% {
+            model_fun <- models_fit_predict[[i]][[1]]
+            predict_fun <- models_fit_predict[[i]][[2]]
+            fit <- model_fun(train_set)
+            out_of_split_preds <- predict_fun(fit, test_set)
+            
+            loss_fun(test_set$y, out_of_split_preds)
+        }
+        cbind(losses)
+    }
+
+    preds
+}
+losses_dsl2 <- get_losses_incl_dsl2(rep(50, 100), candidates_with_dSL)
+losses_dsl2
+# Plot losses dsl 2
+matplot(losses_dsl2, type='l', lty=1, lwd=2, xlab='Column index', ylab='Loss')
+legend('topright', legend=1:ncol(losses_dsl2), col=1:ncol(losses_dsl2), lty=1, lwd=2)
+
+# Idea: one way to make this more interesting could be to simulate data from a much more complicated distribution, with some of the features having high importance but occurs less frequently? 
+# Perhaps the risk can be calculated explicitly, since we have the model formula after all?
+
+
