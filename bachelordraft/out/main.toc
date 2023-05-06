@@ -6,7 +6,8 @@
 \contentsline {subsection}{\numberline {3.2}Cross-validation methodology}{5}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Risks and selectors}{6}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Oracle inequalities}{7}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Example: Binary Regression}{9}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.5}Example: asymptotic equality}{10}{subsection.3.5}%
 \contentsline {section}{\numberline {4}The Ensemble Super Learner}{11}{section.4}%
 \contentsline {section}{\numberline {5}Simulation results}{11}{section.5}%
-\contentsline {section}{\numberline {6}Discussion}{11}{section.6}%
+\contentsline {subsection}{\numberline {5.1}Simulation results for the discrete super learner}{11}{subsection.5.1}%
+\contentsline {section}{\numberline {6}Discussion}{12}{section.6}%

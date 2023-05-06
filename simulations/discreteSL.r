@@ -109,7 +109,7 @@ fit_xgboost <- function(dat) xgboost(data = as.matrix(dat[c('Age', 'Parasites')]
                      verbose = 0,
                      label = dat$y,
                      max.depth = 3,
-                     eta = 0.2,
+                     eta = 0.3,
                      nthread = 5,
                      nrounds = 50, 
                      objective = 'binary:logistic',
@@ -222,7 +222,7 @@ cvres
 # 2. (e) Doing this for all candidate learners the dSL will obtain the cv errors for each of the learners
 # 2. (f) Pick the learner with the lowest CV error, and fit it on the k-1 data, that will be the dSL model for k-1 fold
 # 3. Finally, use the dSL to predict on the left out fold 
-dSL <- function (candidates, dataset, k=5, loss_fun=logloss) {
+dSL <- function (candidates, dataset, k=5, loss_fun=MSE) {
     cv_errors <- cross_validate_multiple(candidates, dataset, k=k)
     avg_cv_errors <- rowMeans(cv_errors)
     return(list(cv_errors, avg_cv_errors, which.min(avg_cv_errors))) 
@@ -289,7 +289,7 @@ rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(10000)
 #matplot(t(losses_dsl), type='l', lty=1, lwd=2, xlab='Column index', ylab='Loss')
 #legend('topright', legend=1:nrow(losses_dsl), col=1:nrow(losses_dsl), lty=1, lwd=2)
 
-get_losses_incl_dsl2 <- function(obs_counts, models_fit_predict, test_count = 5000, loss_fun=) {
+get_losses_incl_dsl2 <- function(obs_counts, models_fit_predict, test_count = 5000, loss_fun=MSE) {
     test_set <- simulateMalariaData(test_count)
     train_set <- simulateMalariaData(1)
 
@@ -311,12 +311,16 @@ get_losses_incl_dsl2 <- function(obs_counts, models_fit_predict, test_count = 50
 
     preds
 }
-losses_dsl2 <- get_losses_incl_dsl2(rep(50, 100), candidates_with_dSL)
+
+set.seed(19)
+jump <- 100
+losses_dsl2 <- get_losses_incl_dsl2(c(99, rep(jump, 35)), candidates_with_dSL)
 losses_dsl2
 # Plot losses dsl 2
-matplot(losses_dsl2, type='l', lty=1, lwd=2, xlab='Column index', ylab='Loss')
-legend('topright', legend=1:ncol(losses_dsl2), col=1:ncol(losses_dsl2), lty=1, lwd=2)
-
+png(filename = "myplot.png", width = 1000, height = 800, res = 120)
+matplot(x = 1:nrow(losses_dsl2)*jump, y=losses_dsl2, type='l', lty=1, lwd=2, xlab='n', ylab='Loss')
+legend('topright', legend=c('Main effects', 'Intercept only', 'XGBoost', 'Discrete super learner'), col=1:ncol(losses_dsl2), lty=1, lwd=2, bg='white', border='black')
+dev.off()
 # Idea: one way to make this more interesting could be to simulate data from a much more complicated distribution, with some of the features having high importance but occurs less frequently? 
 # Perhaps the risk can be calculated explicitly, since we have the model formula after all?
 

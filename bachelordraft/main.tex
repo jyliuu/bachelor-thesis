@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,bm}
 \usepackage{mdframed}
+\usepackage{float}
 \usepackage{mathtools}
 \usepackage[
     backend=biber,
@@ -73,7 +74,7 @@
 
 
 \section{Introduction}
-In the context of regression, a natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for  n observation $ O = (Y, X) $ is minimized. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the conditional mean can only be identified if we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O(1/n) $. \cite{lauritzen2022statistics}[ch. 5]
+In the context of regression, a natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for $ n $ observations $ O = (Y, X) $ is minimized. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the conditional mean can only be identified if we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O\left(\frac{1}{\sqrt{n}}\right) $. \cite{lauritzen2022statistics}[ch. 5]
 
 However, if we are dealing with highly complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be biased. In such situations, it is more appropriate to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests, to estimate the conditional mean. On the other hand, the assumptions of these data-driven methods regarding $ \mathcal{P} $ are not explicit. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal. 
 
@@ -127,7 +128,7 @@ Moving forward, we will denote $ O_1 , \dots , O_n \in \mathcal{O} $ as our \tex
 
 We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function. Indeed, it makes sense in this context since we would like to emphasize that the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, is a regression function. We refer to that outcome as a \textbf{learner}. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
 
-However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. A learner is, therefore, a map from a background space, $ \Omega $, to the parameter space, $ \Theta $. In practice, we would have observed $ O_3(\omega) = o_1, \dots, O_n(\omega) = o_n $ for a specific $ \omega $, and subsequently, we can apply our learning algorithm on $ D_n(\omega) = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \btheta(D_n(\omega)) $, as a \textbf{fitted learner}. 
+However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and subsequently, we can apply our learning algorithm on $ D_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \btheta(D_n) $, as a \textbf{fitted learner}. 
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learner is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
 
@@ -138,9 +139,9 @@ The parameters of the resulting fit are not directly interpretable. Despite this
 \end{example}
 There is a one-to-one correspondence between our data $ D_n $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
 \begin{align*}
-    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A},
 \end{align*}
-We can, therefore, write $ \btheta(P_n)$ as an alternative representation of the learner $\btheta(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
+given that the observations are independent and identically distributed, so permuting the order of the observations does not matter. We can, therefore, write $ \btheta(P_n)$ as an alternative representation of the learner $\btheta(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
 
 
 %\begin{example}[Regression functions $ \btheta $] \label{ex:regfunc}
@@ -228,7 +229,7 @@ Given a split variable $S$ for our data $D_n$, the risk of our learner on the cr
 \end{definition}
 The expectation $ E_S $ is a simple average since $ S $ is discrete. Therefore, for a given $ \q $ we have 
 \begin{align*}
-    E_S R( \btheta_\q(P_{n,S}^{0}), P) &= \sum_{s \in \operatorname{supp}(S)} R(\theta_{q}(P_{n, s}^{0}), P) \cdot P(S = s) 
+    E_S R( \btheta_\q(P_{n,S}^{0}), P) &= \sum_{s \in \{0,1\}^{n}} R(\theta_{q}(P_{n, s}^{0}), P) \cdot P(S = s). 
 \end{align*}
 
 
@@ -295,7 +296,7 @@ To control the bounds for the expected loss we introduce Bernstein pairs
         M(f)^2 P\left( e^{|f|/M(f)} -1 - \frac{|f|}{|M(f)|}\right) \leq \frac{1}{2}v(f) 
     \end{equation}
 \end{definition}
-\begin{proposition}
+\begin{proposition} \label{unifbernstein}
     $ (\norm{f}_{\infty}, \frac{3}{2} Pf^2 ) $ is a Bernstein pair. 
 \end{proposition}
 \begin{proof}
@@ -305,7 +306,7 @@ To control the bounds for the expected loss we introduce Bernstein pairs
                                                                                                         &\leq P f^2 \sum_{k \geq 2}^{\infty} \frac{\norm{f}_{\infty}^{k-2}}{\norm{f}^{k-2}_{\infty} k! } = P f^2 \sum_{k \geq 2}^{\infty} \frac{1}{k !}\\
                                                                                                         &= P f^2 (e-2)\leq \frac{3}{4} P f^2 = \frac{1}{2} \left(\frac{3}{2} Pf^2\right). 
     \end{align*}
-   In the first inequality we replace the absolute value of $ f $ with the uniform norm, which is larger. we also have   
+   In the first inequality we replace the absolute value of $ f $ with the uniform norm, which is larger. 
 \end{proof}
 
 
@@ -358,54 +359,71 @@ The second and third terms above are identical, meaning that they can be combine
 \end{proof}
 
 
-\subsection{Example: Binary Regression}
-Consider the case where we have i.id. observations $ O_1 = (Y_1 , X_1) , \dots , O_n = (Y_n , X_n) $ such that $ Y_i \in \{0, 1\} $ and $ X \in \mathbb{R}^{d} $ distributed according some $ P \in \mathcal{P} $. We would like to estimate the conditional expectation $ \btheta_0(x) = E(Y \mid X = x) = P(Y = 1 \mid X = x) $.  Let $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable} \}  $ and choose the quadratic loss function $ L((Y, X), \btheta) = (Y - \btheta(X))^2 $.
+\subsection{Example: asymptotic equality}
+Let $ D_n $ be our data distributed according some $ P \in \mathcal{P} $. Our goal is to estimate the conditional expectation 
+\begin{align*}
+   x \mapsto E(Y \mid X = x) = P(Y = 1 \mid X = x) 
+\end{align*}
+Consider the quadratic loss function $ L((Y, X), \btheta) = (Y - \btheta(X))^2 $ for this task. 
 
+We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \btheta \in \Theta $ and $ O \in \mathcal{O} $. It follows from proposition \ref{unifbernstein} that $ M(\btheta) = 1 $ and $ v(\btheta) = \frac{3}{2} \int L(o, \btheta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \btheta)$. It is also clear that $ R(\btheta) = \int L(o , \btheta) d P(o) \geq 0  $ since the loss function is positive. 
 
-We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \btheta \in \Theta $ and $ O \in \mathcal{O} $. It is stated in \cite[7]{vaart06} that $ M(\btheta) = 1 $ and $ v(\btheta) = \frac{3}{2} \int L(o, \btheta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \btheta)$. It is also clear that $ R(\btheta) = \int L(o , \btheta) d P(o) \geq 0  $ since the loss function is positive. If we plug these numbers in theorem \ref{finitesample}, then by using $ p = 1 $ and 
+We now have the choice of choosing $p $ in theorem \ref{finitesample}. By choosing $ p = 2 $, we see that we obtain a bound of order $ O(n^{-1/2}) $ on the remainder. We can also choose $ p = 1 $, which yields a bound of order $ O(n^{-1}) $ for every fixed $ \delta > 0$. A smart choice of $ p $ will yield a tighter finite sample bound in conjunction with choosing $ \delta $ to depend on $ n $. It is described in \cite{vaart06} that the oracle risk can be of order $ O(n^{-1}) $ in settings where one of the learners in our library corresponds to a finite-dimensional model containing our true regression function. 
+For asymptotic applications, however, this does not matter. By choosing $ p = 2 $ we observe that our bound simplifies to 
 \begin{align*}
-   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\btheta) + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta}\right]\right)
+   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]\right),
 \end{align*}
-In the equation provided, we observe that we can manipulate the following variables: sample size $n$, validation set size $n_1$, parameter $\delta > 0$, and the number of learners $k$. Assuming $k$ remains constant, the validation set size $n_1$ could be either stochastic, depending on the split variable $S$, or fixed as a constant, as illustrated in example \ref{splits}. For instance, we can set $n_1 = n/2$. By establishing a fixed value for $n_1$, we can drop the expectation in the second term. 
+now by setting $\delta = 0$, we obtain 
+\begin{align*}
+   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) + E \left(  \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]\right).
+\end{align*}
+By assuming that $ n_1 $ increases as $ n $ increases, the above result shows that the risk of our super learner is the risk of the oracle plus a remainder term which goes to zero at a rate of $1/\sqrt{n}$. Recall that the learner selected by oracle selector is by denfinition the learner with the lowest risk in our library, that is
+\begin{align*}
+   ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) \leq ER(\btheta_{\hat{\q}}(P_{n, S}^{0})).
+\end{align*}
+By applying the squeeze theorem, we can conclude that the super learner achieves a risk that is asymptotically equivalent to the oracle.  
 
-The supremum on the left side of the equation might increase significantly because $R(\btheta)$ could be very small. However, by carefully selecting the value of $v(\btheta)$, we can avoid the fraction from growing too large. Note that for any $ \btheta \in \Theta $:
-\begin{align*}
-    \frac{v(\btheta)}{R(\btheta)} = \frac{3}{2} \frac{\int L(o, \btheta)^2 d P(o)}{\int L(o, \btheta) dP(o)  } \leq \frac{3}{2} \frac{\int L(o, \btheta) \cdot 1 dP(o) }{\int L(o, \btheta) dP(o) } = \frac{3}{2},
-\end{align*}
-by using $ 0 \leq L(o, \btheta) \leq 1 $ almost surely. Since $ M(\btheta) $ is constant for all $ \btheta \in \Theta $, it is possible to drop the supremum. Combining all the information above we obtain 
-\begin{align*}
-   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) \frac{16}{n_1} \log (1 +k) \left[ 1 + \frac{3}{2} \frac{1 + \delta}{\delta}\right]\\
-                                        &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 5\delta}{2\delta}(1 + \delta) \frac{16}{n_1} \\
-                                        &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 8\delta + 5 \delta^2}{2\delta}\frac{16}{n_1} \\\
-                                        &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \left( \frac{3}{2\delta} + 4 + \frac{5}{2} \delta \right) \frac{16}{n_1},
-\end{align*}
-We can now adjust for the precision in our bound by choosing $ \delta $ and $ n $. Note that a small delta will mean that the first term $ (1 + 2 \delta) E R(\btheta_{ \tilde{q} }(P_{n, S}^{0})) $ will become smaller, but this is at the expense that the remainder term becomes larger due to the $ \frac{1 + \delta}{ \delta} $ fraction at the end. By choosing $ n $ to be large, we can partially compensate for a smaller delta.
+% \subsubsection{Choosing $p = 1$}
+% \begin{align*}
+%    ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\btheta) + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta}\right]\right)
+% \end{align*}
+% In the equation provided, we observe that we can manipulate the following variables: sample size $n$, validation set size $n_1$, parameter $\delta > 0$, and the number of learners $k$. Assuming $k$ remains constant, the validation set size $n_1$ could be either stochastic, depending on the split variable $S$, or fixed as a constant, as illustrated in example \ref{splits}. For instance, we can set $n_1 = n/2$. By establishing a fixed value for $n_1$, we can drop the expectation in the second term. 
 
-We might, therefore, for each $ n $, choose the $ \delta_n $ that minimizes the left-hand side for the given $ n $. By substituting $ n_1 = n/2 $ into the left hand side expression and then expanding it we obtain 
-\begin{align*}
- ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) + 2 \delta ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\frac{3}{2\delta}\log (1 +k) \frac{32}{n} + 4\log (1 +k) \frac{32}{n} + \frac{5\delta}{2} \log (1 +k)   \frac{32}{n},
-\end{align*}
-we observe that when $n$ is fixed, two terms remain constant, specifically the first and fourth terms, as they do not depend on $\delta$. The optimal $\delta_n$ can be determined as follows:
-\begin{align*}
-    \delta_n &= \argmin_{\delta} \frac{1}{\delta} \cdot \frac{3 \cdot 32}{2n} \log(1 + k) + \delta \cdot \left(2ER(\btheta_{ \tilde{\q} }(P_{n, S}^{0})) + \frac{5 \cdot 32}{2n} \log(1 + k) \right) \\
-    &= \argmin_{\delta} \frac{1}{\delta} \cdot \frac{48}{n} \log(1 + k) + \delta \cdot \left(2ER(\btheta_{ \tilde{\q} }(P_{n, S}^{0})) + \frac{80}{n} \log(1 + k) \right) \\
-    &= \argmin_{\delta} \frac{1}{\delta} a(n) + \delta b(n),
-\end{align*}
-Essentially, solving for the minimum is a convex optimization problem, with the terms $a(n) = \frac{48}{n} \log(1 + k)$ and $b(n) = 2ER(\btheta_{ \tilde{\q} }(P_{n, S}^{0})) + \frac{80}{n} \log(1 + k)$ remaining constant with respect to $n$. By differentiating the expression above and setting it equal to zero we obtain 
-\begin{align*}
-    0 &= \left( \frac{1}{\delta} a(n) + \delta b(n) \right)' = - \frac{1}{\delta^2} a(n) + b(n),
-\end{align*}
-and so we obtain the optimum by isolating $ \delta $ 
-\begin{align*}
-    \delta_n = \sqrt{\frac{a(n)}{b(n)}}. 
-\end{align*}
-We see that $ a(n) $ converges at a rate of order $ 1/n $ to 0 and the rate of $ b(n) $ depends on the unknown oracle risk. For $ n \to \infty $, the risk term $ 2ER(\theta_{ \tilde{q} }(P_{n, S}^{0})) $ converges to the lowest possible risk achievable by any of the learners, it might be the case that the convergence is fast, i.e. it converges at a rate of order $ 1/n^{-1/2} $. That is if  
-\begin{align*}
-    \delta_n = \sqrt{\frac{a(n)}{b(n)}} = \sqrt{\frac{\frac{48}{n} \log(1 + k)}{O(\frac{1}{\sqrt{n}}) + \frac{80}{n} \log(1 + k) }} = \sqrt{\frac{48 \log(1 + k)}{O(\sqrt{n}) + 80 \log(1 + k)}}
-\end{align*}
+% The supremum on the left side of the equation might increase significantly because $R(\btheta)$ could be very small. However, by carefully selecting the value of $v(\btheta)$, we can avoid the fraction from growing too large. Note that for any $ \btheta \in \Theta $:
+% \begin{align*}
+%     \frac{v(\btheta)}{R(\btheta)} = \frac{3}{2} \frac{\int L(o, \btheta)^2 d P(o)}{\int L(o, \btheta) dP(o)  } \leq \frac{3}{2} \frac{\int L(o, \btheta) \cdot 1 dP(o) }{\int L(o, \btheta) dP(o) } = \frac{3}{2},
+% \end{align*}
+% by using $ 0 \leq L(o, \btheta) \leq 1 $ almost surely. Since $ M(\btheta) $ is constant for all $ \btheta \in \Theta $, it is possible to drop the supremum. Combining all the information above we obtain 
+% \begin{align*}
+%    ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) \frac{16}{n_1} \log (1 +k) \left[ 1 + \frac{3}{2} \frac{1 + \delta}{\delta}\right]\\
+%                                         &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 5\delta}{2\delta}(1 + \delta) \frac{16}{n_1} \\
+%                                         &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \frac{3 + 8\delta + 5 \delta^2}{2\delta}\frac{16}{n_1} \\\
+%                                         &= (1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\log (1 +k) \left( \frac{3}{2\delta} + 4 + \frac{5}{2} \delta \right) \frac{16}{n_1},
+% \end{align*}
+% We can now adjust for the precision in our bound by choosing $ \delta $ and $ n $. Note that a small delta will mean that the first term $ (1 + 2 \delta) E R(\btheta_{ \tilde{q} }(P_{n, S}^{0})) $ will become smaller, but this is at the expense that the remainder term becomes larger due to the $ \frac{1 + \delta}{ \delta} $ fraction at the end. By choosing $ n $ to be large, we can partially compensate for a smaller delta.
 
-
-
+% We might, therefore, for each $ n $, choose the $ \delta_n $ that minimizes the left-hand side for the given $ n $. By substituting $ n_1 = n/2 $ into the left hand side expression and then expanding it we obtain 
+% \begin{align*}
+%  ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) + 2 \delta ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +\frac{3}{2\delta}\log (1 +k) \frac{32}{n} + 4\log (1 +k) \frac{32}{n} + \frac{5\delta}{2} \log (1 +k)   \frac{32}{n},
+% \end{align*}
+% we observe that when $n$ is fixed, two terms remain constant, specifically the first and fourth terms, as they do not depend on $\delta$. The optimal $\delta_n$ can be determined as follows:
+% \begin{align*}
+%     \delta_n &= \argmin_{\delta} \frac{1}{\delta} \cdot \frac{3 \cdot 32}{2n} \log(1 + k) + \delta \cdot \left(2ER(\btheta_{ \tilde{\q} }(P_{n, S}^{0})) + \frac{5 \cdot 32}{2n} \log(1 + k) \right) \\
+%     &= \argmin_{\delta} \frac{1}{\delta} \cdot \frac{48}{n} \log(1 + k) + \delta \cdot \left(2ER(\btheta_{ \tilde{\q} }(P_{n, S}^{0})) + \frac{80}{n} \log(1 + k) \right) \\
+%     &= \argmin_{\delta} \frac{1}{\delta} a(n) + \delta b(n),
+% \end{align*}
+% Essentially, solving for the minimum is a convex optimization problem, with the terms $a(n) = \frac{48}{n} \log(1 + k)$ and $b(n) = 2ER(\btheta_{ \tilde{\q} }(P_{n, S}^{0})) + \frac{80}{n} \log(1 + k)$ remaining constant with respect to $n$. By differentiating the expression above and setting it equal to zero we obtain 
+% \begin{align*}
+%     0 &= \left( \frac{1}{\delta} a(n) + \delta b(n) \right)' = - \frac{1}{\delta^2} a(n) + b(n),
+% \end{align*}
+% and so we obtain the optimum by isolating $ \delta $ 
+% \begin{align*}
+%     \delta_n = \sqrt{\frac{a(n)}{b(n)}}. 
+% \end{align*}
+% We see that $ a(n) $ converges at a rate of order $ 1/n $ to 0 and the rate of $ b(n) $ depends on the unknown oracle risk. For $ n \to \infty $, the risk term $ 2ER(\theta_{ \tilde{q} }(P_{n, S}^{0})) $ converges to the lowest possible risk achievable by any of the learners, it might be the case that the convergence is fast, i.e. it converges at a rate of order $ 1/n^{-1/2} $. That is if  
+% \begin{align*}
+%     \delta_n = \sqrt{\frac{a(n)}{b(n)}} = \sqrt{\frac{\frac{48}{n} \log(1 + k)}{O(\frac{1}{\sqrt{n}}) + \frac{80}{n} \log(1 + k) }} = \sqrt{\frac{48 \log(1 + k)}{O(\sqrt{n}) + 80 \log(1 + k)}}
+% \end{align*}
 
 
 %Nonetheless, obtaining a useful bound could be challenging unless $n$ is considerably large. In that case, the oracle risk might be extremely close to the true risk. Unless the remainder constitutes only a minuscule portion of the oracle risk, the finite sample result may not be of significant interest.
@@ -437,7 +455,31 @@ We see that $ a(n) $ converges at a rate of order $ 1/n $ to 0 and the rate of $
 
 \section{The Ensemble Super Learner}
 \section{Simulation results}
+In the following section we show the results of applying the discrete super learner to a simulated dataset. Our dataset consists of a binary outcome, $Y$, which depends on two covariates $X_1$ and $X_2$. Our setup is as follows
+\begin{align*}
+    X_1 &\sim \operatorname{Unif}(0.5, 15),\\
+    X_2 \mid X_1 = x_1 &\sim \mathcal{N}(3.5-0.03x_1, 1),\\
+    Y \mid X_1 = x_1, X_2 = x_2 &\sim \operatorname{Ber}(\theta_0(x_1, x_2)),
+\end{align*}
+for $\theta_0(x_1, x_2) = \expit({-3.5 - 0.3x_1 + 0.85x_2 + 0.35x_1x_2})$ which is the true regression function. The true regression function is captured by the logistic regression model with interaction terms. We would like to learn the true regression using the discrete super learner. We use the following libraries of learners as an illustrative example:
+\begin{enumerate}
+    \item Intercept only logistic regression: $E[Y \mid X_1, X_2] = \expit(\beta_0)$
+    \item Logistic regression with main effects: $E[Y \mid X_1, X_2] = \expit(\beta_0 + \beta_1 X_1 + \beta_2 X_2)$
+    \item XGBoost with hyperparameters: \texttt{max\_depth=3, eta=0.3,\\ n\_rounds=100, objective='binary:logistic', booster='dart', nthread=5}
+\end{enumerate}
+Our goal is to estimate $\theta_0$
+\subsection{Simulation results for the discrete super learner}
+We now show the loss of the discrete super learner compared to the other learners. We use the following loss function
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/dsl_loss.png}
+    \caption{The loss of the discrete super learner compared to other learners. $ N = 3600 $}
+\end{figure}
+
+
+
 \section{Discussion}
+Hello 
 \printbibliography
 
 \end{document}
