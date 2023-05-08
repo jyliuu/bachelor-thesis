@@ -378,7 +378,7 @@ The second and third terms above are identical, meaning that they can be combine
     \begin{align*}
         \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + 2 \delta + \frac{1 + \delta}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right].
     \end{align*}
-    As the inequality holds for all $ \delta > 0 $, we can choose $ \delta $ to depend on $ n $ or just set it to 0. The problem now lies in determining how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
+    As the inequality holds for all $ \delta > 0 $, we can just set it to 0 (formally one would perhaps choose $ \delta_n $ decreasing in $ n $). The problem now lies in determining how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
     \begin{align*}
      \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + \frac{E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} 
     \end{align*}
