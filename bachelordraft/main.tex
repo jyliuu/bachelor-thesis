@@ -359,9 +359,13 @@ The second and third terms above are identical, meaning that they can be combine
 \end{proof}
 
 \begin{corollary}[Asymptotic equivalence] 
-   The risk of the super learner is asymptotically equivalent to the risk of the oracle estimator. That is,
+    If there exists a $ \varepsilon > 0 $ such that 
    \begin{align*}
-       \lim_{n \to \infty} \frac{E_{D_n} E_S R(\btheta_{ \hat{\q} }(P_{n, S}^{0}), P)}{E_{D_n} E_S R(\btheta_{ \tilde{\q} }(P_{n, S}^{0}), P)} = 1 
+       E_{D_n} E_S R(\btheta_{ \tilde{\q} }(P_{n, S}^{0}), P) > \varepsilon \qquad \text{for all } n \in \mathbb{N},
+   \end{align*}
+    then the risk of the super learner is asymptotically equivalent to the risk of the oracle selector, that is
+   \begin{align*}
+       \lim_{n \to \infty} \frac{E_{D_n} E_S R(\btheta_{ \hat{\q} }(P_{n, S}^{0}), P)}{E_{D_n} E_S R(\btheta_{ \tilde{\q} }(P_{n, S}^{0}), P)} = 1.
    \end{align*}
 \end{corollary}
 \begin{proof}
@@ -374,44 +378,29 @@ The second and third terms above are identical, meaning that they can be combine
     \begin{align*}
         \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + 2 \delta + \frac{1 + \delta}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right].
     \end{align*}
-    As the inequality holds for all $ \delta > 0 $, we can choose $ \delta $ to depend on $ n $ or just set it to 0. The problem now lies in assesing how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
+    As the inequality holds for all $ \delta > 0 $, we can choose $ \delta $ to depend on $ n $ or just set it to 0. The problem now lies in determining how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
     \begin{align*}
      \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + \frac{E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} 
     \end{align*}
-    The fraction on the left-hand side will converge to $0$ so long as the remainder (numerator) is $o$ of the oracle risk, or if the oracle risk converges to a number strictly greater than $ 0 $. We also note that by the definition of the oracle, we have 
+    The fraction on the right-hand side will converge to $0$ since the oracle risk must converge to a number strictly greater than $ 0 $ by assumption. We also note that by the definition of the oracle, we have 
     \begin{align*}
         E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P) \leq E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P),
     \end{align*}
     implying that 
         \begin{align*}
-        1 \leq \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)}. 
+        1 \leq \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)}, 
     \end{align*}
-    Applying the squeeze theorem thus yields the desired result. 
+    applying the squeeze theorem thus yields the desired result. 
 \end{proof}
 
-\subsection{Example: asymptotic equality}
-Let $ D_n $ be our data distributed according some $ P \in \mathcal{P} $. Our goal is to estimate the conditional expectation 
-\begin{align*}
-   x \mapsto E(Y \mid X = x) = P(Y = 1 \mid X = x) 
-\end{align*}
-Consider the quadratic loss function $ L((Y, X), \btheta) = (Y - \btheta(X))^2 $ for this task. 
+\begin{example}[Binary regression]
+   In binary regression with quadratic loss, the risk for a consistent learner of the true regression $ x \mapsto P(Y = 1 \mid X = x) $ can never be zero unless the binary outcome is deterministic given $ x $. We have 
+   \begin{align*}
+       R(\theta(P_n) , P) = \int (Y - \theta(P_n)(X))^2 dP \overset{P}{\longrightarrow}   \int (Y - E(Y \mid X))^2 d P 
+   \end{align*}
+   How to prove above?
+\end{example}
 
-We observe that the quadratic loss is bounded by $ 1 $ for all choices of $ \btheta \in \Theta $ and $ O \in \mathcal{O} $. It follows from proposition \ref{unifbernstein} that $ M(\btheta) = 1 $ and $ v(\btheta) = \frac{3}{2} \int L(o, \btheta)^2 dP(o)  $ is a valid Bernstein pair for the function $ o \mapsto L(o, \btheta)$. It is also clear that $ R(\btheta) = \int L(o , \btheta) d P(o) \geq 0  $ since the loss function is positive. 
-
-We now have the choice of choosing $p $ in theorem \ref{finitesample}. By choosing $ p = 2 $, we see that we obtain a bound of order $ O(n^{-1/2}) $ on the remainder. We can also choose $ p = 1 $, which yields a bound of order $ O(n^{-1}) $ for every fixed $ \delta > 0$. A smart choice of $ p $ will yield a tighter finite sample bound in conjunction with choosing $ \delta $ to depend on $ n $. It is described in \cite{vaart06} that the oracle risk can be of order $ O(n^{-1}) $ in settings where one of the learners in our library corresponds to a finite-dimensional model containing our true regression function. 
-For asymptotic applications, however, this does not matter. By choosing $ p = 2 $ we observe that our bound simplifies to 
-\begin{align*}
-   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]\right),
-\end{align*}
-now by setting $\delta = 0$, we obtain 
-\begin{align*}
-   ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) + E \left(  \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]\right).
-\end{align*}
-By assuming that $ n_1 $ increases as $ n $ increases, the above result shows that the risk of our super learner is the risk of the oracle plus a remainder term which goes to zero at a rate of $1/\sqrt{n}$. Recall that the learner selected by oracle selector is by denfinition the learner with the lowest risk in our library, that is
-\begin{align*}
-   ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) \leq ER(\btheta_{\hat{\q}}(P_{n, S}^{0})).
-\end{align*}
-By applying the squeeze theorem, we can conclude that the super learner achieves a risk that is asymptotically equivalent to the oracle.  
 
 % \subsubsection{Choosing $p = 1$}
 % \begin{align*}
