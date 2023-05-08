@@ -358,6 +358,36 @@ Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also
 The second and third terms above are identical, meaning that they can be combined into one term where the numerator in the first fraction is $ 16 $ instead of $ 8 $. 
 \end{proof}
 
+\begin{corollary}[Asymptotic equivalence] 
+   The risk of the super learner is asymptotically equivalent to the risk of the oracle estimator. That is,
+   \begin{align*}
+       \lim_{n \to \infty} \frac{E_{D_n} E_S R(\btheta_{ \hat{\q} }(P_{n, S}^{0}), P)}{E_{D_n} E_S R(\btheta_{ \tilde{\q} }(P_{n, S}^{0}), P)} = 1 
+   \end{align*}
+\end{corollary}
+\begin{proof}
+    By choosing $ p = 2 $ in theorem \ref{finitesample}, we obtain
+    \begin{align*}
+        E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P) &\leq(1 + 2 \delta) E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)\\
+                                                        &+(1 + \delta) E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right].
+    \end{align*}
+    In the above inequality, so long as the $ n_1 $ is monotonically increasing as $ n $ increases, the remainder term goes to $ 0 $. Now by dividing the oracle risk on both sides, we obtain
+    \begin{align*}
+        \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + 2 \delta + \frac{1 + \delta}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right].
+    \end{align*}
+    As the inequality holds for all $ \delta > 0 $, we can choose $ \delta $ to depend on $ n $ or just set it to 0. The problem now lies in assesing how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
+    \begin{align*}
+     \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + \frac{E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} 
+    \end{align*}
+    The fraction on the left-hand side will converge to $0$ so long as the remainder (numerator) is $o$ of the oracle risk, or if the oracle risk converges to a number strictly greater than $ 0 $. We also note that by the definition of the oracle, we have 
+    \begin{align*}
+        E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P) \leq E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P),
+    \end{align*}
+    implying that 
+        \begin{align*}
+        1 \leq \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)}. 
+    \end{align*}
+    Applying the squeeze theorem thus yields the desired result. 
+\end{proof}
 
 \subsection{Example: asymptotic equality}
 Let $ D_n $ be our data distributed according some $ P \in \mathcal{P} $. Our goal is to estimate the conditional expectation 
