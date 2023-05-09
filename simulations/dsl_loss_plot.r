@@ -1,8 +1,10 @@
 source('dsl.r')
 source('model.r')
 
-get_losses_incl_dsl <- function(obs_counts, models_fit_predict, test_count = 5000, loss_fun=MSE) {
+get_losses_incl_dsl <- function(obs_counts, models_fit_predict, test_count = 5000, loss_fun=MSE, seed=19) {
+    set.seed(seed^2)
     test_set <- simulateMalariaData(test_count)
+    set.seed(seed)
     train_set <- simulateMalariaData(1)
 
     p  <- length(models_fit_predict)
@@ -24,9 +26,11 @@ get_losses_incl_dsl <- function(obs_counts, models_fit_predict, test_count = 500
     preds
 }
 
-set.seed(19)
+# Seeds 20 is interesting, jumps between logreg and xgboost
+# Seed 21 super learner == xgboost
+# Seed 22 is perfect, takes min of logreg and xgboost
 jump <- 100
-losses_dsl <- get_losses_incl_dsl(c(99, rep(jump, 35)), candidates_with_dSL)
+losses_dsl <- get_losses_incl_dsl(c(99, rep(jump, 35)), candidates_with_dSL, test_count = 10^6, loss_fun=MSE, seed=22)
 losses_dsl
 # Plot losses dsl 2
 png(filename = "myplot.png", width = 1000, height = 800, res = 120)

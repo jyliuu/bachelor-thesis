@@ -8,9 +8,11 @@
 \usepackage{mathtools}
 \usepackage[
     backend=biber,
-    style=alphabetic
+    bibstyle=numeric,
+    citestyle=authoryear,
+    sorting=ynt
 ]{biblatex}
-\bibliography{references.bib}
+\addbibresource{references.bib} % This command is used instead of \bibliography{references.bib}
 
 \setlength\parindent{0pt}
 \DeclareMathOperator*{\argmax}{arg\,max} 
@@ -74,7 +76,7 @@
 
 
 \section{Introduction}
-In the context of regression, a natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for $ n $ observations $ O = (Y, X) $ is minimized. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the conditional mean can only be identified if we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O\left(\frac{1}{\sqrt{n}}\right) $. \cite{lauritzen2022statistics}[ch. 5]
+In the context of regression, a natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for $ n $ observations $ O = (Y, X) $ is minimized. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the conditional mean can only be identified if we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O\left(\frac{1}{\sqrt{n}}\right) $. \parencite{lauritzen2022statistics}[ch. 5]
 
 However, if we are dealing with highly complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be biased. In such situations, it is more appropriate to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests, to estimate the conditional mean. On the other hand, the assumptions of these data-driven methods regarding $ \mathcal{P} $ are not explicit. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal. 
 
@@ -86,9 +88,8 @@ We first present the general theory and our goal, which is to estimate the condi
 
 \section{Background}
 
-Our setup and notation is similar to \cite{vaart06} and \cite{laan03}:
+Our setup and notation is similar to \parencite{vaart06} and \parencite{laan03}:
 Let a statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
-%Let $ O_1 = (Y_1 , X_1), \ldots, O_n = (Y_n, X_n) \in \mathcal{O} = \{0,1\} \times \mathcal{X} $ be $ n $-i.i.d. observations distributed according to $ P \in \mathcal{P} $ on some measurable space $ (\mathcal{O}, \mathcal{A}) $.
 We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which represents the set of \textbf{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize 
 \begin{definition}[Quadratic loss]
     The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
@@ -96,7 +97,7 @@ We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{
     L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
 \end{align*}
 \end{definition}
-A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected $L^2$-loss, or conditional risk \cite{laan03}[p. 2] $R: \btheta \to \mathbb{R}$ given by 
+A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected $L^2$-loss, or conditional risk \parencite{laan03}[p. 2] $R: \btheta \to \mathbb{R}$ given by 
 \begin{equation} \label{l2risk}
     R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
@@ -112,9 +113,9 @@ Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional
     \end{align*}
 \end{theorem}
 \begin{proof}
-    Proof emulated from \cite{gyorfi2002distribution}[ch. 1]. 
+    Proof emulated from \parencite{gyorfi2002distribution}[ch. 1]. 
 
-    Let $ \btheta \in \Theta $ be arbitrary and $ m(x) = E(Y \mid X = x) $. We have 
+    Let $ \btheta \in \Theta $ be arbitrary and $ m(x) = E(Y \mid X = x) $, we have 
     \begin{align*}
         E| \theta(X) - Y |^2 &= E| \theta(X) - m(X) + m(X) - Y |^2 \\
                              &= E| \theta(X) - m(X) |^2 + E| m(X) - Y |^2 + 2 E[ (\theta(X) - m(X))(m(X) - Y) ].
@@ -137,7 +138,7 @@ It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1
 We will therefore introduce the terminology \textbf{learning algorithm} and \textbf{learner} in the context of learning from our data.  
 
 \subsection{Learning algorithms and learners}
-Moving forward, we will denote $ O_1 , \dots , O_n \in \mathcal{O} $ as our \textbf{observations}, and $ D_n = (O_1 , \dots , O_n) $ as our \textbf{data}. 
+Moving forward, we will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n = (O_1 , \dots , O_n) $ as our \textbf{observations} and \textbf{data} respectively. 
 \begin{definition}[Learning algorithm $ \btheta $]
     An learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
@@ -148,9 +149,9 @@ However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learner is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
 
-Nonparametric learning algorithms such as gradient boosting, for example XGBoost, can also be used to estimate the regression function. The gradient boosting algorithm, XGBoost, has a number of hyperparameters that can be tuned. These include, number of boosted trees, depth of each tree, learning rates, etc., but most importantly the internal loss objective which could for example be log-loss or mean squared error. XGBoost aims to iteratively refine the fitted learner by approximating the data $x \mapsto f_m(x)$ at each step $m$. It does so by introducing a new tree $h_m(x)$, which is trained on the error of $ f_m(x)$, such that $f_{m + 1}(x) = f_m(x) + h_m(x)$. The internal loss of the updated learner, $f_{m + 1}$, evaluated on the training data, is lower than that of the previous learner due to the inclusion of the new tree \cite{chen2016xgboost}.
+Nonparametric learning algorithms such as gradient boosting, for example XGBoost, can also be used to estimate the regression function. The gradient boosting algorithm, XGBoost, has a number of hyperparameters that can be tuned. These include, number of boosted trees, depth of each tree, learning rates, etc., but most importantly the internal loss objective which could for example be log-loss or mean squared error. XGBoost aims to iteratively refine the fitted learner by approximating the data $x \mapsto f_m(x)$ at each step $m$. It does so by introducing a new tree $h_m(x)$, which is trained on the error of $ f_m(x)$, such that $f_{m + 1}(x) = f_m(x) + h_m(x)$. The internal loss of the updated learner, $f_{m + 1}$, evaluated on the training data, is lower than that of the previous learner due to the inclusion of the new tree \parencite{chen2016xgboost}.
 
-The parameters of the resulting fit are not directly interpretable. Despite this, XGBoost has demonstrated its ability to model very complex datasets \cite{chen2016xgboost}.
+The parameters of the resulting fit are not directly interpretable. Despite this, XGBoost has demonstrated its ability to model very complex datasets \parencite{chen2016xgboost}.
 
 \end{example}
 There is a one-to-one correspondence between our data $ D_n $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
@@ -165,10 +166,10 @@ given that the observations are independent and identically distributed, so perm
 %    \begin{align*}
 %        Y_1 = \btheta_0(X_1) + \varepsilon,
 %    \end{align*}
-%    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \btheta_0 \in \Theta $ where $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \cite{vaart06}
+%    for an unobservable stochastic error term $ \varepsilon $. The goal is to estimate an unknown \textbf{regression function} $ \btheta_0 \in \Theta $ where $ \btheta = \{\btheta \mid \btheta : \mathcal{X} \to \mathbb{R}\}$, is the set of possible regression functions each having $ \mathcal{X} $ as their domain. \parencite{vaart06}
 %\end{example}
 %\begin{example}[Parametric statistical model] \label{ex:parametricfam}
-%    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \cite{gyorfi2002distribution}.  
+%    In the case where we have $ n $-i.i.d. observations distributed according to some data-generating process $ P \in \mathcal{P} $, we have that each $ O_i = (Y_i , X_i) $, and $ X_i $ is a stochastic variable. The distribution $ P $ factorizes essentially into two parts, the conditional distribution of $ Y $ given $ X $ and the background distribution of $ X $, so $ P = P_{Y \mid X = x} \cdot P_X $. In this setup we are doing estimation with random design \parencite{gyorfi2002distribution}.  
 %
 %We can formalize the setup as follows: $ O = (Y, X) \sim P $, if $ Y $ is $ \mathcal{B}(\mathbb{R})-\mathcal{B}(\mathbb{R}) $ measurable and $ X $ is $ \mathcal{F} - \mathcal{B}(\mathbb{R})  $ measurable for some sigma-algebra $ \mathcal{F} $ on $ \mathcal{X} $, then a \textbf{generalized regression model} could be considered as parametrized family of distributions, $ \mathcal{P} = \{P_{\btheta} \mid \btheta \in \Theta\} $, given that $ \btheta $ is finite-dimensional.
 %
@@ -204,7 +205,7 @@ given that the observations are independent and identically distributed, so perm
 
 \section{The Discrete Super Learner}
 \subsection{Library of learners}
-We would now like to consider the scenario where we have a set of learning algorithms, $ \btheta_1 , \ldots, \btheta_\ml $. From these algorithms, we can define the \textbf{library of learners} $ \lib_{k}(P_n) = \{\btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $ of size $ \ml $. Our goal is to find $ \btheta_{\q}(P_n) $, that achieves the lowest risk among our learners -- that is to provide an estimate of $ \q $ for which $ \q = \argmin_{1 \leq \q \leq \ml} R(\theta_{\q}(P_n) , P) $, we will denote this estimate as $ \hat{q} $.
+We would now like to consider the scenario where we have a set of learning algorithms, $ \btheta_1 , \ldots, \btheta_\ml $. From these algorithms, we can define the \textbf{library of learners} $ \lib_{k}(P_n) = \{\btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $ of size $ \ml $. Our goal is to find $ \btheta_{\q}(P_n) $, that achieves the lowest risk among our learners -- that is to provide an estimate of $ \q $ for which $$ \q = \argmin_{1 \leq \q \leq \ml} R(\theta_{\q}(P_n) , P), $$ we will denote this estimate as $ \hat{q} $.
 
 \subsection{Cross-validation methodology}
 To provide $ \hat{\q} $ we have proceed via cross validation. In cross validation, we randomly split our data into a \textbf{training set} and a \textbf{test set}. Let the random binary vector $ S = (S_1,\ldots,S_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ S_i = 0 $ indicates that $ O_i $ should be in the training set and $ S_i = 1 $ indicates that $ O_i $ belongs to the test set. We can define the empirical distributions over these two subsets, $ P_{n,S}^0$ and $ P_{n,S}^{1} $ as
@@ -235,8 +236,8 @@ Given a split variable $S$ for our data $D_n$, the risk of our learner on the cr
  \begin{align*}
      R(\theta, P_{n, S}^{1}) =  \int L(o, \btheta) d P_{n,S}^{1}(o).
  \end{align*}
- The following definitions are analogous to what is stated in section 1 and 2 of  \cite{laan03}.
- \begin{definition}[Expected loss averaged over splits \cite{vaart06}]
+ The following definitions are analogous to what is stated in section 1 and 2 of  \parencite{laan03}.
+ \begin{definition}[Expected loss averaged over splits \parencite{vaart06}]
      Given data $D_n$ and a split-variable $S$, the average expected loss for a learner, $\theta_q(P_{n,s}^0)$, from a library $\lib_{\ml}(P_n)$ applied to the training data $P_{n,S}^0$ is
     \begin{align*}
         E_S R( \btheta_\q(P_{n,S}^{0}), P),
@@ -264,7 +265,7 @@ As we are never able to know the oracle, we must proceed via cross-validation to
     where $ P_{n,S}^{1} $ is the test data as specified by the split-variable.
 \end{definition}
 
-\begin{definition}[Cross-validation selector \cite{laan03}]
+\begin{definition}[Cross-validation selector \parencite{laan03}]
     Given the data $ D_n $ and a split variable $ S $, the cross validation selector depends on our data and is the index of the learner with the lowest cross-validation expected loss 
     \begin{align*}
         \hat{\q} := \argmin_{1 \leq \q \leq k}  E_S R( \btheta_\q(P_{n,S}^{0}), P_{n, S}^{1}).
@@ -294,7 +295,7 @@ Formally, the map above is a random map as $ P_n $ is stochastic. Note that in t
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ i = 0 $ or $ i = 1 $.
 
 In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
-\begin{lemma}[Lemma 2.1 in \cite{vaart06}] \label{finitesampledecomp}
+\begin{lemma}[Lemma 2.1 in \parencite{vaart06}] \label{finitesampledecomp}
     Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P. For $ \delta > 0 $ it holds that
    \begin{align*}
        E_{S} \int L(o, \btheta_{ \hat{\q}}(P_{n, S}^{0})) dP(o) &\leq (1 + 2 \delta) E_{S} \int L(o, \btheta_{ \tilde{\q} }(P_{n, S}^{0})) d P(o) \\ 
@@ -306,7 +307,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
     See appendix
 \end{proof}
 To control the bounds for the expected loss we introduce Bernstein pairs 
-\begin{definition}[Bernstein pair \cite{vaart06}]
+\begin{definition}[Bernstein pair \parencite{vaart06}]
     Given a measurable function $ f: O \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
     \begin{equation} \label{bernstein}
         M(f)^2 P\left( e^{|f|/M(f)} -1 - \frac{|f|}{|M(f)|}\right) \leq \frac{1}{2}v(f) 
@@ -316,7 +317,7 @@ To control the bounds for the expected loss we introduce Bernstein pairs
     $ (\norm{f}_{\infty}, \frac{3}{2} Pf^2 ) $ is a Bernstein pair. 
 \end{proposition}
 \begin{proof}
-    Following proof is due to \cite{vaart06}[ch. 8.1]. 
+    Following proof is due to \parencite{vaart06}[ch. 8.1]. 
     \begin{align*}
         \norm{f}_{\infty}^2 P\left( e^{|f|/\norm{f}_{\infty}} -1 - \frac{|f|}{\norm{f}_{\infty}}\right) &= \norm{f}_{\infty}^{2} \sum_{k \geq 2}^{\infty} P \frac{|f|^{k}}{\norm{f}^{k}_{\infty}k!} = Pf^2 \sum_{k \geq 2}^{\infty} P\frac{|f|^{k-2}}{\norm{f}^{k-2}_{\infty} k! } \\
                                                                                                         &\leq P f^2 \sum_{k \geq 2}^{\infty} \frac{\norm{f}_{\infty}^{k-2}}{\norm{f}^{k-2}_{\infty} k! } = P f^2 \sum_{k \geq 2}^{\infty} \frac{1}{k !}\\
@@ -326,7 +327,7 @@ To control the bounds for the expected loss we introduce Bernstein pairs
 \end{proof}
 
 
-\begin{lemma}[Lemma 2.2 in \cite{vaart06}] \label{finitesamplebound}
+\begin{lemma}[Lemma 2.2 in \parencite{vaart06}] \label{finitesamplebound}
     Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$ in some set of measurable functions $ \mathcal{F} $ on $ \mathcal{O} $. Then, for any Bernstein pair $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
     \begin{align*}
         E_{D_n} \max_{f \in \mathcal{F}}(G_n-\delta \sqrt{n} P) f \leq \frac{8}{n^{1 / p-1 / 2}} \log (1+\# \mathcal{F}) \max _{f \in \mathcal{F}}\left[\frac{M(f)}{n^{1-1 / p}}+\left(\frac{v(f)}{(\delta P f)^{2-p}}\right)^{1 / p}\right].
@@ -335,10 +336,10 @@ To control the bounds for the expected loss we introduce Bernstein pairs
 \end{lemma}
 The expectation above is wrt. the joint probability measure over our observations, $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
 
-\begin{theorem}[Theorem 2.3 in \cite{vaart06}] \label{finitesample}
-   For $ \btheta \in \Theta $ let $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+\begin{theorem}[Theorem 2.3 in \parencite{vaart06}] \label{finitesample}
+   For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
-       E_{D_n} E_{S} R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P) \leq&(1 + 2 \delta) E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P) +\\
+       E_{D_n} E_{S} &R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P) \leq(1 + 2 \delta) E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P) +\\
                                                                 &(1 + \delta) E_S \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right),
    \end{align*}
    where $ k $ is the number of learners in our library $ \{\btheta_{\q}(P_{n, S}^{0}) \mid 1 \leq \q \leq k\} $ and $ S $ is a split-variable. 
@@ -392,7 +393,7 @@ The second and third terms above are identical, meaning that they can be combine
     \end{align*}
     In the above inequality, so long as the $ n_1 $ is monotonically increasing as $ n $ increases, the remainder term goes to $ 0 $. Now by dividing the oracle risk on both sides, we obtain
     \begin{align*}
-        \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + 2 \delta + \frac{1 + \delta}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right].
+        \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + 2 \delta + \frac{(1 + \delta)E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} .
     \end{align*}
     As the inequality holds for all $ \delta > 0 $, we can just set it to 0 (formally one would perhaps choose $ \delta_n $ decreasing in $ n $). The problem now lies in determining how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
     \begin{align*}
@@ -479,7 +480,7 @@ The second and third terms above are identical, meaning that they can be combine
 %\end{align*}
 %For $ k = 5 $ and $ \gamma = 0.01 $, the left hand side is around 865806, multiplying this number by 3 and then squaring it yields us $n = 2998480118544 $, at this point, the oracle risk is $ f(n) \approx 5 \cdot 10^{-26}$. 
 
-%The following result is due to \cite{laan03}: 
+%The following result is due to \parencite{laan03}: 
 %\begin{theorem}[Asymptotic equality]
 %    The cross validation selector $ \hat{\q} $ performs asymptotically as well as the oracle selector $ \tilde{\q} $ in the sense that 
 %    \begin{align*}
@@ -514,7 +515,6 @@ We now show the loss of the discrete super learner compared to the other learner
 
 
 \section{Discussion}
-Hello 
 \printbibliography
 
 \end{document}

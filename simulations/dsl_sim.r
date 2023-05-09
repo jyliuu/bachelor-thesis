@@ -22,3 +22,4 @@ rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(2000),
 rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(10000), k=10))
 
 # Seems like the discrete super learner is at least as good as the best learner for larger and larger n's
+
