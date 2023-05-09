@@ -112,12 +112,28 @@ Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional
     \end{align*}
 \end{theorem}
 \begin{proof}
-    See \cite{gyorfi2002distribution}[ch. 1]
+    Proof emulated from \cite{gyorfi2002distribution}[ch. 1]. 
+
+    Let $ \btheta \in \Theta $ be arbitrary and $ m(x) = E(Y \mid X = x) $. We have 
+    \begin{align*}
+        E| \theta(X) - Y |^2 &= E| \theta(X) - m(X) + m(X) - Y |^2 \\
+                             &= E| \theta(X) - m(X) |^2 + E| m(X) - Y |^2 + 2 E[ (\theta(X) - m(X))(m(X) - Y) ].
+    \end{align*}
+    We see that the last term is zero, see that by using the tower rule we have 
+    \begin{align*}
+        E[ (\theta(X) - m(X))(m(X) - Y) ] &= E[ E[ (\theta(X) - m(X))(m(X) - Y) \mid X] ] \\
+                                                       &= E[ (\theta(X) - m(X)) E( (m(X) - Y) \mid X) ] \\
+                                                       &= E[ (\theta(X) - m(X)) ( m(X) - E(Y \mid X)) ] \\
+                                                       &= E[ (\theta(X) - m(X)) ( m(X) - m(X)) ] \\
+                                                       &= 0.
+    \end{align*}
+    We conclude that 
+    \begin{align*}
+        \int L(o, \theta) d P(o) &= E| \theta(X) - m(X) |^2 + E | m(X) - Y |^2.
+    \end{align*}
+    The first term after the equality is always positive and is $ 0 $ only when $ \theta = m $, this proves that $ m $ minimizes the expression above. 
 \end{proof}
-It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. 
-
-
-As we do not have access to the data-generating process $ P $, our goal is to estimate $ \btheta^{*} $, this means to \textbf{learn} the true regression function from our data. 
+It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. As we do not have access to the data-generating process $ P $, our goal is to estimate $ \btheta^{*} $, this means to \textbf{learn} the true regression function from our data. 
 We will therefore introduce the terminology \textbf{learning algorithm} and \textbf{learner} in the context of learning from our data.  
 
 \subsection{Learning algorithms and learners}
