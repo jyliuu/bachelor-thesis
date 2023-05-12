@@ -26,16 +26,44 @@ get_losses_incl_dsl <- function(obs_counts, models_fit_predict, test_count = 500
     preds
 }
 
-# Seeds 20 is interesting, jumps between logreg and xgboost
+# Seeds 20, 23 is interesting, jumps between logreg and xgboost
 # Seed 21 super learner == xgboost
 # Seed 22 is perfect, takes min of logreg and xgboost
 jump <- 100
-losses_dsl <- get_losses_incl_dsl(c(99, rep(jump, 35)), candidates_with_dSL, test_count = 10^6, loss_fun=MSE, seed=22)
+seed <- 22
+test_count <- 10^6
+losses_dsl <- get_losses_incl_dsl(c(99, rep(jump, 34)), candidates_with_dSL, test_count = test_count, loss_fun = MSE, seed = seed)
 losses_dsl
 # Plot losses dsl 2
-png(filename = "myplot.png", width = 1000, height = 800, res = 120)
-matplot(x = 1:nrow(losses_dsl)*jump, y=losses_dsl, type='l', lty=1, lwd=2, xlab='n', ylab='Loss')
-legend('topright', legend=c('Main effects', 'Intercept only', 'XGBoost', 'Discrete super learner'), col=1:ncol(losses_dsl), lty=1, lwd=2, bg='white', border='black')
-dev.off()
 # Idea: one way to make this more interesting could be to simulate data from a much more complicated distribution, with some of the features having high importance but occurs less frequently? 
 # Perhaps the risk can be calculated explicitly, since we have the model formula after all?
+
+
+library(reshape2)
+# Convert the row numbers to a column for the x-axis
+losses_dsl_df <- as.data.frame(losses_dsl)
+losses_dsl_df$n <- (1:nrow(losses_dsl_df)) * jump
+
+# Melt the data to long format
+df_melted <- melt(losses_dsl_df, id.vars = "n", variable.name = "Model", value.name = "Loss")
+
+# Plot the data
+p <- ggplot(df_melted, aes(x = n, y = Loss, color = Model, linetype = Model)) +
+  geom_line(size = 0.5, alpha = 0.9) +
+  labs(x = "n", y = "Loss") +
+  theme_bw() +
+  theme(
+    legend.title = element_blank(),
+    legend.position = 'bottom',
+    legend.text = element_text(size = 8), # Change this for smaller text
+    legend.key.size = unit(1, "lines"),  # Change this for smaller keys
+    legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
+  ) +
+  scale_color_discrete(labels = c('Main effects', 'Intercept only', 'XGBoost', 'Discrete super learner')) +
+  scale_linetype_manual(values = c('dashed', 'dashed', 'dashed', 'solid'), 
+                    labels = c('Main effects', 'Intercept only', 'XGBoost', 'Discrete super learner')) +
+  guides(color = guide_legend(override.aes = list(alpha = c(1, 1, 1, 0.5))))
+
+# Save the plot
+ggsave("s23.png", plot = p, width = 6, height = 4, dpi = 360, units = "in")
+

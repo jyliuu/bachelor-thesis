@@ -145,7 +145,7 @@ Moving forward, we will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n =
 
 We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function. Indeed, it makes sense in this context since we would like to emphasize that the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, is a regression function. We refer to that outcome as a \textbf{learner}. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
 
-However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and subsequently, we can apply our learning algorithm on $ D_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \btheta(D_n) $, as a \textbf{fitted learner}. 
+However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and subsequently, we can apply our learning algorithm on $ d_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \btheta(d_n) $, as a \textbf{fitted learner}. 
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learner is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
 
@@ -395,7 +395,7 @@ The second and third terms above are identical, meaning that they can be combine
     \begin{align*}
         \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + 2 \delta + \frac{(1 + \delta)E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} .
     \end{align*}
-    As the inequality holds for all $ \delta > 0 $, we can just set it to 0 (formally one would perhaps choose $ \delta_n $ decreasing in $ n $). The problem now lies in determining how fast the oracle risk converges, see that by setting $ \delta = 0 $ the inequality becomes 
+    As the inequality holds for all $ \delta > 0 $, we can just set it to 0 (formally one would perhaps choose $ \delta_n $ decreasing in $ n $). See that by setting $ \delta = 0 $ the inequality becomes 
     \begin{align*}
      \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} &\leq 1 + \frac{E_S \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)} 
     \end{align*}
@@ -407,15 +407,19 @@ The second and third terms above are identical, meaning that they can be combine
         \begin{align*}
         1 \leq \frac{E_{D_n} E_S R(\btheta_{\hat{\q}}(P_{n, S}^{0}), P)}{E_{D_n} E_{S} R(\btheta_{ \tilde{\q}}(P_{n,S}^{0}), P)}, 
     \end{align*}
-    applying the squeeze theorem thus yields the desired result. 
+    applying the squeeze theorem thus yields the desired result.         
 \end{proof}
 
-\begin{example}[Binary regression]
-   In binary regression with quadratic loss, the risk for a consistent learner of the true regression $ x \mapsto P(Y = 1 \mid X = x) $ can never be zero unless the binary outcome is deterministic given $ x $. We have 
+\begin{example}[Regression]
+   In a regression context with quadratic loss, the risk for a learner can never be zero unless the binary outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
    \begin{align*}
-       R(\theta(P_n) , P) = \int (Y - \theta(P_n)(X))^2 dP \overset{P}{\longrightarrow}   \int (Y - E(Y \mid X))^2 d P 
+       \int (Y - E(Y \mid X))^2 d P \geq 0. 
    \end{align*}
-   How to prove above?
+   Since the integrand is positive, the integral is zero if and only if $ Y = E(Y \mid X) $ almost surely. That is only the case when $ Y $ is deterministic given $ X $, i.e. $ Y $ is $ X $-measurable. Assuming, therefore, that $ Y $ is not deterministic given $ X $, then we note that by the fact that the quadratic loss is strictly proper, then we have for any $ \theta \in \Theta $
+   \begin{align*}
+       R(\theta, P) \geq R(\theta^*, P) > 0,
+   \end{align*}
+    thus showing that the risk of any learner is strictly positive.
 \end{example}
 
 
@@ -497,15 +501,20 @@ In the following section we show the results of applying the discrete super lear
     X_2 \mid X_1 = x_1 &\sim \mathcal{N}(3.5-0.03x_1, 1),\\
     Y \mid X_1 = x_1, X_2 = x_2 &\sim \operatorname{Ber}(\theta_0(x_1, x_2)),
 \end{align*}
-for $\theta_0(x_1, x_2) = \expit({-3.5 - 0.3x_1 + 0.85x_2 + 0.35x_1x_2})$ which is the true regression function. The true regression function is captured by the logistic regression model with interaction terms. We would like to learn the true regression using the discrete super learner. We use the following libraries of learners as an illustrative example:
+for $\theta_0(x_1, x_2) = \expit({-3.5 - 0.3x_1 + 0.85x_2 + 0.35x_1x_2})$ which is the data-generatig regression function. The data-generating regression function is captured by the logistic regression model with interaction terms. We would like to learn the regression using the discrete super learner. We use the following library of learners as an illustrative example:
 \begin{enumerate}
     \item Intercept only logistic regression: $E[Y \mid X_1, X_2] = \expit(\beta_0)$
     \item Logistic regression with main effects: $E[Y \mid X_1, X_2] = \expit(\beta_0 + \beta_1 X_1 + \beta_2 X_2)$
     \item XGBoost with hyperparameters: \texttt{max\_depth=3, eta=0.3,\\ n\_rounds=100, objective='binary:logistic', booster='dart', nthread=5}
 \end{enumerate}
-Our goal is to estimate $\theta_0$
+Our goal is to estimate $\theta_0$ by applying the library above. By using the discrete super learner, we show that
+\begin{enumerate}
+    \item As the sample size increases, the  discrete super learner achieves the minimum risk in comparison to every other learner in the library 
+    \item For a single new observation, the prediction of the discrete super learner on the outcome has the lowest variance among the learners in the library
+\end{enumerate}
 \subsection{Simulation results for the discrete super learner}
 We now show the loss of the discrete super learner compared to the other learners. We use the following loss function
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/dsl_loss.png}
@@ -513,6 +522,17 @@ We now show the loss of the discrete super learner compared to the other learner
 \end{figure}
 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/dsl_loss_jumps.png}
+    \caption{The loss of the discrete super learner compared to other learners. $ N = 3600 $}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/learner_vars.png}
+    \caption{The loss of the discrete super learner compared to other learners. $ N = 3600 $}
+\end{figure}
 
 \section{Discussion}
 \printbibliography

@@ -1,10 +1,10 @@
 # Fdb version 4
-["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1683638383 0
+["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1683910648 0
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1683638383 "main.tex" "out/main.pdf" "main" 1683638383 0
+["pdflatex"] 1683910645 "main.tex" "out/main.pdf" "main" 1683910648 0
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1680514707 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1680514707 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -152,16 +152,18 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1680514707 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1681656637 4491781 539e3b5e308794ddb50e5f94f0e971f4 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1681656533 8204108 01e5e5f6eea5d709dc5cb9980b73620a ""
-  "figures/dsl_loss.png" 1683624819 43817 5d1a0c5282ce28e9c4d931b7d219d0b0 ""
+  "figures/dsl_loss.png" 1683882782 84268 641051651327fc9b58017e8682b0fda8 ""
+  "figures/dsl_loss_jumps.png" 1683883299 92243 21fe5e6790681468fcdc7002e0e2de41 ""
+  "figures/learner_vars.png" 1683910491 136626 2406fd57c5962097115a1d8b0b698b69 ""
   "ku-frontpage.sty" 1683637883 12952 7d85eb9cafe159b397d3014f50d766a1 ""
   "logos/ku-logo.pdf" 1675697292 93879 31d1db24936015ee9fe960c856f01525 ""
   "logos/science-english.pdf" 1675697292 71141 827ec2c5d6f797163b848e34358df682 ""
   "main.bbl" 1683637680 8534 643f51bd040aaaf8767025d7b3501e61 "bibtex main"
-  "main.tex" 1683638381 46193 d5a0c6554d92369fdc7b44fca0c9b6c6 ""
-  "out/main.aux" 1683638383 4204 3a248c3b78fd0b0db99b71fe9a72f360 "pdflatex"
-  "out/main.out" 1683638383 2009 6defe80e16a27bc8608493ab1ecaa92c "pdflatex"
-  "out/main.run.xml" 1683638383 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
-  "out/main.toc" 1683638383 1004 f46fa4df7477f768f32ab0b7ec7846e3 "pdflatex"
+  "main.tex" 1683910645 47427 f8b1f13d6e243e83d247344ccb8787be ""
+  "out/main.aux" 1683910648 4586 b1f345b11a4fc2e3cc7819c8801348d2 "pdflatex"
+  "out/main.out" 1683910648 2009 6defe80e16a27bc8608493ab1ecaa92c "pdflatex"
+  "out/main.run.xml" 1683910648 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
+  "out/main.toc" 1683910648 1004 43e27f334b48b5bdec14a5164be82126 "pdflatex"
   (generated)
   "out/main.aux"
   "out/main.bcf"

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  9 MAY 2023 15:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  12 MAY 2023 18:57
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -814,17 +814,38 @@ Package mdframed Info: mdframed detected package amsthm
  changed the theorem header of amsthm
 (mdframed)              on input line 413.
  [10]
-<figures/dsl_loss.png, id=206, 481.8pt x 361.35pt>
+<figures/dsl_loss.png, id=206, 433.62pt x 289.08pt>
 File: figures/dsl_loss.png Graphic file (type png)
 <use figures/dsl_loss.png>
-Package pdftex.def Info: figures/dsl_loss.png  used on input line 511.
-(pdftex.def)             Requested size: 298.75264pt x 224.06776pt.
- [11] [12
+Package pdftex.def Info: figures/dsl_loss.png  used on input line 520.
+(pdftex.def)             Requested size: 298.75264pt x 199.1787pt.
+ [11]
+<figures/dsl_loss_jumps.png, id=218, 433.62pt x 289.08pt>
+File: figures/dsl_loss_jumps.png Graphic file (type png)
+<use figures/dsl_loss_jumps.png>
+Package pdftex.def Info: figures/dsl_loss_jumps.png  used on input line 527.
+(pdftex.def)             Requested size: 341.43437pt x 227.63405pt.
+<figures/learner_vars.png, id=219, 722.7pt x 433.62pt>
+File: figures/learner_vars.png Graphic file (type png)
+<use figures/learner_vars.png>
+Package pdftex.def Info: figures/learner_vars.png  used on input line 533.
+(pdftex.def)             Requested size: 426.79135pt x 256.07838pt.
+ [12
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.520 \end{document}
-                     <./figures/dsl_loss.png (PNG copy)>] (out/main.aux)
+l.536 
+      
+pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.536 
+       <./figures/dsl_loss.png (PNG copy)> <./figures/dsl_loss_jumps.png (PNG copy)>] [13
+pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.540 \end{document}
+                     <./figures/learner_vars.png (PNG copy)>] (out/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 6DEFE80E16A27BC8608493AB1ECAA92C;2009.
 Package logreq Info: Writing requests to 'main.run.xml'.
@@ -832,18 +853,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20294 strings out of 476025
- 352101 string characters out of 5796532
+ 20313 strings out of 476025
+ 352532 string characters out of 5796532
  1876388 words of memory out of 5000000
- 40420 multiletter control sequences out of 15000+600000
+ 40432 multiletter control sequences out of 15000+600000
  534423 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,16n,90p,969b,1707s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 90i,15n,90p,969b,1707s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (12 pages, 497996 bytes).
+Output written on out/main.pdf (13 pages, 775671 bytes).
 PDF statistics:
- 321 PDF objects out of 1000 (max. 8388607)
- 249 compressed objects within 3 object streams
- 55 named destinations out of 1000 (max. 500000)
- 124 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 332 PDF objects out of 1000 (max. 8388607)
+ 257 compressed objects within 3 object streams
+ 60 named destinations out of 1000 (max. 500000)
+ 134 words of extra memory for PDF output out of 10000 (max. 10000000)
 
