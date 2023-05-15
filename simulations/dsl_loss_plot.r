@@ -45,6 +45,7 @@ losses_dsl
 # Convert the row numbers to a column for the x-axis
 losses_dsl_df <- as.data.frame(losses_dsl)
 losses_dsl_df$n <- (1:nrow(losses_dsl_df)) * jump
+df_melted <- melt(losses_dsl_df, id.vars = "n", variable.name = "Model", value.name = "Loss")
 
 # Melt the data to long format
 p <- ggplot(df_melted, aes(x = n, y = Loss, color = Model, alpha = Model, linetype = Model)) +

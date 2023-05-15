@@ -1,6 +1,7 @@
 \documentclass[11pt, a4paper]{article}
 \usepackage[margin=3cm]{geometry} 
 \usepackage[english, science, hyperref]{ku-frontpage}
+\usepackage[justification=centering]{caption}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,bm}
 \usepackage{mdframed}
@@ -227,6 +228,15 @@ where $ n_1 = \sum_{i = 1}^{n} S_i, n_0 = 1-n_1$ identifies the number of observ
     this procedure is also known as Monte Carlo cross-validation.
 \end{example}
 
+\begin{example}[Cross-validation loss]
+   The test size $ n_1 $ is formally a random variable as it depends on $ S $
+   Hold one out cross validation
+   \begin{align*}
+       E_S R(\theta(P_{n, S}^{0} , P_{n, S}^{1}))= E_S \frac{1}{n_1} \sum_{i : S_i = 1} L(o_i, \theta) = E_S L(o_{S_t}, \theta) = \frac{1}{n} \sum_{i = 1}^{n} L(o_i, \theta) 
+   \end{align*}
+   
+\end{example}
+
 \subsection{Risks and selectors}
 We now provide the formal definitions for the expected loss associated with our learners. Recall that the expected $L^2$-loss (\ref{l2risk}) was the integral of the loss with respect to data-generating process $P$. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
 \begin{align*}
@@ -289,7 +299,7 @@ We are now ready to give the definition of the discrete super learner
         \mathcal{X} \ni x \mapsto \theta_{\hat{\q}}(P_n)(x). 
     \end{align*}
 \end{definition}
-Formally, the map above is a random map as $ P_n $ is stochastic. Note that in the definition above, $ \hat{q}  $ depends on our data. The discrete super learner is not one specific leaerner among the learners in the library, but the result of after applying the cross-validation selector to the library. 
+Formally, the map above is a random map as $ P_n $ is stochastic. Note that in the definition above, $ \hat{q}  $ depends on our data. The discrete super learner is not one specific learner among the learners in the library, but the result of after applying the cross-validation selector to the library. 
 
 \subsection{Oracle inequalities}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, S}^{i} f = \sqrt{n}(P_{n, S}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ i = 0 $ or $ i = 1 $.
@@ -501,40 +511,53 @@ In the following section we show the results of applying the discrete super lear
     X_2 \mid X_1 = x_1 &\sim \mathcal{N}(3.5-0.03x_1, 1),\\
     Y \mid X_1 = x_1, X_2 = x_2 &\sim \operatorname{Ber}(\theta_0(x_1, x_2)),
 \end{align*}
-for $\theta_0(x_1, x_2) = \expit({-3.5 - 0.3x_1 + 0.85x_2 + 0.35x_1x_2})$ which is the data-generatig regression function. The data-generating regression function is captured by the logistic regression model with interaction terms. We would like to learn the regression using the discrete super learner. We use the following library of learners as an illustrative example:
+for $\theta_0(x_1, x_2) = \expit({-3.5 - 0.3x_1 + 0.85x_2 + 0.35x_1x_2})$ which is the data-generatig regression function. The data-generating regression function is captured by the logistic regression model with interaction terms. We would like to learn $ \theta_0 $ using the discrete super learner. We will use the following library of learners as an illustrative example:
 \begin{enumerate}
     \item Intercept only logistic regression: $E[Y \mid X_1, X_2] = \expit(\beta_0)$
     \item Logistic regression with main effects: $E[Y \mid X_1, X_2] = \expit(\beta_0 + \beta_1 X_1 + \beta_2 X_2)$
     \item XGBoost with hyperparameters: \texttt{max\_depth=3, eta=0.3,\\ n\_rounds=100, objective='binary:logistic', booster='dart', nthread=5}
 \end{enumerate}
-Our goal is to estimate $\theta_0$ by applying the library above. By using the discrete super learner, we show that
+The discrete super learner will use 10-fold cross validation and the internal loss function will be the quadratic loss. 
+
+The performance of the discrete super learner will be compared to each individual learner in the library. We show that
 \begin{enumerate}
-    \item As the sample size increases, the  discrete super learner achieves the minimum risk in comparison to every other learner in the library 
-    \item For a single new observation, the prediction of the discrete super learner on the outcome has the lowest variance among the learners in the library
+    \item As the sample size increases, the  discrete super learner achieves the minimum risk 
+    \item For a single new observation, the prediction of the discrete super learner on the outcome has the lowest variance
 \end{enumerate}
 \subsection{Simulation results for the discrete super learner}
-We now show the loss of the discrete super learner compared to the other learners. We use the following loss function
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/dsl_loss.png}
-    \caption{The loss of the discrete super learner compared to other learners. $ N = 3600 $}
+    \includegraphics[width=\textwidth]{figures/dsl_loss.png}
+    \caption{The risk of the discrete super learner compared to other learners. $ N = 3500 $} 
+    \label{fig:loss_min_of_both}
 \end{figure}
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/dsl_loss_jumps.png}
-    \caption{The loss of the discrete super learner compared to other learners. $ N = 3600 $}
+    \includegraphics[width=\textwidth]{figures/dsl_loss_jumps.png}
+    \caption{The risk of the discrete super learner compared to other learners. $ N = 3500 $}
+    \label{fig:loss_jumps}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/learner_vars.png}
-    \caption{The loss of the discrete super learner compared to other learners. $ N = 3600 $}
+    \caption{Variances of learner predictions for a single observation, each trained on $n $ samples and evaluated $ K = 1000 $ times on a single observation}
+    \label{fig:pred_probs_boxplot}
 \end{figure}
 
-\section{Discussion}
-\printbibliography
+\subsection{Discussion of results}
+Figures \ref{fig:loss_min_of_both} and \ref{fig:loss_jumps} illustrate how the discrete super learner performs in comparison to the learners in terms of loss over number of training samples. The plots are generated for two runs where the model is fitted on $ n = 100, 200, \dots , 3500 $ observations, as indicated on the $ x $-axis, then the empirical risk is calculated by evaluating each fitted learner on a fixed test sample of size of $ 5000 $. The test data is sampled from the data-generating distribution.  
 
+The first run perfectly illustrates how the discrete super learner is able to achieve the minimum risk. For small training sample sizes, the machine learning method XGBoost has a higher risk than the main effects logistic regression, and it is therefore more desirable for the discrete super learner to choose logistic regression despite the fact that it is misspecified. The discrete super learner consequently achieves the same risk as the logistic regression in the beginning, but for $ n > 1200 $ the risk of the discrete super learner becomes less than the logistic regression. Here XGBoost begins to achieve a lower risk than the misspecified logistic regression, and so the discrete super learner will choose XGBoost instead. 
+
+The second run shows that the discrete super learner might be unable to determine the learner with the lowest risk when the training sample size is small, which results in it moving in a zig-zag pattern between two learners that have quite similar risks. However, we see that the discrete super learner eventually chooses XGBoost as the training sample size becomes larger.  
+
+
+For $ n > 1200 $ we then observe a shift 
+
+In the first run, we observe that the discrete super learner achieves the minimum loss for all sample sizes, the first run is perfectly  
+
+\printbibliography
 \end{document}
