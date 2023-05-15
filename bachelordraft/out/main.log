@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  15 MAY 2023 12:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  15 MAY 2023 20:21
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -698,24 +698,24 @@ Package: blx-case-expl3 2023/03/05 v3.19 expl3 case changing code for biblatex
  (out/main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -770,7 +770,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 70.
+Package hyperref Info: Link coloring OFF on input line 71.
  (out/main.out) (out/main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
@@ -791,21 +791,21 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 70.
-Package biblatex Info: Reference segment=0 on input line 70.
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 72.
+Package biblatex Info: Reference section=0 on input line 71.
+Package biblatex Info: Reference segment=0 on input line 71.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 73.
  (/usr/share/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 <logos/ku-logo.pdf, id=52, 597.23125pt x 845.1575pt>
 File: logos/ku-logo.pdf Graphic file (type pdf)
 <use logos/ku-logo.pdf>
-Package pdftex.def Info: logos/ku-logo.pdf  used on input line 73.
+Package pdftex.def Info: logos/ku-logo.pdf  used on input line 74.
 (pdftex.def)             Requested size: 597.22978pt x 845.15544pt.
 <logos/science-english.pdf, id=54, 597.23125pt x 845.1575pt>
 File: logos/science-english.pdf Graphic file (type pdf)
 <use logos/science-english.pdf>
-Package pdftex.def Info: logos/science-english.pdf  used on input line 73.
+Package pdftex.def Info: logos/science-english.pdf  used on input line 74.
 (pdftex.def)             Requested size: 597.22978pt x 845.15544pt.
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
 
@@ -824,36 +824,46 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [2] [3] [4]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 150.
+(mdframed)              on input line 151.
  [5]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 219.
+(mdframed)              on input line 220.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 231.
- [6] [7] [8] [9] [10]
+(mdframed)              on input line 232.
+ [6] [7]
+Overfull \hbox (17.93855pt too wide) detected at line 319
+[]
+ []
+
+[8] [9]
+Overfull \hbox (8.6236pt too wide) detected at line 383
+[]
+ []
+
+[10]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 423.
+(mdframed)              on input line 428.
  [11]
 <figures/dsl_loss.png, id=212, 433.62pt x 289.08pt>
 File: figures/dsl_loss.png Graphic file (type png)
 <use figures/dsl_loss.png>
-Package pdftex.def Info: figures/dsl_loss.png  used on input line 530.
+Package pdftex.def Info: figures/dsl_loss.png  used on input line 535.
 (pdftex.def)             Requested size: 426.79135pt x 284.54036pt.
-<figures/dsl_loss_jumps.png, id=213, 433.62pt x 289.08pt>
+ [12]
+<figures/dsl_loss_jumps.png, id=223, 433.62pt x 289.08pt>
 File: figures/dsl_loss_jumps.png Graphic file (type png)
 <use figures/dsl_loss_jumps.png>
-Package pdftex.def Info: figures/dsl_loss_jumps.png  used on input line 538.
+Package pdftex.def Info: figures/dsl_loss_jumps.png  used on input line 543.
 (pdftex.def)             Requested size: 426.79135pt x 284.54036pt.
- [12 <./figures/dsl_loss.png (PNG copy)>]
-<figures/learner_vars.png, id=225, 722.7pt x 433.62pt>
+<figures/learner_vars.png, id=224, 722.7pt x 433.62pt>
 File: figures/learner_vars.png Graphic file (type png)
 <use figures/learner_vars.png>
-Package pdftex.def Info: figures/learner_vars.png  used on input line 545.
+Package pdftex.def Info: figures/learner_vars.png  used on input line 550.
 (pdftex.def)             Requested size: 426.79135pt x 256.07838pt.
- [13 <./figures/dsl_loss_jumps.png (PNG copy)> <./figures/learner_vars.png (PNG copy)>] [14] (out/main.aux)
+ [13 <./figures/dsl_loss.png (PNG copy)> <./figures/dsl_loss_jumps.png (PNG copy)>] [14 <./figures/learner_vars.png (PNG copy)>] [15] (out/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 0A2085DE13C6948D30FFA6D31874DCD9;2084.
 Package logreq Info: Writing requests to 'main.run.xml'.
@@ -861,18 +871,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 21619 strings out of 476025
- 378083 string characters out of 5796532
- 1876388 words of memory out of 5000000
- 41730 multiletter control sequences out of 15000+600000
+ 21621 strings out of 476025
+ 378092 string characters out of 5796532
+ 1877388 words of memory out of 5000000
+ 41731 multiletter control sequences out of 15000+600000
  534423 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  90i,15n,90p,969b,1707s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (14 pages, 793380 bytes).
+Output written on out/main.pdf (15 pages, 795827 bytes).
 PDF statistics:
- 340 PDF objects out of 1000 (max. 8388607)
- 264 compressed objects within 3 object streams
- 62 named destinations out of 1000 (max. 500000)
+ 344 PDF objects out of 1000 (max. 8388607)
+ 267 compressed objects within 3 object streams
+ 63 named destinations out of 1000 (max. 500000)
  134 words of extra memory for PDF output out of 10000 (max. 10000000)
 
