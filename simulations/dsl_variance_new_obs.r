@@ -1,6 +1,7 @@
 source('dsl.r')
 source('model.r')
 
+library(reshape2)
 fit_and_predict_on_new_obs <- function(fit_predict, new_obs, n, K = 1000) {
     model_fun <- fit_predict[[1]]
     predict_fun <- fit_predict[[2]]
@@ -41,6 +42,7 @@ obs <- data.frame(
   Age = 4.5,
   Parasites = 2
 )
+true_prob <- trueModel(obs$Age, obs$Parasites)
 
 res_xgboost <- fit_and_predict_on_new_obs(xgboost_fit_predict, obs, 1000)
 res_logistic <- fit_and_predict_on_new_obs(logistic_fit_predict, obs, 1000)
@@ -51,7 +53,7 @@ variable_names <- c("Main effects", "Intercept only", "XGBoost", "Discrete super
 
 res_lib_diff_ns <- foreach(n = training_counts) %do% {
     print(n)
-    df <- as.data.frame(fit_library_on_new_obs(candidates_with_dSL, obs, n, 100))
+    df <- as.data.frame(fit_library_on_new_obs(candidates_with_dSL, obs, n, 1000))
     rownames(df) <- NULL
     df
 }
@@ -70,13 +72,14 @@ p <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
     legend.key.size = unit(1, "lines"),  # Change this for smaller keys
     legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
   )+
+  geom_hline(aes(yintercept = true_prob), color = "red", linetype = "dashed") +
   scale_x_discrete(labels = training_counts) +
   scale_fill_discrete(labels = variable_names) +
   scale_y_continuous(breaks = seq(0, 1, by = 0.1)) +
   geom_boxplot() +
   labs(x = "n", y = "Predicted probability", fill = "Model")
 
-ggsave("learner_vars.png",
+ggsave("learner_vars_1000.png",
     plot = p,
     width = 10,
     height = 6,
