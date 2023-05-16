@@ -5,12 +5,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,bm}
 \usepackage{mdframed}
+\usepackage[normalem]{ulem}
 \usepackage{float}
 \usepackage{mathtools}
 \usepackage[
     backend=biber,
-    bibstyle=numeric,
-    citestyle=authoryear,
+    style=authoryear,
     sorting=ynt
 ]{biblatex}
 \addbibresource{references.bib} % This command is used instead of \bibliography{references.bib}
@@ -20,6 +20,7 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \newcommand{\indep}{\perp \!\!\! \perp}
 \newcommand\norm[1]{\lVert#1\rVert}
+\renewcommand\tag[1]{\color{blue} #1 \color{black}}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{claim}[theorem]{Claim}
@@ -78,33 +79,110 @@
 
 
 \section{Introduction}
-In the context of regression, a natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ for $ n $ observations $ O = (Y, X) $ is minimized. It turns out that the conditional mean $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but the conditional mean can only be identified if we know the underlying data-generating process $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a curved exponential family. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and achieve an asymptotic convergence rate of $ O\left(\frac{1}{\sqrt{n}}\right) $. \parencite{lauritzen2022statistics}[ch. 5]
+In the context of regression, \tag{where (\(X\), \(Y)\) is a pair of
+  random variables such that \(X\) is \(R^d\) valued and Y is \(R^d\)
+  valued,} a natural goal is to estimate a regression function
+$ \theta $ such that the $ L^2 $-risk or mean squared error
+$ E(Y - \theta(X))^2 $ for $ n $ observations $ O = (Y, X) $ is
+minimized. It turns out that the conditional mean
+$ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but \tag{
+  consistent estimation of the conditional mean requires a statistical
+  model \(\mathcal{P}\) for the data-generating distribution}
+$ O \sim P $.\marginpar{Actually, we only need a model for the
+  conditional mean, not for the marginal distribution of X} \sout{the
+  conditional mean can only be identified if we know the underlying
+  data-generating process $ P \in \mathcal{P} $ for which
+  $ O \sim P $}. We typically make certain assumptions about the
+statistical model, $\mathcal{P}$, in which we believe $P$ resides. For
+instance, we might assume that $\mathcal{P}$ is a curved exponential
+family[REF?]. In doing so we are able to identify through maximum
+likelihood techniques, the parameters of the distribution $ P $ and
+achieve an asymptotic convergence rate of
+$ O\left(\frac{1}{\sqrt{n}}\right) $
+\parencite{lauritzen2022statistics}[ch. 5].
 
-However, if we are dealing with highly complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be biased. In such situations, it is more appropriate to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests, to estimate the conditional mean. On the other hand, the assumptions of these data-driven methods regarding $ \mathcal{P} $ are not explicit. We can nevertheless incorporate these methods as a part of our repertoire, but it is important that we can compare and choose the best method that most effectively accomplishes our goal. 
+However, if we are dealing with \sout{highly} complex data, there is a
+risk of misspecifying the model by identifying it as an exponential
+family. Our assumptions may be \sout{biased} \tag{wrong.} In such situations, it is \sout{more
+appropriate}\tag{tempting} to utilize non-parametric and data-driven regression
+methods, such as tree-based algorithms like XGBoost or random forests,
+to estimate the conditional mean. On the other hand, the assumptions
+of these data-driven methods regarding $ \mathcal{P} $ are not
+explicit. We can nevertheless incorporate these methods as a part of
+our repertoire, but it is important that we can compare and choose the
+best method that most effectively accomplishes our goal.
 
-The ``super learner'' is the answer to how we can effectively select the `best' learner -- regression estimate -- among the learners that we have in our library of learners. We will demonstrate that the cross-validation selector, which evaluates learners based on their cross-validated (empirical) risk and chooses the one with the lowest risk, is asymptotically equivalent to the oracle selector. The oracle selector identifies the learner with the lowest true risk – the theoretical risk achieved by the true distribution.
+\tag{TRANSITION NEEDED}
 
-The discrete super learner is then obtained by applying the cross-validation selector to a library of learners. The asymptotic result shows that the risk of the super learner will be the same as the learner selected by the oracle selector when the number of observations goes to $ \infty $. The discrete super learner is not a fixed learner from our library, but rather depends on the available data. It represents the learner chosen by the cross-validation selector, which can vary depending on the amount of data at hand.
+The ``super learner'' [REF?] is the answer to how we can effectively
+select the `best' learner -- regression estimate -- among the learners
+that we have in our library of learners.  We will demonstrate that the
+cross-validation selector, which evaluates learners based on their
+cross-validated (empirical) risk and chooses the one with the lowest
+risk, is asymptotically equivalent to the oracle selector.
+\tag{I DON'T THINK THAT THE ORACLE SELECTOR CAN DO BETTER THAN
+  THE BEST SPECIFIED LEARNER AND HOW LIKELY IS }
+The oracle
+selector identifies the learner with the lowest true risk – the
+theoretical risk achieved by the true distribution.
 
-We first present the general theory and our goal, which is to estimate the conditional mean $ E(Y \mid X = x) $ for a observation  $ (Y, X) $ being a outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
+The discrete super learner is then obtained by applying the
+cross-validation selector to a library of learners. The asymptotic
+result shows that the risk of the super learner will be the same as
+the learner selected by the oracle selector when the number of
+observations goes to $ \infty $. The discrete super learner is not a
+fixed learner from our library, but rather depends on the available
+data. It represents the learner chosen by the cross-validation
+selector, which can vary depending on the amount of data at hand.
+
+\tag{THE PARAGRAPH WHICH STARTS BY ``WE FIRST PRESENT'' IS
+  PARTLY REPETITION OF THE FIRST PARAGRAPH. IT IS IMPORTANT TO STATE
+  MORE CLEARLY AND WITH MORE DETAIL WHAT THE BACHELOR THESIS
+  CONTAINS.}
+We first present the general theory and our goal, which
+is to estimate the conditional mean $ E(Y \mid X = x) $ for a
+observation $ (Y, X) $ being a outcome-covariate pair. More
+specifically, we focus on the case where we regress on a binary
+outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given
+$ X $ exactly becomes the conditional probability
+$ P(Y = 1 \mid X = x) $. The choice to focus on binary regression
+stems from its significance in various fields. For instance, in
+biomedicine, researchers might want to predict patient mortality upon
+administering a specific drug. The survival indicator for the patient
+is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could
+represent the probability of the patient's survival.
+
 
 \section{Background}
-
-Our setup and notation is similar to \parencite{vaart06} and \parencite{laan03}:
-Let a statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
-We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which represents the set of \textbf{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize 
+\tag{INTEGRATE THE REFERENCES TO LAAN03 AND VAART06 INTO THE
+  INTRODUCTION.}  \sout{Our setup and notation is similar to
+  \cite{laan03} and \cite{vaart06}.}  Let a statistical model
+$ \mathcal{P} $ be given on the measurable space
+$ (\mathcal{O}, \mathcal{A}) $ where
+$ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is the sample space for
+some $ \mathcal{X} \subseteq \mathbb{R}^{d} $.  We will consider the
+parameter set
+$ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which
+represents the set of \textbf{regression functions} that map from the
+covariates to the probability interval. We define the quadratic loss
+and the corresponding risk that we wish to minimize.
 \begin{definition}[Quadratic loss]
     The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
     L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
 \end{align*}
 \end{definition}
-A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected $L^2$-loss, or conditional risk \parencite{laan03}[p. 2] $R: \btheta \to \mathbb{R}$ given by 
+A natural aim would be to find the optimal parameter value
+$\btheta^* \in \Theta$ that minimizes the expected $L^2$-loss, or
+conditional risk \tag{NO NEED FOR PAGE NUMBER, MAYBE NO NEED FOR THIS REFERENCE}
+\parencite{laan03}[p. 2] $R: \btheta \to \mathbb{R}$
+given by
 \begin{equation} \label{l2risk}
     R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
 Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
 \begin{theorem} \label{minrisk}
+  \tag{ LET $ (\mathcal{O} , \mathcal{A}, \mathcal P) $ BE A STATISTICAL MODEL. SHOULD SAY WHAT \(\mathcal P\) IS}
     Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
         \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta, P)= \argmin_{\btheta \in \Theta} \int L(o, \btheta)  dP(o),
@@ -136,13 +214,20 @@ Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional
     \end{align*}
     The first term after the equality is always positive and is $ 0 $ only when $ \theta = m $, this proves that $ m $ minimizes the expression above. 
 \end{proof}
-It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. As we do not have access to the data-generating process $ P $, our goal is to estimate $ \btheta^{*} $, this means to \textbf{learn} the true regression function from our data. 
-We will therefore introduce the terminology \textbf{learning algorithm} and \textbf{learner} in the context of learning from our data.  
+It follows immediately that if $ Y $ is binary, then
+$ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. \sout{As we do not have
+  access to the data-generating process $ P $, } Our goal is to
+estimate $ \btheta^{*} $, this means to \textbf{learn} the true
+regression function from our data.  We will therefore introduce the
+terminology \textbf{learning algorithm} and \textbf{learner} in the
+context of learning the regression function from a data set.
 
 \subsection{Learning algorithms and learners}
-Moving forward, we will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n = (O_1 , \dots , O_n) $ as our \textbf{observations} and \textbf{data} respectively. 
+\sout{Moving forward, } We will denote $ O_1 , \dots , O_n \in \mathcal{O} $
+and $ D_n = (O_1 , \dots , O_n) $ as our \textbf{observations} and
+\textbf{data set} respectively.
 \begin{definition}[Learning algorithm $ \btheta $]
-    An learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
+    A learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
 
 We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function. Indeed, it makes sense in this context since we would like to emphasize that the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, is a regression function. We refer to that outcome as a \textbf{learner}. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
