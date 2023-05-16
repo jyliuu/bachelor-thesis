@@ -226,26 +226,68 @@ context of learning the regression function from a data set.
 \sout{Moving forward, } We will denote $ O_1 , \dots , O_n \in \mathcal{O} $
 and $ D_n = (O_1 , \dots , O_n) $ as our \textbf{observations} and
 \textbf{data set} respectively.
-\begin{definition}[Learning algorithm $ \btheta $]
+\begin{definition}[Learning algorithm $ \btheta $] 
     A learning algorithm is a measurable map $ \btheta : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
 
-We use the notation $ \btheta $ for the learning algorithm, which coincides with the notation for a regression function. Indeed, it makes sense in this context since we would like to emphasize that the outcome of applying a learning algorithm to our data, $\btheta(D_n) $, is a regression function. We refer to that outcome as a \textbf{learner}. We will furthermore assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
+We use the notation $ \btheta $ for the learning algorithm, which
+coincides with the notation for a regression function.
+\tag{LET'S NOT USE THE SAME NOTATION FOR TWO DIFFERENT OBJECTS}
+Indeed, it
+makes sense in this context since we would like to emphasize that the
+outcome of applying a learning algorithm to our data, $\btheta(D_n) $,
+is a regression function. We refer to that outcome as a
+\textbf{learner}. We will furthermore assume that the learning
+algorithm is well defined for each $ n \in \mathbb{N} $, and that
+permuting the observations has no effect on the outcome, i.e., the
+algorithm is symmetric in the observations.
 
-However, note that formally $ \btheta(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and subsequently, we can apply our learning algorithm on $ d_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \btheta(d_n) $, as a \textbf{fitted learner}. 
+However, note that formally $ \btheta(D_n) $ is a stochastic variable
+since $ D_n $ is stochastic. In practice, we would have observed
+$ O_1 = o_1, \dots, O_n = o_n $, and subsequently, we can apply our
+learning algorithm on $ d_n = (o_1 , \dots , o_n) $, which is a
+particular instance of a dataset. We will refer the quantity,
+$ \btheta(d_n) $, as a \textbf{fitted learner}. \tag{JUST BEFORE 2.1 YOU SAY THAT YOU WOULD DEFINE LEARNING ALGORITHM AND LEARNER. I SUGGEST TO MAKE A DEFINITION OF LEARNER TOO.}
 \begin{example}[Parametric and nonparametric learning algorithms]
-    An example of a parametric learner is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
+  An example of a parametric learner \tag{LEARNING ALGORITHM, IK?}is logistic regression. In
+  logistic regression we assume that the conditional probability,
+  $ P(Y = 1 \mid X = x) $, can be expressed as
+  $ \btheta(x) = \expit( \beta x) $ for some
+  $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be
+  estimated via maximum likelihood.
 
-Nonparametric learning algorithms such as gradient boosting, for example XGBoost, can also be used to estimate the regression function. The gradient boosting algorithm, XGBoost, has a number of hyperparameters that can be tuned. These include, number of boosted trees, depth of each tree, learning rates, etc., but most importantly the internal loss objective which could for example be log-loss or mean squared error. XGBoost aims to iteratively refine the fitted learner by approximating the data $x \mapsto f_m(x)$ at each step $m$. It does so by introducing a new tree $h_m(x)$, which is trained on the error of $ f_m(x)$, such that $f_{m + 1}(x) = f_m(x) + h_m(x)$. The internal loss of the updated learner, $f_{m + 1}$, evaluated on the training data, is lower than that of the previous learner due to the inclusion of the new tree \parencite{chen2016xgboost}.
+    Nonparametric learning algorithms such as gradient boosting, for
+    example XGBoost, can also be used to estimate the regression
+    function. The gradient boosting algorithm, XGBoost, has a number
+    of hyperparameters that can be tuned. These include, number of
+    boosted trees, depth of each tree, learning rates, etc., but most
+    importantly the internal loss objective which could for example be
+    log-loss or mean squared error. XGBoost aims to iteratively refine
+    the fitted learner by approximating the data $x \mapsto f_m(x)$ at
+    each step $m$. It does so by introducing a new tree $h_m(x)$,
+    which is trained on the error of $ f_m(x)$, such that
+    $f_{m + 1}(x) = f_m(x) + h_m(x)$. The internal loss of the updated
+    learner, $f_{m + 1}$, evaluated on the training data, is lower
+    than that of the previous learner due to the inclusion of the new
+    tree \parencite{chen2016xgboost}.
 
 The parameters of the resulting fit are not directly interpretable. Despite this, XGBoost has demonstrated its ability to model very complex datasets \parencite{chen2016xgboost}.
 
 \end{example}
-There is a one-to-one correspondence between our data $ D_n $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
+Based on the data $ D_n $ we define the
+empirical measure as a measure on
+$ (\mathcal{O} , \mathcal{A}) $ as
 \begin{align*}
-    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A},
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
 \end{align*}
-given that the observations are independent and identically distributed, so permuting the order of the observations does not matter. We can, therefore, write $ \btheta(P_n)$ as an alternative representation of the learner $\btheta(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
+\tag{LETS DISCUSS THE FOLLOWING}
+given that the observations are independent and identically
+distributed, so permuting the order of the observations does not
+matter. We can, therefore, write $ \btheta(P_n)$ as an alternative
+representation of the learner $\btheta(D_n)$, by adjusting the
+notation slightly without introducing ambiguity. The motivation for
+using this notation will become clearer in the subsequent section,
+where we introduce the discrete super learner.
 
 
 %\begin{example}[Regression functions $ \btheta $] \label{ex:regfunc}
@@ -292,19 +334,45 @@ given that the observations are independent and identically distributed, so perm
 
 \section{The Discrete Super Learner}
 \subsection{Library of learners}
-We would now like to consider the scenario where we have a set of learning algorithms, $ \btheta_1 , \ldots, \btheta_\ml $. From these algorithms, we can define the \textbf{library of learners} $ \lib_{k}(P_n) = \{\btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $ of size $ \ml $. Our goal is to find $ \btheta_{\q}(P_n) $, that achieves the lowest risk among our learners -- that is to provide an estimate of $ \q $ for which $$ \q = \argmin_{1 \leq \q \leq \ml} R(\theta_{\q}(P_n) , P), $$ we will denote this estimate as $ \hat{q} $.
+We would now like to consider the scenario where we have a set of
+learning algorithms, $ \btheta_1 , \ldots, \btheta_\ml $. From these
+algorithms, we can define the \textbf{library of learners}
+$ \lib_{k}(P_n) = \{\btheta_{\q}(P_n) \mid 1 \leq \q \leq \ml \} $ of
+size $ \ml $. Our goal is to find $ \btheta_{\q}(P_n) $, that achieves
+the lowest risk among our learners -- that is to provide an estimate
+of $ \q $ for which
+$$ \q = \argmin_{1 \leq \q \leq \ml} R(\theta_{\q}(P_n) , P), $$
+\tag{ELABORATE}we will denote this estimate as $ \hat{q} $.
 
 \subsection{Cross-validation methodology}
-To provide $ \hat{\q} $ we have proceed via cross validation. In cross validation, we randomly split our data into a \textbf{training set} and a \textbf{test set}. Let the random binary vector -- from now on referred to as the \textbf{split variable} or just \textbf{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. Here the superscript $ n $ of $ \Sn $ indicates that the split variable depends on $ n $ as in that it is a split of $ n $ observations. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
+
+To define $ \hat{\q} $ we proceed via cross validation. In cross
+validation, we randomly split our data into a \textbf{training set}
+and a \textbf{test set}. Let the random binary vector -- from now on
+referred to as the \textbf{split variable} or just \textbf{split} --
+$ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of
+$ O_1,\ldots, O_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $
+should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $
+belongs to the test set. \tag{ELABORATE OR DELETE: Here the superscript $ n $ of $ \Sn $
+indicates that the split variable depends on $ n $ as in that it is a
+split of $ n $ observations. } We can define the empirical distributions
+over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
 \begin{align*}
     P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i} \\
     P_{n,\Sn}^{1} &= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
 \end{align*}
-where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of observations in the test and training set respectively.
+where $ n_1 = \sum_{i = 1}^{n} \Sn_i$ and $n_0 = 1-n_1$ are the
+numbers of observations in the test and training set, respectively.
 
-\begin{example}[Random splits] \label{splits}
-   For $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the test set. It might not be desirable to define the discrete probabilities for $ \Sn $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/test data, since that would also include the combination where $ n_1 = 0 $. To ensure that there is always a certain amount of observations in our test set, let $ n_1 > 0 $ be given, we see that there are $ \begin{pmatrix}
-        n \\ n_1
+\begin{example}[Random splits] \label{splits} For $ n $ observations
+  we have $ 2^{n} $ ways of choosing which observations should be in
+  the training set and in the test set. It might not be desirable to
+  define the discrete probabilities for $ \Sn $ over $ \{0,1\}^{n} $
+  simply as $ \frac{1}{2^{n}} $ for each possible combination of
+  training/test data, since that would also include the combination
+  where $ n_1 = 0 $. To ensure that there is always a certain amount
+  of observations in our test set, let $ n_1 > 0 $ be given, we see
+  that there are $ \begin{pmatrix} n \\ n_1
     \end{pmatrix}$ ways of choosing both the test and training set. We can therefore define the distribution of $ \Sn $ as 
     \begin{align*}
         P \left(\Sn = s \right) = \begin{pmatrix}
