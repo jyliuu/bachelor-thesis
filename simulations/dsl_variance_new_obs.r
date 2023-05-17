@@ -61,7 +61,9 @@ res_lib_diff_ns <- foreach(n = training_counts) %do% {
 
 # Bind all dataframes into one and add an id column
 df_combined <- bind_rows(res_lib_diff_ns, .id = "id")
-df_melted <- melt(df_combined, id.vars = "id")
+df_melted <- melt(ndf_combined, id.vars = "id")
+
+# Read old data
 
 p <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
   theme_bw() +
@@ -78,14 +80,11 @@ p <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
   scale_y_continuous(breaks = seq(0, 1, by = 0.1)) +
   geom_boxplot() +
   labs(x = "n", y = "Predicted probability", fill = "Model")
-
+p
 ggsave("learner_vars_1000.png",
     plot = p,
     width = 10,
     height = 6,
     dpi = 360,
     units = "in")
-
-
-# Read old data
 

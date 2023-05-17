@@ -3,19 +3,8 @@ library(patchwork)
 
 source('model.r')
 
-N <- 10^5
+N <- 10^4
 simDat <- simulateMalariaData(N)
-
-### 2d plot of the true model
-
-ggplot(simDat, aes(x = Age, y = Parasites, color = ps)) + 
-  geom_point() + 
-  scale_color_gradient(limits = c(0, 1), low = "blue", high = "red") + 
-  xlab("Age") + 
-  ylab("Parasites") + 
-  ggtitle("2D Plot of Age vs Parasites")
-# Not quite what I was looking for, we can make a heatmap plot
-
 
 
 # create a grid of values for Age and Parasites
@@ -27,42 +16,48 @@ grid$ps <- trueModel(grid$Age, grid$Parasites)
 
 # plot the grid
 trueplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = ps)) + 
+  theme_bw() +
   geom_tile() + 
-  scale_fill_gradient(limits = c(0, 1), low = "green", high = "red") + 
-  xlab("Age") + 
-  ylab("Parasites") + 
-  ggtitle("Heatmap of Age vs Parasites")
+  scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+  xlab("X1") + 
+  ylab("X2") + 
+  ggtitle("The data-generating regression function") +
+  labs(fill = "Probabilities")
 
 trueplot
-
+ggsave("trueplot.png",
+    plot = trueplot,
+    width = 6,
+    height = 5,
+    dpi = 360,
+    units = "in")
 # Fitting logistic regression without interaction term
 modLogReg0 <- glm(Fever ~ Age + Parasites, data = simDat, family = binomial()) 
-summary(modLogReg0)
+modLogRegIntercept <- glm(Fever ~ 1, data = simDat, family = binomial()) 
 
-# And with interactions
-modLogRegTrue <- glm(Fever ~ Age + Parasites + Age*Parasites, data = simDat, family = binomial()) 
-summary(modLogRegTrue)
+
 # Estimates the true parameters correctly
-
 grid$psLogReg0 <- predict(modLogReg0, newdata=grid, type='response')
-grid$psLogRegTrue <- predict(modLogRegTrue, newdata=grid, type='response')
+grid$psLogRegIntercept <- predict(modLogRegIntercept, newdata=grid, type='response')
 
 # modLogReg0 predictions 
 misspecifiedplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = psLogReg0)) + 
+  theme_bw() +
   geom_tile() + 
-  scale_fill_gradient(limits = c(0, 1), low = "blue", high = "red") + 
-  xlab("Age") + 
-  ylab("Parasites") + 
-  ggtitle("Predicted probabilities using misspecified logReg0")
-  
-truemodplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = psLogRegTrue)) + 
-  geom_tile() + 
-  scale_fill_gradient(limits = c(0, 1), low = "blue", high = "red") + 
-  xlab("Age") + 
-  ylab("Parasites") + 
-  ggtitle("Predicted probabilities using true identification logRegTrue")
+  scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+  xlab("X1") + 
+  ylab("X2") + 
+  ggtitle("Main effects logistic regression") +
+  labs(fill = "Probabilities")
 
-trueplot | misspecifiedplot / truemodplot
+misspecifiedplotintercept <-  ggplot(grid, aes(x = Age, y = Parasites, fill = psLogRegIntercept)) + 
+  theme_bw() +
+  geom_tile() + 
+  scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+  xlab("X1") + 
+  ylab("X2") + 
+  ggtitle("Intercept logistic regression") +
+  labs(fill = "Probabilities")
 
 ## Fitting xgboost model
 library(xgboost)
@@ -79,12 +74,15 @@ bstSparse <- xgboost(data = as.matrix(simDat[c('Age', 'Parasites')]),
 grid$xgboostps <- predict(bstSparse, as.matrix(grid[c('Age', 'Parasites')]))
 
 
-xgboostmodplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = xgboostps)) + 
+xgboostmodplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = xgboostps)) + 
+  theme_bw() +
   geom_tile() + 
-  scale_fill_gradient(limits = c(0, 1), low = "blue", high = "red") + 
-  xlab("Age") + 
-  ylab("Parasites") + 
-  ggtitle("Predicted probabilities using XGBoost")
+  scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+  xlab("X1") + 
+  ylab("X2") + 
+  ggtitle("XGBoost") +
+  labs(fill = "Predictions")
 
-xgboostmodplot 
-
+xgboostmodplot
+p <- misspecifiedplot + theme(legend.position = "none") |xgboostmodplot 
+ggsave('predictpar.png', plot = p, width = 10, height = 5, dpi = 360, units = 'in')
