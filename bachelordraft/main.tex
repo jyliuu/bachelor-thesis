@@ -83,15 +83,19 @@ In the context of regression, where $ O = (Y, X) $ is an observation or outcome-
 
 However, if we are dealing with complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be wrong. In such situations, it is tempting to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests. Machine learning methods seek to estimate regression function directly, in contrast to parametric statistics where the parameters of the underlying model are estimated first, then a regression function derived as some analytical expression of these parameters and the covariates. The assumptions of these machine learning methods regarding the data-generating distribution are not explicitly specified, but it does not pose a problem for us in achieving our goal. Indeed, it is not necessary for us to identify $ P $ completely if $ P $ can be factored into the conditional distribution $ P_{Y \mid X} $ and the distribution over our covariates $ P_X $, here our goal of estimating the regression function is akin to estimating $ P_{Y \mid X} $.   
 
-Given an abundance of different ways we can tackle the problem of estimating the regression, we would like to be able to compare the different methods select the best one. In a practical scenario we might have set of different learning algorithms from which we can choose from. Cross-validation, for example, can help in determining the risk of each algorithm by splitting the data into training and validation sets, each algorithm would then be fitted on the training set and an empirical risk for each fitted model is then calculated by evaluating the model on the validation set. We would run cross-validation using a predefined splitting mechanism for each learning algorithm that we have. A popular choice in machine learning and statistics is $ K $-fold cross-validation. $ K $-fold cross-validation divides the data into $ K $ disjoint and exhaustive sets referred to as validation sets. For every $ k = 1, \dots , K $ the learning algorithm is trained using all data excluding the $ k $'th validation set. Subsequently, the risk of the fitted model is computed by applying it on the validation set that was held out from training. We obtain an estimate of the global risk of the model by repeating this procedure $ K $ times and then averaging the risks.
+Given an abundance of different ways we can tackle the problem of estimating the regression, we would like to be able to compare the different methods select the best one. In a practical scenario we might have set of different learning algorithms from which we can choose from. Cross-validation, for example, can help in determining the risk of each algorithm by splitting the data into training and validation sets, each algorithm would then be fitted on the training set and an empirical risk for each fitted model is then calculated by evaluating the model on the validation set. We would run cross-validation using a predefined splitting mechanism for each learning algorithm that we have. A popular choice in machine learning and statistics is $ K $-fold cross-validation. $ K $-fold cross-validation divides the data into $ K $ disjoint and exhaustive sets referred to as validation sets. For every $ k = 1, \dots , K $ the learning algorithm is trained using all data excluding the $ k $'th validation set. Subsequently, the risk of the fitted model is computed by applying it on the validation set that was held out from training. We obtain an estimate of the true risk of the model by repeating this procedure $ K $ times and then averaging the risks. The model with the lowest risk is then selected as our candidate estimate of the regression function. 
 
-The model with the lowest risk is then selected as the best candidate for our estimate of the regression function. This is the idea behind the cross-validation selector \parencite{laan03}. The cross-validation selector forms the discrete super learner \parencite{van2007super}. The discrete super learner is simply the learner (fitted model) created by applying the result of the cross-validation selector to our data. The cross-validation selector, given a library of learning algorithms and our data, applies cross-validation to each learning algorithm in the library. 
+This is the idea behind the cross-validation selector \parencite{laan03}. The discrete super learner \parencite{van2007super} is simply the learner (fitted model) that is created by applying the result of the cross-validation selector to our data. The cross-validation selector, given a library of learning algorithms and our data, applies cross-validation to each algorithm in the library. 
 
-The super learner is effectively the best learner we can create from a library of candidate learners. It is the best in the sense that it can not perform worse than the best learner that we have in our library in terms of the specified loss objective. We will demonstrate that the cross-validation selector, which evaluates learners based on their cross-validated (empirical) risk and chooses the one with the lowest risk, is asymptotically equivalent to the oracle selector. The oracle selector identifies the learner with the lowest true risk – the theoretical risk achieved by the true distribution.
+Another method, called the ensemble super learner \parencite{van2007super} seeks to combine the learning algorithms into a single learner by taking a linear combination of algorithms in the library. One way to fit the ensemble super learner is by taking a weighted average of the each learner, where the weights are chosen to minimize the risk of the ensemble. A prediction made by an ensemble super learner will then be a weighted sum of the predictions made by the individual learners.
 
-The discrete super learner is not a fixed learner from our library, but rather depends on the available data. It represents the learner chosen by the cross-validation selector, which can vary depending on the amount of data at hand.
+As we will demonstrate in this thesis, given a library of learning algorithms, the super learner is effectively the best estimate of the data-generating regression that we can obtain. It is the best in the sense that it can not perform worse than the best learner created from our library in terms of risk. 
 
-We first present the general theory and our goal, which is to estimate the conditional mean $ E(Y \mid X = x) $ for a observation  $ (Y, X) $ being a outcome-covariate pair. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
+To formalize the notion of the best learner in the library, we will define the oracle selector. The oracle selector knows $ P $, hence oracle, and selects the learner with the lowest risk relative to $ P $. In this thesis we demonstrate that the cross-validation selector is asymptotically equivalent to the oracle selector. 
+
+Our setup and notation is similar to \cite{vaart06} and \cite{laan03}. The focus in the thesis will to demonstrate the effectiveness of the super learner applied to binary regression. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The simulation results in section \ref{sec:simulations} shows that the super learner is able to achieve the minimum risk as the number of training samples increases. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. Logistic regression and XGBoost are the learning algorithms in our library, and the super learner from the library and compared against the different algorithms.  
+
+The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
 
 \section{Background}
 
@@ -151,12 +155,12 @@ We will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n = (O_1 , \dots , 
 \end{definition}
 We will throughout assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
 \begin{definition}[Learner]
-    Given a learning algorithm $ \la $. A learner is the stochastic variable in $ \Theta $ representing the outcome of applying the learning algorithm to our data $ \btheta = \la(D_n) $.
+    Given a learning algorithm $ \la $. A learner is a stochastic variable in $ \Theta $ representing the outcome of applying the learning algorithm to our data $ \btheta = \la(D_n) $.
 \end{definition}
-Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and subsequently we can apply our learning algorithm on $ d_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer the quantity, $ \la(d_n) $, as a \textit{fitted learner}. 
+Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and can subsequently apply our learning algorithm on $ d_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer to the quantity, $ \la(d_n) $, as a \textit{fitted learner}. 
 
 \begin{definition}[Fitted learner]
-    Given a learning algorithm $ \la $, and upon observing the data $ d_n = (o_1, \dots , o_n) $. A fitted learner is a regression function in $ \Theta $, obtained by applying the learning algorithm to the observed data $ \btheta = \la(d_n) $.
+    Let $ \la $ be a learning algorithm. Upon observing the data $ d_n = (o_1, \dots , o_n) $, a fitted learner is a regression function in $ \Theta $, obtained by applying the learning algorithm to the observed data $ \btheta = \la(d_n) $.
 \end{definition}
 
 \begin{example}[Parametric and nonparametric learning algorithms]
@@ -167,11 +171,11 @@ Nonparametric learning algorithms such as gradient boosting, for example XGBoost
 The parameters of the resulting fit are not directly interpretable. Despite this, XGBoost has demonstrated its ability to model very complex datasets \parencite{chen2016xgboost}.
 
 \end{example}
-There is a one-to-one correspondence between our data $ D_n $ and the empirical measures over $ n $ observations on $ (\mathcal{O} , \mathcal{A}) $ defined as
+We will denote the empirical measure obtained from the data $ D_n $ as
 \begin{align*}
-    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A},
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
 \end{align*}
-given that the observations are independent and identically distributed, so permuting the order of the observations does not matter. We can, therefore, write $ \la(P_n)$ as an alternative representation of the learner $\la(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
+When the observations are independent and identically distributed, then there is a one-to-one correspondence between the empirical measures obtained from $ n $ observations and $ D_n $. We can, therefore, write $ \la(P_n)$ as an alternative representation of the learner $\la(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
 
 
 %\begin{example}[Regression functions $ \btheta $] \label{ex:regfunc}
@@ -225,7 +229,7 @@ $$ \tilde{\la}  = \argmin_{\la \in \lib} R(\la(P_n) , P) $$
 We can only provide an estimate for $ \tilde{\la} $ since knowing it would require knowledge of the data-generating distribution. We will denote the estimate as $ \hat{\la} $. 
 
 \subsection{Cross-validation methodology}
-To provide $ \hat{\la} $ we have proceed via cross validation. In cross validation, we randomly split our data into a \textit{training set} and a \textit{test set}. Let the random binary vector -- from now on referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. Here the superscript $ n $ of $ \Sn $ indicates that the split variable depends on $ n $ as in that it is a split of $ n $ observations. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
+To provide $ \hat{\la} $ we have proceed via cross validation. In cross validation, we randomly split our data into a \textit{training set} and a \textit{test set}. Let the random binary vector -- from now on referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is formally a tuple in $ \{0,1\}^{n} $, here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
 \begin{align*}
     P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i} \\
     P_{n,\Sn}^{1} &= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
@@ -312,9 +316,9 @@ As we are never able to know what the oracle chooses, we must proceed via cross-
 %                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
 %\end{align*}
 %
-The oracle selector and cross-validation selector are simply procedures of selecting the learning algorithm from the library. One could alternatively first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $.
+The oracle selector and cross-validation selector are simply procedures for selecting a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $.
 
-We are now ready to give the definition of the discrete super learner
+We will now give the definition of the \textit{discrete super learner}  
 \begin{definition}[Discrete super learner]
     The \textit{discrete super learner}, $ \la(P_n) $, created from a library $ \lib $ is the cross-validation selected learning algorithm applied to the entire dataset $ D_n $  
     \begin{align*}
@@ -330,9 +334,9 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{lemma}[Lemma 2.1 in \parencite{vaart06}] \label{finitesampledecomp}
     Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}  $ and $ \tilde{\la} $ denote the cross-validation selected algorithm and oracle selected algorithm from $ \lib $ respectively. For $ \delta > 0 $ it holds that
    \begin{align*}
-       E_{\Sn} \int L(o, \hat{\la}(P_{n, \Sn}^{0})) dP(o) &\leq (1 + 2 \delta) E_{\Sn} \int L(o, \tilde{\la}(P_{n, \Sn}^{0})) d P(o) \\ 
+       E_{\Sn} \int L(o, \hat{\la}(P_{n, \Sn}^{0})) &dP(o) \leq (1 + 2 \delta) E_{\Sn} \int L(o, \tilde{\la}(P_{n, \Sn}^{0})) d P(o) \\ 
                                                                 &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)  \\
-                                                                &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int-L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)(o)  \\
+                                                                &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int-L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)(o)  
    \end{align*}
 \end{lemma}
 \begin{proof}
@@ -537,7 +541,7 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 
 
 \section{The Ensemble Super Learner}
-\section{Simulation results}
+\section{Simulation results} \label{sec:simulations}
 In the following section we show the results of applying the discrete super learner to a simulated dataset. Our dataset consists of a binary outcome, $Y$, which depends on two covariates $X_1$ and $X_2$. Our setup is as follows
 \begin{align*}
     X_1 &\sim \operatorname{Unif}(0.5, 15),\\
