@@ -154,6 +154,48 @@
       \verb https://doi.org/10.1524/stnd.2006.24.3.351
       \endverb
     \endentry
+    \entry{van2007super}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=5a33f5a4cddd196acebc20b9d7dadeec}{%
+           family={Van\bibnamedelimb der\bibnamedelima Laan},
+           familyi={V\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Mark\bibnamedelima J},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=11b911e666648422266de9e7eed0133f}{%
+           family={Polley},
+           familyi={P\bibinitperiod},
+           given={Eric\bibnamedelima C},
+           giveni={E\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d3f4f82d64e8d306c3bd45692d2e2bff}{%
+           family={Hubbard},
+           familyi={H\bibinitperiod},
+           given={Alan\bibnamedelima E},
+           giveni={A\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {De Gruyter}%
+      }
+      \strng{namehash}{055e04978f144a45e808f197f149ad3f}
+      \strng{fullhash}{055e04978f144a45e808f197f149ad3f}
+      \strng{bibnamehash}{055e04978f144a45e808f197f149ad3f}
+      \strng{authorbibnamehash}{055e04978f144a45e808f197f149ad3f}
+      \strng{authornamehash}{055e04978f144a45e808f197f149ad3f}
+      \strng{authorfullhash}{055e04978f144a45e808f197f149ad3f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Statistical applications in genetics and molecular biology}
+      \field{number}{1}
+      \field{title}{Super learner}
+      \field{volume}{6}
+      \field{year}{2007}
+    \endentry
     \entry{chen2016xgboost}{inproceedings}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=48461ccdf50ba5a54e29a354aa734c0b}{%

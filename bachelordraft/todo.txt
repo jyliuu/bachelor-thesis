@@ -1,3 +1,8 @@
+- write in intro difference between Theta and library. 
+- Write about connection between Theta and P 
+- One-to one correspondence between Dn Pn, make more clear
+
+
 - Where the loss function attain its minimum and is it unique? For what loss functions is this true
 - Bound of loss 
 - theta hat is not an estimator

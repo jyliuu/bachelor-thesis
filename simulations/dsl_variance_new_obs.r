@@ -48,7 +48,7 @@ res_xgboost <- fit_and_predict_on_new_obs(xgboost_fit_predict, obs, 1000)
 res_logistic <- fit_and_predict_on_new_obs(logistic_fit_predict, obs, 1000)
 res_lib <- fit_library_on_new_obs(candidatesLogReg, obs, 1000)
 
-training_counts <- c(150, 500, 1000, 1500)
+training_counts <- c(150, 500, 1000, 1500, 3000)
 variable_names <- c("Main effects", "Intercept only", "XGBoost", "Discrete super learner")
 
 res_lib_diff_ns <- foreach(n = training_counts) %do% {
@@ -85,3 +85,7 @@ ggsave("learner_vars_1000.png",
     height = 6,
     dpi = 360,
     units = "in")
+
+
+# Read old data
+
