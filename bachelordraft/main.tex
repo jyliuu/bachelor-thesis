@@ -552,37 +552,49 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 
 
 \section{The Ensemble Super Learner}
-The idea behind the ensemble super learner is to fit a weighted combination of candidate learners, $\la_1(P_{n, \Sn}^{0}), \ldots, \la_k(P_{n, \Sn}^0) $, where the weights are chosen to minimize the cross-validated risk. We define 
-$$ \mathcal{Z} = \{Z = (\la_1(P_{n, \Sn}^{0})(x), \ldots, \la_k(P_{n, \Sn}^0)(x) ) \mid x \in \mathcal{X} \} \subseteq [0,1]^{k}, $$
-as the set of possible outcomes by applying the learners on $ \mathcal{X} $. 
+The idea behind the ensemble super learner is to fit a weighted combination of candidate learners, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, where the weights are chosen to minimize the cross-validated risk. We will first introduce 
+
+\subsection{$ K $-fold cross validation}
+The idea behind cross validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. Furthermore, we will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $.  
+
+\subsection{Level 1 data}
+Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 covariates} of $ \lib $ applied to $ D_n $ as specified by a $ K $-fold cross validation procedure is  
+$$ \mathcal{Z} = \{Z_i = (\la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^0)(X_i) ) \}_{i = 1}^{n} \subseteq [0,1]^{k}, $$
+which is the set of possible outcomes by applying the learners on the observed $ X_i $'s. 
 
 \begin{definition}[Level 1 data]
-    Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 data} of $ \lib $ applied to $ D_n $ is defined as  
+    The \textit{level 1 data} is given by concatenating our observed $ Y_i $'s with the level 1 covariates, i.e.
     \begin{align*}
-        \lone^{n} = \{(Y_i , Z_i)\}_{i = 1}^{n} = \{ (Y_i, \la_1(P_n)(X_i), \ldots, \la_\ml(P_n)(X_i)) \}_{i = 1}^n \subseteq \{0,1\} \times \mathcal{Z}  
+        \lone_{n}  = \{(Y_i ; Z_i) = (Y_i; \la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)})(X_i)) \}_{i = 1}^n \subseteq \{0,1\} \times \mathcal{Z}  
     \end{align*}
 \end{definition}
+The level 1 data is exactly the predictions made by the learners on the observations that they were not trained on.
 We now define $ \mathcal{M} $ as the class of all measurable functions that map from $ \mathcal{Z} $ to $ [0,1] $ which we will refer to as \textit{meta learners}. 
+\subsection{Meta learners}
 \begin{definition}[Meta learner]
     The \textit{meta learner} is a function $ \meta: \mathcal{Z} \to [0,1] $ in $ \mathcal{M} $ that maps the output of the candidate learners to a prediction. 
 \end{definition}
 The goal is to estimate the regression of $ Y $ given the predictions made by our learners, $ \mathcal{Z} \ni z \mapsto E(Y \mid Z = z) $, which is an element in $ \mathcal{M} $. We accomplish this by applying a \textit{meta learning algorithm} to the level 1 data. 
 \begin{definition}[Meta learning algorithm]
-    A \textit{meta learning algorithm} is a measurable map that creates a meta learner from our level 1 data $ \lone^{n} \mapsto \Meta(\lone^{n}) \in \mathcal{M} $. 
+    A \textit{meta learning algorithm} is a measurable map that creates a meta learner from our level 1 data $ \lone_{n} \mapsto \Meta(\lone_{n}) \in \mathcal{M} $. 
 \end{definition}
 A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. 
 
+\subsection{Ensemble super learner}
 \begin{definition}[Ensemble super learner \parencite{van2007super}]
-    Given a library of learning algorithms $ \lib $, a split variable $ \Sn $ and the level 1 data, $ \lone^{n} $, obtained by fitting each learning algorithm according to the split and then evaluating them on each observation in entire dataset $ D_n $.
-    Let $ \meta = \Meta(\lone^{n}) $ be the outcome of applying a meta learning algorithm to the level 1 data, then the map 
+    Let a library of learning algorithms $ \lib $ be given and let $ \lone_{n} $ be the level 1 data obtained by fitting each learning algorithm according to some $ K $-fold cross validation procedure. Let $ \meta = \Meta(\lone_{n}) $ be the outcome of applying a meta learning algorithm to the level 1 data, then the map 
     \begin{align*}
        x \mapsto \meta(\la_1(P_{n})(x), \ldots, \la_k(P_{n})(x) )
     \end{align*}
     is called the \textit{ensemble super learner} and we will denote it by $ \esl(P_{n}) $. 
 \end{definition}
-The meta learning algorithm fits the learner that most accurately predicts $ Y $ given $ Z $, a way of formalizing the notion of `fitting' is that the meta learning algorithm seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a finite set, for each $ a \in \mathcal{A} $ let $ \meta( \cdot \mid a) $ be a meta learner. Intuitively, one might consider $ \meta( \cdot \mid a) $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone^{n} $, define 
+Here the $ P_n $ indicates that we fit each learner in the library on the entire data set, then a meta learner, $ \meta $, is used to combine the predictions made by each learner. 
+
+
+\subsection{Oracle inequalities}
+The meta learning algorithm fits the learner that most accurately predicts $ Y $ given $ Z $, a way of formalizing the notion of `fitting' is that the meta learning algorithm seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a finite set, for each $ a \in \mathcal{A} $ let $ \meta( \cdot \mid a) $ be a meta learner. Intuitively, one might consider $ \meta( \cdot \mid a) $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
 $$ \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta( \cdot \mid a)) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta(Z_i \mid a))^2 $$
-The meta learning algorithm applied to $ \lone^{n} $ returns $ \meta(\cdot \mid \hat{a}) $, which is the meta learner with the empirical lowest risk on the level 1 data. We will now let the finite parameter set to depend on $ n $, such that the number elements in $ \mathcal{A}_{n} $ grows at most at a polynomial rate in $ n $. It is possible to write 
+The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta(\cdot \mid \hat{a}) $, which is the meta learner with the empirical lowest risk on the level 1 data. We will now let the finite parameter set to depend on $ n $, such that the number elements in $ \mathcal{A}_{n} $ grows at most at a polynomial rate in $ n $. It is possible to write 
 \begin{align*}
     \meta_{ a } &:= \meta(\cdot \mid a ),\\
     \hat{a}_n &:= \argmin_{a \in \mathcal{A}_{n}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
@@ -593,12 +605,15 @@ We can denote the ensemble super learner that applies the meta learner $ \meta_{
 \end{align*}
 Denote the oracle selector of $ a $ as 
 \begin{align*}
-    \tilde{a}_n := \argmin_{a \in \mathcal{A}_n} E_{\Sn} R(\esl_{a}(P_{n, S^{n}}^{0}) , P),
+    \tilde{a}_n := \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}) , P),
 \end{align*}
 where $ P $ is the distribution of our level 0 data $ O $.
 
 
-\begin{theorem}[Asymptotic equivalence]
+\begin{theorem}[Finite sample bound]
+    \begin{align*}
+        \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \hat{a}_n }(P_n) , P) \leq (1 + 2 \delta) E_{D_n} R(\esl_{ \tilde{a}_n }(P_n), P) + (1 + \delta) \frac{C \log(1 + K(n))}{\sqrt{n}}
+    \end{align*}
     
 \end{theorem}
 
