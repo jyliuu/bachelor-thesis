@@ -56,7 +56,11 @@
 \newcommand{\la}{\psi}
 \newcommand{\Sn}{S^n}
 \newcommand{\lib}{\Psi}
+\newcommand{\lone}{\mathcal{L}}
 \newcommand{\empmod}{\mathcal{P}_{\text{emp}}}
+\newcommand{\meta}{\phi}
+\newcommand{\Meta}{\Phi}
+\newcommand{\esl}{\Sigma}
 \DeclareMathOperator{\expit}{expit}
 
 \assignment{A Bachelor of Science thesis}
@@ -91,9 +95,9 @@ Another method, called the ensemble super learner \parencite{van2007super} seeks
 
 As we will demonstrate in this thesis, given a library of learning algorithms, the super learner is effectively the best estimate of the data-generating regression that we can obtain. It is the best in the sense that it can not perform worse than the best learner created from our library in terms of risk. 
 
-To formalize the notion of the best learner in the library, we will define the oracle selector. The oracle selector knows $ P $, hence oracle, and selects the learner with the lowest risk relative to $ P $. In this thesis we demonstrate that the cross-validation selector is asymptotically equivalent to the oracle selector. 
+To formalize the notion of the best learner in the library, we will define the oracle selector. The oracle selector knows $ P $ -- hence it is called the oracle -- and selects the learner with the lowest risk relative to $ P $. In this thesis we demonstrate that the cross-validation selector is asymptotically equivalent to the oracle selector. 
 
-Our setup and notation is similar to \cite{vaart06} and \cite{laan03}. The focus in the thesis will to demonstrate the effectiveness of the super learner applied to binary regression. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The simulation results in section \ref{sec:simulations} shows that the super learner is able to achieve the minimum risk as the number of training samples increases. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. Logistic regression and XGBoost are the learning algorithms in our library, and the super learner from the library and compared against the different algorithms.  
+Our setup and notation is similar to \cite{vaart06} and \cite{laan03}. The focus in the thesis will to demonstrate the effectiveness of the super learner applied to binary regression. More specifically, we focus on the case where we regress on a binary outcome $ Y \in \{0,1\} $. The conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X = x) $. The simulation results in section \ref{sec:simulations} shows that the super learner is able to achieve the minimum risk as the number of training samples increases. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. We evaluate a collection of learning algorithms, including logistic regression and XGBoost. From this library, we create the super learner and compare its performance against the individual algorithms.
 
 The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
 
@@ -320,7 +324,7 @@ The oracle selector and cross-validation selector are simply procedures for sele
 
 We will now give the definition of the \textit{discrete super learner}  
 \begin{definition}[Discrete super learner]
-    The \textit{discrete super learner}, $ \la(P_n) $, created from a library $ \lib $ is the cross-validation selected learning algorithm applied to the entire dataset $ D_n $  
+    The \textit{discrete super learner}, $ \la(P_n) $, created from a library $ \lib $ is the cross-validation selected learning algorithm fitted to the entire dataset 
     \begin{align*}
         \mathcal{X} \ni x \mapsto \hat{\la}(P_n)(x). 
     \end{align*}
@@ -332,7 +336,7 @@ We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable fun
 
 In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
 \begin{lemma}[Lemma 2.1 in \parencite{vaart06}] \label{finitesampledecomp}
-    Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}  $ and $ \tilde{\la} $ denote the cross-validation selected algorithm and oracle selected algorithm from $ \lib $ respectively. For $ \delta > 0 $ it holds that
+    Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}  $ and $ \tilde{\la} $ denote the cross-validation- and oracle selected algorithm from $ \lib $ of size $ \ml $ respectively. For $ \delta > 0 $ it holds that
    \begin{align*}
        E_{\Sn} \int L(o, \hat{\la}(P_{n, \Sn}^{0})) &dP(o) \leq (1 + 2 \delta) E_{\Sn} \int L(o, \tilde{\la}(P_{n, \Sn}^{0})) d P(o) \\ 
                                                                 &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)  \\
@@ -344,13 +348,13 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{proof}
 To control the bounds for the expected loss we introduce Bernstein pairs 
 \begin{definition}[Bernstein pair \parencite{vaart06}]
-    Given a measurable function $ f: O \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
+    Given a measurable function $ f: \mathcal{O} \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
     \begin{equation} \label{bernstein}
         M(f)^2 P\left( e^{|f|/M(f)} -1 - \frac{|f|}{|M(f)|}\right) \leq \frac{1}{2}v(f) 
     \end{equation}
 \end{definition}
 \begin{proposition} \label{unifbernstein}
-    $ (\norm{f}_{\infty}, \frac{3}{2} Pf^2 ) $ is a Bernstein pair. 
+    If $ f $ is uniformly bounded, then $ (\norm{f}_{\infty}, \frac{3}{2} Pf^2 ) $ is a Bernstein pair. 
 \end{proposition}
 \begin{proof}
     Following proof is due to \parencite{vaart06}[ch. 8.1]. 
@@ -362,6 +366,11 @@ To control the bounds for the expected loss we introduce Bernstein pairs
    In the first inequality we replace the absolute value of $ f $ with the uniform norm, which is larger. 
 \end{proof}
 
+\begin{example}[Binary regression]
+    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f(o) = L(o, \btheta) = (Y - \theta(X))^2$ can be found by applying proposition \ref{unifbernstein}. By requiring that $ \theta(x) \in [0,1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ o \in \mathcal{O} $ since $ Y \in \{0,1\} $.  
+
+\end{example}
+
 
 \begin{lemma}[Lemma 2.2 in \parencite{vaart06}] \label{finitesamplebound}
     Let $G_{n}$ be the empirical process of an i.i.d. sample of size $n$ from the distribution $P$ and assume that $P f \geq 0$ for every $f \in \mathcal{F}$ in some set of measurable functions $ \mathcal{F} $ on $ \mathcal{O} $. Then, for any Bernstein pair $(M(f), v(f))$ and for any $\delta>0$ and $1 \leq p \leq 2$,
@@ -370,14 +379,15 @@ To control the bounds for the expected loss we introduce Bernstein pairs
     \end{align*}
     The same upper bound is valid for $ E_{D_n} \max_{f \in \mathcal{F}}(G_n+\delta \sqrt{n} P)(-f) $  
 \end{lemma}
-The expectation $ E_{D_n} $ is taken wrt. the joint probability measure over our observations, here we have tha $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
+The expectation $ E_{D_n} $ is taken wrt. the joint probability measure over our observations, here we have that $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
 
 \begin{theorem}[Theorem 2.3 in \parencite{vaart06}] \label{finitesample}
-   For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+   Let $ \lib $ be a library of learning algorithms of size $ \ml $. For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
        E_{D_n} E_{\Sn} &R(\hat{\la}(P_{n, \Sn}^{0}), P) \leq(1 + 2 \delta) E_{D_n} E_{\Sn} R( \tilde{\la}(P_{n,\Sn}^{0}), P) +\\
                        &(1 + \delta) E_{\Sn} \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right).
    \end{align*}
+   Where $ \hat{\la} $ and $ \tilde{\la} $ are the cross-validation- and the oracle selected algorithm from $ \lib $. 
 \end{theorem}
 In the expectations above, we are taking the expectation wrt. the random split-variable $ \Sn $ as well as the joint distribution of our observations. In a more verbose manner one would write 
 \begin{align*}
@@ -470,6 +480,7 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 \end{example}
 
 
+
 % \subsubsection{Choosing $p = 1$}
 % \begin{align*}
 %    ER(\btheta_{\hat{\q}}(P_{n, S}^{0})) &\leq(1 + 2 \delta) ER(\btheta_{ \tilde{\q}}(P_{n,S}^{0})) +(1 + \delta) E \left(  \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\btheta) + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta}\right]\right)
@@ -541,6 +552,58 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 
 
 \section{The Ensemble Super Learner}
+The idea behind the ensemble super learner is to fit a weighted combination of candidate learners, $\la_1(P_{n, \Sn}^{0}), \ldots, \la_k(P_{n, \Sn}^0) $, where the weights are chosen to minimize the cross-validated risk. We define 
+$$ \mathcal{Z} = \{Z = (\la_1(P_{n, \Sn}^{0})(x), \ldots, \la_k(P_{n, \Sn}^0)(x) ) \mid x \in \mathcal{X} \} \subseteq [0,1]^{k}, $$
+as the set of possible outcomes by applying the learners on $ \mathcal{X} $. 
+
+\begin{definition}[Level 1 data]
+    Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 data} of $ \lib $ applied to $ D_n $ is defined as  
+    \begin{align*}
+        \lone^{n} = \{(Y_i , Z_i)\}_{i = 1}^{n} = \{ (Y_i, \la_1(P_n)(X_i), \ldots, \la_\ml(P_n)(X_i)) \}_{i = 1}^n \subseteq \{0,1\} \times \mathcal{Z}  
+    \end{align*}
+\end{definition}
+We now define $ \mathcal{M} $ as the class of all measurable functions that map from $ \mathcal{Z} $ to $ [0,1] $ which we will refer to as \textit{meta learners}. 
+\begin{definition}[Meta learner]
+    The \textit{meta learner} is a function $ \meta: \mathcal{Z} \to [0,1] $ in $ \mathcal{M} $ that maps the output of the candidate learners to a prediction. 
+\end{definition}
+The goal is to estimate the regression of $ Y $ given the predictions made by our learners, $ \mathcal{Z} \ni z \mapsto E(Y \mid Z = z) $, which is an element in $ \mathcal{M} $. We accomplish this by applying a \textit{meta learning algorithm} to the level 1 data. 
+\begin{definition}[Meta learning algorithm]
+    A \textit{meta learning algorithm} is a measurable map that creates a meta learner from our level 1 data $ \lone^{n} \mapsto \Meta(\lone^{n}) \in \mathcal{M} $. 
+\end{definition}
+A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. 
+
+\begin{definition}[Ensemble super learner \parencite{van2007super}]
+    Given a library of learning algorithms $ \lib $, a split variable $ \Sn $ and the level 1 data, $ \lone^{n} $, obtained by fitting each learning algorithm according to the split and then evaluating them on each observation in entire dataset $ D_n $.
+    Let $ \meta = \Meta(\lone^{n}) $ be the outcome of applying a meta learning algorithm to the level 1 data, then the map 
+    \begin{align*}
+       x \mapsto \meta(\la_1(P_{n})(x), \ldots, \la_k(P_{n})(x) )
+    \end{align*}
+    is called the \textit{ensemble super learner} and we will denote it by $ \esl(P_{n}) $. 
+\end{definition}
+The meta learning algorithm fits the learner that most accurately predicts $ Y $ given $ Z $, a way of formalizing the notion of `fitting' is that the meta learning algorithm seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a finite set, for each $ a \in \mathcal{A} $ let $ \meta( \cdot \mid a) $ be a meta learner. Intuitively, one might consider $ \meta( \cdot \mid a) $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone^{n} $, define 
+$$ \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta( \cdot \mid a)) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta(Z_i \mid a))^2 $$
+The meta learning algorithm applied to $ \lone^{n} $ returns $ \meta(\cdot \mid \hat{a}) $, which is the meta learner with the empirical lowest risk on the level 1 data. We will now let the finite parameter set to depend on $ n $, such that the number elements in $ \mathcal{A}_{n} $ grows at most at a polynomial rate in $ n $. It is possible to write 
+\begin{align*}
+    \meta_{ a } &:= \meta(\cdot \mid a ),\\
+    \hat{a}_n &:= \argmin_{a \in \mathcal{A}_{n}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
+\end{align*}
+We can denote the ensemble super learner that applies the meta learner $ \meta_{ a } $ as 
+\begin{align*}
+    \esl_{a}(P_{n}) := \meta_{a}(\la_1(P_{n}), \ldots, \la_k(P_{n})).
+\end{align*}
+Denote the oracle selector of $ a $ as 
+\begin{align*}
+    \tilde{a}_n := \argmin_{a \in \mathcal{A}_n} E_{\Sn} R(\esl_{a}(P_{n, S^{n}}^{0}) , P),
+\end{align*}
+where $ P $ is the distribution of our level 0 data $ O $.
+
+
+\begin{theorem}[Asymptotic equivalence]
+    
+\end{theorem}
+
+
+
 \section{Simulation results} \label{sec:simulations}
 In the following section we show the results of applying the discrete super learner to a simulated dataset. Our dataset consists of a binary outcome, $Y$, which depends on two covariates $X_1$ and $X_2$. Our setup is as follows
 \begin{align*}
@@ -562,15 +625,15 @@ The regression is captured by the logistic regression model with interaction ter
     \item XGBoost with hyperparameters: \texttt{max\_depth=3, eta=0.3,\\ n\_rounds=100, objective='binary:logistic', booster='dart', nthread=5}
 \end{enumerate}
 As we have have been able to plot the data-generating regression, we can also visualize the predictions of the learning algorithms in the library similarly. In figure \ref{fig:predictpar} we visualize the predictions of the main effects logistic regression and XGBoost fitted using 1000 observations sampled from the distribution. 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/predictpar.png}
     \caption{The predictions of the main effects logistic regression and XGBoost plotted as a heat map}
     \label{fig:predictpar}
 \end{figure}
-The plot for the intercept only logistic regression is omitted, as its appearance is as one would expect -- it is simply a orange square spanning the entire plot.
+The plot for the intercept only logistic regression is omitted, as its appearance is as one would expect -- the plot is simply an orange square.
 
-From figure \ref{fig:predictpar} we can observe a clear difference in the predicted probabilities between the logistic regression and the tree-based XGBoost. The main effects logistic regression is a parametric model that assumes that the regression function is a smooth transformation of the linear predictor $ X\beta $. XGBoost, in contrast, is made up of decision trees, which explains the patchwork pattern in its prediction plot. For small samples and as we will see in the simulations, XGBoost has a high risk in comparison to the main effects logistic regression despite the fact that it is misspecified. However, it becomes increasingly better at approximating the true regression when the number of observations becomes large as seen in figure \ref{fig:xgboost10k}. By applying a super learning algorithm to the library, we will see that the cross-validation selector is able to qualitatively assess and select the best learning algorithm to apply given the amount of data at hand. For example the cross-validation selector might select the main effects logistic regression in the beginning with few training samples, but as the predictions of XGBoost become more stable with more samples, the selector is likely to shift its preference towards XGBoost.  
+From figure \ref{fig:predictpar} we can observe a clear difference in the predicted probabilities between the logistic regression and the tree-based XGBoost. The main effects logistic regression is a parametric model that assumes that the regression function is a smooth transformation of the linear predictor $ X\beta $. XGBoost, in contrast, is made up of decision trees, which explains the patchwork pattern in its prediction plot. For small samples and as we will see in the simulations, XGBoost has a high risk in comparison to the main effects logistic regression despite the fact that it is misspecified. However, XGBoost becomes increasingly better at approximating the true regression when the number of observations becomes large as seen in figure \ref{fig:xgboost10k}. By applying a super learning algorithm to the library, we will see that the cross-validation selector is able to qualitatively assess and select the best learning algorithm to apply given the amount of data at hand. For example the cross-validation selector might select the main effects logistic regression in the beginning with few training samples, but as the predictions of XGBoost become more stable with more samples, the selector is likely to shift its preference towards XGBoost.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/xgboost10k.png}

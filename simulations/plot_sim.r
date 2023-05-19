@@ -80,9 +80,10 @@ xgboostmodplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = xgboostps)) +
   scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
   xlab("X1") + 
   ylab("X2") + 
-  ggtitle("XGBoost") +
+  ggtitle("XGBoost fitted on 10,000 samples") +
   labs(fill = "Predictions")
 
 xgboostmodplot
 p <- misspecifiedplot + theme(legend.position = "none") |xgboostmodplot 
 ggsave('predictpar.png', plot = p, width = 10, height = 5, dpi = 360, units = 'in')
+ggsave('xgboost10k.png', plot = xgboostmodplot, width = 6, height = 5, dpi = 360, units = 'in')
