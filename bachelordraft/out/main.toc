@@ -12,8 +12,8 @@
 \contentsline {subsection}{\numberline {4.3}Meta learners}{14}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Ensemble super learner}{14}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Oracle inequalities}{14}{subsection.4.5}%
-\contentsline {section}{\numberline {5}Simulation results}{15}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Simulation results for the discrete super learner}{18}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Discussion of results}{19}{subsection.5.2}%
-\contentsline {section}{\numberline {6}Appendix}{20}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Proof of lemma \ref {finitesampledecomp}}{20}{subsection.6.1}%
+\contentsline {section}{\numberline {5}Simulation results}{16}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Simulation results for the discrete super learner}{19}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Discussion of results}{20}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Appendix}{21}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Proof of lemma \ref {finitesampledecomp}}{21}{subsection.6.1}%

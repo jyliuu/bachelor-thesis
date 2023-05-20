@@ -156,12 +156,15 @@
     \endentry
     \entry{van2007super}{article}{}
       \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=5a33f5a4cddd196acebc20b9d7dadeec}{%
-           family={Van\bibnamedelimb der\bibnamedelima Laan},
-           familyi={V\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim L\bibinitperiod},
-           given={Mark\bibnamedelima J},
+        {{un=0,uniquepart=base,hash=d1d9714d48a0b28418307c19bfd94c0e}{%
+           family={Laan},
+           familyi={L\bibinitperiod},
+           given={Mark\bibnamedelima J.},
            giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
-           givenun=0}}%
+           givenun=0,
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod},
+           prefixun=0}}%
         {{un=0,uniquepart=base,hash=11b911e666648422266de9e7eed0133f}{%
            family={Polley},
            familyi={P\bibinitperiod},
@@ -178,12 +181,12 @@
       \list{publisher}{1}{%
         {De Gruyter}%
       }
-      \strng{namehash}{055e04978f144a45e808f197f149ad3f}
-      \strng{fullhash}{055e04978f144a45e808f197f149ad3f}
-      \strng{bibnamehash}{055e04978f144a45e808f197f149ad3f}
-      \strng{authorbibnamehash}{055e04978f144a45e808f197f149ad3f}
-      \strng{authornamehash}{055e04978f144a45e808f197f149ad3f}
-      \strng{authorfullhash}{055e04978f144a45e808f197f149ad3f}
+      \strng{namehash}{6da1c8de20c5b24e3ad3116a9d113a1e}
+      \strng{fullhash}{6da1c8de20c5b24e3ad3116a9d113a1e}
+      \strng{bibnamehash}{6da1c8de20c5b24e3ad3116a9d113a1e}
+      \strng{authorbibnamehash}{6da1c8de20c5b24e3ad3116a9d113a1e}
+      \strng{authornamehash}{6da1c8de20c5b24e3ad3116a9d113a1e}
+      \strng{authorfullhash}{6da1c8de20c5b24e3ad3116a9d113a1e}
       \field{sortinit}{2}
       \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{extradatescope}{labelyear}
@@ -229,7 +232,7 @@
       \field{pages}{785\bibrangedash 794}
       \range{pages}{10}
     \endentry
-    \entry{lauritzen2022statistics}{book}{}
+    \entry{lauritzen2023fundamentals}{book}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=767d1fd28490bcd9783ef6e5d677c984}{%
            family={Lauritzen},
@@ -237,6 +240,9 @@
            given={Steffen},
            giveni={S\bibinitperiod},
            givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {CRC Press}%
       }
       \strng{namehash}{767d1fd28490bcd9783ef6e5d677c984}
       \strng{fullhash}{767d1fd28490bcd9783ef6e5d677c984}
@@ -250,8 +256,8 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Mathematical Statistics: A Concise Course}
-      \field{year}{2022}
+      \field{title}{Fundamentals of Mathematical Statistics}
+      \field{year}{2023}
     \endentry
   \enddatalist
 \endrefsection
