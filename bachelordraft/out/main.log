@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  20 MAY 2023 16:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  20 MAY 2023 16:12
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -835,51 +835,51 @@ Package mdframed Info: mdframed detected package amsthm
  [7] [8] [9]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 369.
+(mdframed)              on input line 367.
  [10] [11]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 470.
+(mdframed)              on input line 468.
  [12] [13] [14]
-Overfull \hbox (4.45587pt too wide) detected at line 616
+Overfull \hbox (4.45587pt too wide) detected at line 614
 []
  []
 
 <figures/trueplot.png, id=278, 433.62pt x 361.35pt>
 File: figures/trueplot.png Graphic file (type png)
 <use figures/trueplot.png>
-Package pdftex.def Info: figures/trueplot.png  used on input line 630.
+Package pdftex.def Info: figures/trueplot.png  used on input line 628.
 (pdftex.def)             Requested size: 341.43437pt x 284.54257pt.
 [15 <./figures/trueplot.png (PNG copy)>]
 <figures/predictpar.png, id=287, 722.7pt x 361.35pt>
 File: figures/predictpar.png Graphic file (type png)
 <use figures/predictpar.png>
-Package pdftex.def Info: figures/predictpar.png  used on input line 643.
+Package pdftex.def Info: figures/predictpar.png  used on input line 641.
 (pdftex.def)             Requested size: 426.79135pt x 213.39867pt.
 <figures/xgboost10k.png, id=290, 433.62pt x 361.35pt>
 File: figures/xgboost10k.png Graphic file (type png)
 <use figures/xgboost10k.png>
-Package pdftex.def Info: figures/xgboost10k.png  used on input line 652.
+Package pdftex.def Info: figures/xgboost10k.png  used on input line 650.
 (pdftex.def)             Requested size: 298.75264pt x 248.97337pt.
  [16 <./figures/predictpar.png (PNG copy)>]
 <figures/dsl_loss.png, id=301, 433.62pt x 289.08pt>
 File: figures/dsl_loss.png Graphic file (type png)
 <use figures/dsl_loss.png>
-Package pdftex.def Info: figures/dsl_loss.png  used on input line 664.
+Package pdftex.def Info: figures/dsl_loss.png  used on input line 662.
 (pdftex.def)             Requested size: 426.79135pt x 284.54036pt.
  [17 <./figures/xgboost10k.png (PNG copy)>]
 <figures/dsl_loss_jumps.png, id=308, 433.62pt x 289.08pt>
 File: figures/dsl_loss_jumps.png Graphic file (type png)
 <use figures/dsl_loss_jumps.png>
-Package pdftex.def Info: figures/dsl_loss_jumps.png  used on input line 672.
+Package pdftex.def Info: figures/dsl_loss_jumps.png  used on input line 670.
 (pdftex.def)             Requested size: 426.79135pt x 284.54036pt.
 <figures/learner_vars.png, id=309, 722.7pt x 433.62pt>
 File: figures/learner_vars.png Graphic file (type png)
 <use figures/learner_vars.png>
-Package pdftex.def Info: figures/learner_vars.png  used on input line 679.
+Package pdftex.def Info: figures/learner_vars.png  used on input line 677.
 (pdftex.def)             Requested size: 426.79135pt x 256.07838pt.
  [18 <./figures/dsl_loss.png (PNG copy)> <./figures/dsl_loss_jumps.png (PNG copy)>] [19 <./figures/learner_vars.png (PNG copy)>]
-Overfull \hbox (8.00462pt too wide) detected at line 729
+Overfull \hbox (8.00462pt too wide) detected at line 727
 []
  []
 
@@ -899,7 +899,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  90i,15n,90p,1392b,1707s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (21 pages, 1132174 bytes).
+Output written on out/main.pdf (21 pages, 1132181 bytes).
 PDF statistics:
  443 PDF objects out of 1000 (max. 8388607)
  356 compressed objects within 4 object streams

@@ -276,15 +276,15 @@ For example, if $\Sn$ is a split for our data $D_n$, the risk of our learner on 
  \end{align*}
  The following definitions are analogous to what is stated in section 1 and 2 of  \parencite{laan03}.
  \begin{definition}[Expected loss averaged over splits \parencite{vaart06}]
-     Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The expected loss for the learner, $\la(P_{n,s}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
+     Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The expected loss for the learner, $\la(P_{n,\Sn}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
     \begin{align*}
-        E_{\Sn} R( \la(P_{n,S}^{0}), P),
+        E_{\Sn} R( \la(P_{n,\Sn}^{0}), P),
     \end{align*}
     where $ P $ is the data-generating distribution.
 \end{definition}
 The expectation $ E_{\Sn} $ is a simple average since $ \Sn $ is discrete. Therefore, for a given $ \la $ we have 
 \begin{align*}
-    E_{\Sn} R( \la(P_{n,\Sn}^{0}), P) &= \sum_{s^{n} \in \{0,1\}^{n}} R(\la(P_{n, s}^{0}), P) \cdot P(\Sn = s^{n}). 
+    E_{\Sn} R( \la(P_{n,\Sn}^{0}), P) &= \sum_{s^{n} \in \{0,1\}^{n}} R(\la(P_{n, s^{n}}^{0}), P) \cdot P(\Sn = s^{n}). 
 \end{align*}
 
 
@@ -320,9 +320,7 @@ As we are never able to know what the oracle chooses, we must proceed via cross-
 %                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
 %\end{align*}
 %
-The oracle selector and cross-validation selector are simply procedures for selecting a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $.
-
-We will now give the definition of the \textit{discrete super learner}  
+The oracle selector and cross-validation selector are simply procedures for selecting a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. We are now ready to give the definition of the \textit{discrete super learner}  
 \begin{definition}[Discrete super learner]
     The \textit{discrete super learner}, $ \la(P_n) $, created from a library $ \lib $ is the cross-validation selected learning algorithm fitted to the entire dataset 
     \begin{align*}
@@ -391,7 +389,7 @@ The expectation $ E_{D_n} $ is taken wrt. the joint probability measure over our
 \end{theorem}
 In the expectations above, we are taking the expectation wrt. the random split-variable $ \Sn $ as well as the joint distribution of our observations. In a more verbose manner one would write 
 \begin{align*}
-     E_{D_n} E_{\Sn}  R(\hat{\la}(P_{n, \Sn}^{0}), P) = \int R(\hat{\la}(P_{n, \Sn}^{0}), P) d (P_\Sn \otimes  P^{n}_O ).
+    E_{D_n} E_{\Sn}  R(\hat{\la}(P_{n, \Sn}^{0}), P) = \int R(\hat{\la}(P_{n, \Sn}^{0}), P) d (P_{\Sn} \otimes  P^{n}_O ).
 \end{align*}
 
 \begin{proof}[Proof]
