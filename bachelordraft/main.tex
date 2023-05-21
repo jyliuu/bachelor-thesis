@@ -6,6 +6,7 @@
 \usepackage{amsmath,amssymb,amsthm,bm}
 \usepackage{mdframed}
 \usepackage{float}
+\usepackage[mode=buildnew]{standalone}% requires -shell-escape
 \usepackage{mathtools}
 \usepackage[
     backend=biber,
@@ -329,7 +330,7 @@ The oracle selector and cross-validation selector are simply procedures for sele
 \end{definition}
 Formally, the map above is a random map as $ P_n $ is stochastic. The discrete super learner is not a specific learner among the learners in the library, but the result of after applying the cross-validation selector to the library. 
 
-\subsection{Oracle inequalities}
+\subsection{Oracle property}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, \Sn}^{i} f = \sqrt{n}(P_{n, \Sn}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ i = 0 $ or $ i = 1 $.
 
 In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
@@ -550,10 +551,10 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 
 
 \section{The Ensemble Super Learner}
-The idea behind the ensemble super learner is to fit a weighted combination of candidate learners, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, where the weights are chosen to minimize the cross-validated risk. We will first introduce 
+The idea behind the \textit{ensemble super learner} is to combine the predictions made by each candidate learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The ensemble super learner can, therefore, be thought of as a way of balancing the weaknesses of each learner. We will begin by introducing $ K $-fold cross validation, which is used by the ensemble super learner.
 
 \subsection{K-fold cross validation}
-The idea behind cross validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. Furthermore, we will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $.  
+The idea behind cross validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. Furthermore, we will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set.  
 
 \subsection{Level 1 data}
 Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 covariates} of $ \lib $ applied to $ D_n $ as specified by a $ K $-fold cross validation procedure is  
@@ -563,10 +564,10 @@ which is the set of possible outcomes by applying the learners on the observed $
 \begin{definition}[Level 1 data]
     The \textit{level 1 data} is given by concatenating our observed $ Y_i $'s with the level 1 covariates, i.e.
     \begin{align*}
-        \lone_{n}  = \{(Y_i ; Z_i) = (Y_i; \la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)})(X_i)) \}_{i = 1}^n \subseteq \{0,1\} \times \mathcal{Z}  
+        \lone_{n}  = \{(Y_i ; Z_i) = (Y_i; \la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^{0})(X_i)) \}_{i = 1}^n \subseteq \{0,1\} \times \mathcal{Z}  
     \end{align*}
 \end{definition}
-The level 1 data is exactly the predictions made by the learners on the observations that they were not trained on.
+The level 1 data is exactly the predictions made by the learners on the observations that they were not trained on. Thus, \textit{level 0 data} is what we refer to as $ D_n $. 
 We now define $ \mathcal{M} $ as the class of all measurable functions that map from $ \mathcal{Z} $ to $ [0,1] $ which we will refer to as \textit{meta learners}. 
 \subsection{Meta learners}
 \begin{definition}[Meta learner]
@@ -586,17 +587,15 @@ A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example
     \end{align*}
     is called the \textit{ensemble super learner} and we will denote it by $ \esl(P_{n}) $. 
 \end{definition}
-Here the $ P_n $ indicates that we fit each learner in the library on the entire data set. A meta learner, $ \meta $, is used to combine the predictions made by each learner. 
+Here the $ P_n $ indicates that each learner $ \la \in \lib $ is fitted on the entire data set. A meta learner, $ \meta $, is used to combine the predictions made by each learner. 
 
 
-\subsection{Oracle inequalities}
-The meta learning algorithm fits the learner that most accurately predicts $ Y $ given $ Z $, a way of formalizing the notion of `fitting' is that the meta learning algorithm seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a parameter set (for example Euclidean), for each $ a \in \mathcal{A} $ let $ \meta( \cdot \mid a) $ be a meta learner. Intuitively, one might consider $ \meta( \cdot \mid a) $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
-$$ \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta( \cdot \mid a)) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta(Z_i \mid a))^2 $$
-The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta(\cdot \mid \hat{a}) $, which is the meta learner with the empirical lowest risk on the level 1 data. We will now consider $ \mathcal{A}_n \subseteq \mathcal{A} $ which depends on $ n $, such that the number elements $ \ml(n) = |\mathcal{A}_{n}| $ grows at most at a polynomial rate in $ n $. We will use the following notation for a meta learner depending on $ a $ 
-\begin{align*}
-    \meta_{ a } &:= \meta(\cdot \mid a ).
-\end{align*}
-Denote the ensemble super learner that uses the meta learner $ \meta_{ a } $ as 
+\subsection{Oracle property}
+The meta learning algorithm, $ \Meta $, fits the learner that most accurately predicts $ Y $ given $ Z $, a way of formalizing the notion of `fitting' is that $ \Meta $ seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a parameter set (for example Euclidean), for each $ a \in \mathcal{A} $ let $ \meta_{a} $ be a meta learner. In a practical setting, one might consider $ \meta_{a} $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
+\begin{align} \label{eq:meta_learning_algorithm}
+    \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta_{a}) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2 
+\end{align}
+The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta_{ \hat{a} } $, which is the meta learner with the empirical lowest risk on the level 1 data. We will now consider $ \mathcal{A}_n \subseteq \mathcal{A} $ such that $ \ml(n) = |\mathcal{A}_{n}| $ depends on $ n $. Denote the ensemble super learner that uses the meta learner $ \meta_{ a } $ as 
 \begin{align*}
     \esl_{a}(P_{n}) := \meta_{a}(\la_1(P_{n}), \ldots, \la_k(P_{n})).
 \end{align*}
@@ -605,17 +604,18 @@ Denote the cross-validation- and oracle selector of $ a $ as
     \hat{a}_n &:= \argmin_{a \in \mathcal{A}_{n}} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}), P_{n, s}^{1}) \\
     \tilde{a}_n &:= \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}) , P),
 \end{align*}
-where $ P $ is the distribution of our level 0 data $ O $. Note that for each $ s' $ up to $ K $ 
+where $ P $ is the distribution of the observations in our level 0 data. Note that for each $ s' $ up to $ K $ 
 $$ \esl_a(P_{n, s'}^{0})(X_i) = \meta_{a}(\la_{1}(P_{n, s'}^{0})(X_i) , \dots , \la_{\ml}(P_{n, s'}^{0})(X_i) ) = \meta_{a}(Z_i) $$ 
-holds for each $ i $ when $ s(i) = s' $. By using the fact that the $ K $ folds are disjoint and exhaustive, we can express $ \hat{a}_n $ as  
-\begin{align*}
-    \hat{a}_n = \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s' = 1}^{K} \frac{K}{n} \sum_{i: s(i) = s'} (Y_i - \meta_{a}(Z_i))^2 = \argmin_{a \in \mathcal{A}_n} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2   
-\end{align*}
-The way that $ \hat{a}_n  $ and $ \tilde{a}_n $ are defined fit directly into our existing framework for the discrete super learner. Recall that the cross-validation selector selected the algorithm that had the lowest cross-validation risk averaged across some split variable $ \Sn $, by using a $ K $-fold cross-validation scheme, the averaged risk over $ \Sn $ becomes the averaged risk over the $ K $ folds, which is exactly the above definition. In the case of the ensemble super learner, the learning algorithm, $ \meta_{a} $, is determined by the parameter $ a $, so the selection problem reduces to selecting the most optimal parameter over a finite parameter set $ \mathcal{A}_n $. The parameter set $ \mathcal{A}_n $ indexes our library of learning algorithms, and is what the cross-validation selector acts upon. The difference here is that we let the number of elements in $ \mathcal{A}_n $ go to infinity, whereas with the discrete super learner the library $ \lib $ was of fixed size. One could think of $ \mathcal{A}_n $ as approximating the entire parameter set $ \mathcal{A} $ using a grid of points such that the approximation becomes finer as the number of points increase.
+holds true for each $ i $ if $ s(i)$ equals $ s' $, i.e. when $ X_i $ is in the validation set $ s' $. By using the fact that the $ K $ folds are disjoint and exhaustive, we can express $ \hat{a}_n $ as  
+\begin{align} \label{eq:meta_learning_algorithm_cv}
+    \hat{a}_n = \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s' = 1}^{K} \frac{K}{n} \sum_{i: s(i) = s'} (Y_i - \esl_{a}(P_{n,s'}^{0}) (X_i))^2 = \argmin_{a \in \mathcal{A}_n} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
+\end{align}
+Equation (\ref{eq:meta_learning_algorithm_cv}) shows that the cross-validation selector, $ \hat{a}_n $, is exactly the objective of the meta learning algorithm defined in \eqref{eq:meta_learning_algorithm}. 
 
-The following finite sample oracle inequality is a direct consequence of the oracle inequality for the discrete super learner.
+The way that $ \hat{a}_n  $ and $ \tilde{a}_n $ are defined fit directly into our existing framework for the discrete super learner. Recall that the cross-validation selector selected the algorithm that had the lowest cross-validation risk averaged across some split variable $ \Sn $. By using a $ K $-fold cross-validation scheme, the averaged risk over $ \Sn $ becomes the averaged risk over the $ K $ folds, which is exactly the above definition of $ \hat{a}_n $. In the case of the ensemble super learner, the learning algorithm, $ \meta_{a} $, is determined by the parameter $ a $, so the selection problem reduces to selecting the most optimal parameter over a finite parameter set $ \mathcal{A}_n $. The parameter set $ \mathcal{A}_n $ indexes our library of learning algorithms, and is what the cross-validation selector acts upon. The difference here is that we let the number of elements in $ \mathcal{A}_n $ go to infinity, whereas with the discrete super learner the library $ \lib $ was of fixed size. One could think of $ \mathcal{A}_n $ as approximating the entire parameter set $ \mathcal{A} $ using a grid of points such that the approximation becomes finer as the number of points increase.
 
-\begin{theorem}[Finite sample bound]
+The following finite sample oracle inequality is a direct consequence of the oracle inequality for the discrete super learner, theorem \ref{finitesample}.
+\begin{theorem}[Finite sample oracle inequality]
     Let $ \lib $ be a library of learning algorithms of size $ k $. Let $ \esl_{ \hat{a}_{n} } $ be the ensemble super learner over $ \lib $ obtained by applying the cross-validation selector over a finite parameter space $ \mathcal{A}_n $ using the $ K $-fold cross-validation scheme. Let $ \esl_{ \tilde{a}_n } $ be the oracle ensemble learner obtained by applying the oracle selector over the same set of parameters. If the conditions of theorem \ref{finitesample} are satisfied, then the following oracle inequality holds
     \begin{align*}
         \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \hat{a}_n }(P_{n, s}^{0}) , P) &\leq (1 + 2 \delta) \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \tilde{a}_n }(P_{n,s}^{0}), P) \\
@@ -635,6 +635,30 @@ The following finite sample oracle inequality is a direct consequence of the ora
 \begin{proof}
     The $ \log(1 + k(n)) $ term is less than $ 1 + \log(k(n)) = 1 + p \log(n) $, which is of lower order than $ \sqrt{n} $, thus the remainder term goes to zero as $ n \to \infty $.
 \end{proof}
+
+\subsection{Choice of meta learning algorithm}
+Given the level 1 data, $ \lone_n $, the meta learning algorithm seeks to optimize over the parameter set $ \mathcal{A}_n \subseteq \mathcal{A} $. The interpretation of $ \mathcal{A} $ depends on the chosen learning algorithm. If a parametric learning algorithm is used, for example logistic regression, then $ \mathcal{A} $ is $ \mathbb{R}^{\ml} $ where $ \ml $ is the number of learners in $ \lib $. The learner $ \meta_a $ for $ a \in \mathcal{A} $ will then be the map $ z \mapsto \expit(az) $.
+\cite{van2007super} mentions that it is also possible to use a non-parametric learning algorithm as the meta learning algorithm, or even apply a super learning algorithm on the level 1 data. In this case $ \mathcal{A} $ could be measurable functions from $ \mathcal{Z} $ to $ [0, 1] $. The learner $ \meta_a $ for $ a \in \mathcal{A} $ will then be the map $ z \mapsto a(z) $.
+
+\subsubsection{Constrained regression and the $ \ml $-simplex}
+Here we examine a simple meta learning algorithm, which is to do a constrained regression on the level 1 data. The goal is to essentially fit a weighted combination of the learners, such that the weights sum to $ 1 $. We can achieve this by parametrizing $ \mathcal{A} $ as the $ \ml $-simplex given by
+\begin{align*}
+    \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{i = 1}^{\ml} a_i = 1 , a_i \geq 0 \text{ for } 1 \leq i \leq k \right\}. 
+\end{align*}
+The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \mapsto z \cdot a $. By Cauchy-Schwarz we have $ z \cdot a \leq \norm{z} \norm{a} \leq 1 $ meaning that the range of $ \meta_a $ is $ [0,1] $. The ensemble super learner that applies $ \meta_a $ is, therefore, a valid learner in $ \Theta $. To apply the oracle results, we will cover $ \mathcal{A} $ with equidistant points on the simplex surface. For every $ n $, we specify $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of points in $ \mathcal{A}_n $ increases with $ n $ at a polynomial rate, and that for any $ a \in \mathcal{A} $ we have 
+\begin{align*}
+    \min_{a_n \in \mathcal{A}_n } \norm{a - a_n} \leq \frac{1}{n}.
+\end{align*}
+This is possible since $ \mathcal{A} $ is compact. It thus follows that we can find a sequence of points $ a_n \in \mathcal{A}_n $ such that $ \meta_{a_n} \to \meta_{a} $ for any $ a \in \mathcal{A}$.  
+
+\begin{figure}[H]
+    \centering
+    \includestandalone[width=0.5\textwidth]{figures/simplex-3.tex}
+    \caption{The parameter set $ \mathcal{A} $ as a $ \ml $-simplex for $ \ml = 3 $. Here $ \mathcal{A}_n $ is visualized as points on the surface.}
+\end{figure}
+
+
+
 
 \section{Simulation results} \label{sec:simulations}
 In the following section we show the results of applying the discrete super learner to a simulated dataset. Our dataset consists of a binary outcome, $Y$, which depends on two covariates $X_1$ and $X_2$. Our setup is as follows

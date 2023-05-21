@@ -1,0 +1,43 @@
+\documentclass[tikz, border=2mm]{standalone}
+\usetikzlibrary{shapes.geometric} % for 3D shapes
+\usetikzlibrary{3d} % for 3D coordinate transformation
+\usetikzlibrary{perspective} % for perspective viewing
+
+\begin{document}
+\begin{tikzpicture}[3d view={120}{35}] % Adjust these angles to change the viewing perspective
+    \tikzstyle{point}=[circle, fill=gray, minimum size=2pt, inner sep=0pt, outer sep=0pt]
+    \tikzstyle{pointtop}=[circle, fill=black, minimum size=2pt, inner sep=0pt, outer sep=0pt]
+    \draw[fill=blue!20] (0,0,0) -- (2,0,0) -- (0,2,0) -- (0,0,2) -- (2,0,0) -- cycle; % Tetrahedron
+    % Add points to the faces
+    \foreach \i in {0.1,0.3,...,0.9} {
+        \foreach \j in {0.1,0.3,...,0.9} {
+            \pgfmathsetmacro\sumij{\i+\j}
+            \ifdim\sumij pt<1pt
+                % Points on face 1 (x-z plane)
+                \node[point] at (2*\i, 0, 2*\j) {};
+                % Points on face 2 (y-z plane)
+                \node[point] at (0, 2*\i, 2*\j) {};
+                % Points on face 3 (x-y plane)
+                \node[point] at (2*\i, 2*\j, 0) {};
+            \fi
+        }
+    }
+
+
+    \foreach \i in {0.1,0.3,...,0.9} {
+        \foreach \j in {0.1,0.3,...,0.9} {
+            \foreach \s in {0.1,0.3,...,0.9} {
+            \pgfmathsetmacro\sumijk{\i+\j+\s}
+                \ifdim\sumijk pt<1pt
+                    \node[pointtop] at (2*\i, 2*\j, 2*\s) {};
+                \fi
+            }
+        }
+    }
+    \begin{scope}[canvas is xyz plane at z=0]
+        \draw[-stealth] (0,0,0) -- (4,0,0) node[left] {$a_1$};
+        \draw[-stealth] (0,0,0) -- (0,4,0) node[right] {$a_2$};
+        \draw[-stealth] (0,0,0) -- (0,0,3) node[above] {$a_3$};
+    \end{scope}
+\end{tikzpicture}
+\end{document}
