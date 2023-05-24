@@ -42,7 +42,7 @@ cross_validate_multiple <- function(models_fit_predict, dataset, k=5, loss_fun=l
 }
 
 
-cross_validate_multiple_lvl1 <- function(models_fit_predict, dataset, k=5, loss_fun=logloss) {
+cross_validate_multiple_lvl1 <- function(models_fit_predict, dataset, k=10, loss_fun=MSE) {
     folds <- createFolds(dataset$y, k = k, list = TRUE)     
     p <- length(models_fit_predict)
 
@@ -55,12 +55,16 @@ cross_validate_multiple_lvl1 <- function(models_fit_predict, dataset, k=5, loss_
             predict_fun <- models_fit_predict[[j]][[2]]
             fit <- model_fun(train_set)
             out_of_split_preds <- predict_fun(fit, test_set)
+            loss <- loss_fun(test_set$y, out_of_split_preds)
 
             cbind(out_of_split_preds)
         }
 
         cbind(Y = test_set$y, preds)
     }
-    res
+
+    # Compute loss for each column using sapply
+    losses <- sapply(2:ncol(res), function(i) loss_fun(res[,1], res[,i]))
+    return(list(lvl1 = res, losses = losses))
 }
 

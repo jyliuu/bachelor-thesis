@@ -1,10 +1,10 @@
 # Fdb version 4
-["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1684689682 0
+["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1684916119 0
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1684689681 "main.tex" "out/main.pdf" "main" 1684689682 0
+["pdflatex"] 1684916116 "main.tex" "out/main.pdf" "main" 1684916119 0
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1680514707 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1680514707 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -177,18 +177,18 @@
   "figures/dsl_loss_jumps.png" 1684142710 95053 c5ef674936c3a9abc0d72f83201dc930 ""
   "figures/learner_vars.png" 1684242905 180720 925057d232ddffd6a219535de2ba8ac1 ""
   "figures/predictpar.png" 1684352843 110762 8374fa17695fa39a7dbfebde3a13b936 ""
-  "figures/simplex-3.tex.pdf" 1684688839 22131 bd656b76af3e7a1a6c813b44bf43d8ca ""
+  "figures/simplex-3.tex.pdf" 1684828937 24164 23ac9cbdc0092215b58257da56352348 ""
   "figures/trueplot.png" 1684351352 76066 547f1bdcaa4938ec632de113d9cafcaa ""
   "figures/xgboost10k.png" 1684355158 78842 07f3f341b31f299d4f8d10af8b57f13e ""
   "ku-frontpage.sty" 1683637883 12952 7d85eb9cafe159b397d3014f50d766a1 ""
   "logos/ku-logo.pdf" 1675697292 93879 31d1db24936015ee9fe960c856f01525 ""
   "logos/science-english.pdf" 1675697292 71141 827ec2c5d6f797163b848e34358df682 ""
   "main.bbl" 1684593405 10470 c8f6bf36e6723c6e5c0a7b87392b79ad "bibtex main"
-  "main.tex" 1684689680 75919 6f68880ed390103ebd1d0804af6f16e7 ""
-  "out/main.aux" 1684689682 8857 243efa1c0e9252b5bcae2e4fd009f7fb "pdflatex"
-  "out/main.out" 1684689682 3274 b629c1c21975f43e8032857f8a128e9c "pdflatex"
-  "out/main.run.xml" 1684689682 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
-  "out/main.toc" 1684689682 1805 bf315f0bb716e638ce0d8fce15d9c9c1 "pdflatex"
+  "main.tex" 1684916114 76924 d77b10fe509b3794957ce1b999a9e7eb ""
+  "out/main.aux" 1684916119 9072 9a759543de41e84c0abd7d8af8b907ad "pdflatex"
+  "out/main.out" 1684916119 3394 6b34297f306498e8af5d17354b6013f8 "pdflatex"
+  "out/main.run.xml" 1684916119 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
+  "out/main.toc" 1684916119 1941 8d812664a76989d23f9389c9fddd1462 "pdflatex"
   (generated)
   "out/main.aux"
   "out/main.bcf"

@@ -38,5 +38,4 @@ fit_dSL_with_candidates <- function(candidates, k=10) function(dat) {
 # Candidates including dSL
 fit_dSL <- fit_dSL_with_candidates(candidates)
 predict_dSL <- function(sl, dat) sl$predict_fun(sl$fitted_mod, dat)
-candidates_with_dSL <- c(candidates, list(dSL = c(fit_dSL, predict_dSL)))
 
