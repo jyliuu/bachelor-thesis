@@ -1,6 +1,6 @@
 library(tidyverse)
 library(patchwork)
-
+library(ranger)
 source('model.r')
 
 N <- 10^4
@@ -86,21 +86,19 @@ xgboostmodplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = xgboostps)) +
 xgboostmodplot
 p <- misspecifiedplot + theme(legend.position = "none") |xgboostmodplot 
 ggsave('predictpar.png', plot = p, width = 10, height = 5, dpi = 360, units = 'in')
-ggsave('xgboost10k.png', plot = xgboostmodplot, width = 6, height = 5, dpi = 360, units = 'in')
+ggsave('figures/xgboost_preds.png', plot = xgboostmodplot, width = 6, height = 5, dpi = 360, units = 'in')
 
+# Fit random forests using ranger
+forest <- ranger(y ~ Age + Parasites, data = simDat, probability = TRUE)
+preds <- predict(forest, data = grid, type = "response")
+grid$rangerps <- preds$predictions[,1]
 
-# For the ensemble learner
-source('esl.r')
-eSL <- fit_eSl(simDat)
-grid$eSL <- predict_eSL(eSL, grid)
-
-eslplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = eSL)) + 
+rangerplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = rangerps)) + 
   theme_bw() +
   geom_tile() + 
   scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
   xlab("X1") + 
   ylab("X2") + 
-  ggtitle("Ensemble super learner") +
+  ggtitle("Random forest fitted on 10,000 samples") +
   labs(fill = "Predictions")
-
-ggsave('esl.png', plot = eslplot, width = 6, height = 5, dpi = 360, units = 'in')
+rangerplot
