@@ -18,7 +18,6 @@ fit_xgboost <- function(dat) xgboost(data = as.matrix(dat[c('Age', 'Parasites')]
 ## Predict functions
 predict_logreg <- function(mod, dat) predict(mod, newdata=dat, type='response')
 predict_logreg_reverse <- function(mod, dat) 1-predict(mod, newdata=dat, type='response')
-
 predict_xgboost <- function(bst, dat) predict(bst, as.matrix(dat[c('Age', 'Parasites')]))
 
 

@@ -333,7 +333,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{lemma}[Lemma 2.1 in \parencite{vaart06}] \label{finitesampledecomp}
     Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}  $ and $ \tilde{\la} $ denote the cross-validation- and oracle selected algorithms from $ \lib $ of size $ \ml $ respectively. For $ \delta > 0 $ it holds that
    \begin{align*}
-       E_{\Sn} &R( \hat{\la}(P_{n, \Sn}^{0} ), P_{n, \Sn}^{1}) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P ) \\ 
+       E_{\Sn} &R( \hat{\la}(P_{n, \Sn}^{0}), P) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P ) \\ 
                                                                 &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)  \\
                                                                 &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int-L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)(o).
    \end{align*}
@@ -428,30 +428,24 @@ In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\
        \lim_{n \to \infty} \frac{E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n, \Sn}^{0}), P)} = 1.
    \end{align*}
 \end{corollary}
-For the sake of simplicity and the previous remark we will consider $ n_1 $ as a sequence of numbers that increases as $ n $ increases, this will allow us to remove $ E_{\Sn} $ in the remainder term. 
+For the sake of simplicity and the previous remark we will consider $ n_1 $ as a sequence of numbers polynomial in $ n $, this will allow us to remove $ E_{\Sn} $ in the remainder term. 
 \begin{proof}
-    By choosing $ p = 2 $ in theorem \ref{finitesample}, we obtain
+    We let $ \delta $ depend on $ n $, define $ \delta_n := \frac{1}{\log(n)} $.  By choosing $ p = 1 $ in theorem \ref{finitesample} and substituting $ \delta $ with $ \delta_n $, we obtain
     \begin{align*}
-        E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P) &\leq(1 + 2 \delta) E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)\\
-                                                                 &+(1 + \delta) \frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right].
+        E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P) &\leq(1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)\\
+                                                        &+(1 + \delta_n) \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta, P)} \cdot \frac{1 + \delta_n}{\delta_n}  \right]\\
+                                                        &= (1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)\\
+                                                        &+(1 + \delta_n) \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta, P)} \cdot (\log(n) + 1) \right].
     \end{align*}
-    In the above inequality the remainder term goes to $ 0 $ as $ n_1 $ increases. Now by dividing the oracle risk on both sides, we obtain
+    In the above inequality the remainder term goes to $ 0 $ as $ n_1 $ increases. The $ \log(n) $ term in the supremum will be dominated by the $ \frac{1}{n_1} $ that is multiplied in the front. By dividing the oracle risk on both sides, we obtain
     \begin{align*}
         \frac{E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)} 
         &\leq 
-        1 + 2 \delta 
+        1 + 2 \delta_n
         + 
-        \frac{(1 + \delta)\frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{\Sn} R( \tilde{\la}(P_{n,\Sn}^{0}), P)} .
+        \frac{(1 + \delta_n)\frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta , P)} \cdot (\log(n) + 1) \right]}{E_{D_n} E_{\Sn} R( \tilde{\la}(P_{n,\Sn}^{0}), P)} .
     \end{align*}
-    As the inequality holds for all $ \delta > 0 $, we can just set it to 0 (formally one would perhaps choose $ \delta_n $ decreasing in $ n $). See that by setting $ \delta = 0 $ the inequality becomes 
-    \begin{align*}
-        \frac{E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)} 
-        &\leq
-        1 
-        + 
-        \frac{\frac{16}{\sqrt{n_1}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\theta)}{\sqrt{n_1}} + \sqrt{v(\theta)} \right]}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)}.
-    \end{align*}
-    The fraction on the right-hand side will converge to $0$ because the numerator converges to $ 0 $ and the oracle risk is bounded away from $ 0 $. We also note that by the definition of the oracle, we have 
+    The fraction on the right hand side will converge to $ 0 $ as $ n \to \infty $, since $ n_1 $ is polynomial in $ n $ and the oracle risk is bounded away from $ 0 $ by assumption. We also note that by the definition of the oracle, we have 
     \begin{align*}
         E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P) \leq E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P),
     \end{align*}
@@ -462,6 +456,9 @@ For the sake of simplicity and the previous remark we will consider $ n_1 $ as a
     applying the squeeze theorem thus yields the desired result.         
 \end{proof}
 For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as $ n \to \infty $. This is a reasonable assumption for cross-validation schemes such as $ K $-fold cross-validation or if $ n_1 = np $ for $ p \in (0,1) $ where the test size increases with the amount of available data. Note that the condition is not satisfied for leave-one-out cross-validation since $ n_1$ is equal to $ 1 $ for every $ n $.  
+
+In the proof of the asymptotic result we have chosen $ \delta_n = \frac{1}{\log(n)} $, in doing so, the remainder converges to $ 0 $ at a rate of $ \frac{\log(n)}{n} $. An immediate consequence of this is that if we have a library of parametric learning algorithms and one of them corresponds to the true regression, then the oracle risk might very well converge at a rate of $ \frac{1}{n} $, implying that the risk of the discrete super learner achieves an almost parametric rate of convergence of $ \frac{\log(n)}{n} $ to the oracle \parencite{van2007super}.  
+
 \begin{example}[Regression]
    In a regression context with quadratic loss, the risk for a learner can never be zero unless the outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
    \begin{align*}
@@ -608,18 +605,18 @@ holds true for each $ i $ if $ s(i)$ equals $ s' $, i.e. when $ X_i $ is in the 
 \end{align}
 Equation (\ref{eq:meta_learning_algorithm_cv}) shows that the cross-validation selector, $ \hat{a}_n $, is exactly the objective of the meta learning algorithm defined in \eqref{eq:meta_learning_algorithm}. 
 
-The way that $ \hat{a}_n  $ and $ \tilde{a}_n $ are defined fit directly into our existing framework for the discrete super learner. Recall that the cross-validation selector selected the algorithm that had the lowest cross-validation risk averaged across some split variable $ \Sn $. By using a $ K $-fold cross-validation scheme, the averaged risk over $ \Sn $ becomes the averaged risk over the $ K $ folds, which is exactly the above definition of $ \hat{a}_n $. In the case of the ensemble super learner, the learning algorithm, $ \meta_{a} $, is determined by the parameter $ a $, so the selection problem reduces to selecting the most optimal parameter over a finite parameter set $ \mathcal{A}_n $. The parameter set $ \mathcal{A}_n $ indexes our library of learning algorithms, and is what the cross-validation selector acts upon. The difference here is that we let the number of elements in $ \mathcal{A}_n $ go to infinity, whereas with the discrete super learner the library $ \lib $ was of fixed size. One could think of $ \mathcal{A}_n $ as approximating the entire parameter set $ \mathcal{A} $ using a grid of points such that the approximation becomes finer as the number of points increase.
+The way that $ \hat{a}_n  $ and $ \tilde{a}_n $ are defined fit directly into our existing framework for the discrete super learner. Recall that the cross-validation selector selected the algorithm that had the lowest cross-validation risk averaged across some split variable $ \Sn $. By using a $ K $-fold cross-validation scheme, the averaged risk over $ \Sn $ becomes the averaged risk over the $ K $ folds, which is exactly the above definition of $ \hat{a}_n $. In the case of the ensemble super learner, the learning algorithm, $ \meta_{a} $, is determined by the parameter $ a $, so the selection problem reduces to selecting the most optimal parameter over a finite parameter set $ \mathcal{A}_n $. The parameter set $ \mathcal{A}_n $ indexes the meta learning algorithms, and is what the cross-validation selector acts upon. It is, therefore, possible to think of $ \mathcal{A}_n $ as approximating the entire parameter set $ \mathcal{A} $ using a grid of points such that the approximation becomes finer as the number of points increase. The key difference lies in the fact that the ensemble super learner is a completely new learner, whereas the discrete super learner is an algorithm selected from the library $ \lib $ fitted on the dataset.
 
 The following finite sample oracle inequality is a direct consequence of the oracle inequality for the discrete super learner, theorem \ref{finitesample}.
 \begin{theorem}[Finite sample oracle inequality]
     Let $ \lib $ be a library of learning algorithms of size $ k $. Let $ \esl_{ \hat{a}_{n} } $ be the ensemble super learner over $ \lib $ obtained by applying the cross-validation selector over a finite parameter space $ \mathcal{A}_n $ using the $ K $-fold cross-validation scheme. Let $ \esl_{ \tilde{a}_n } $ be the oracle ensemble learner obtained by applying the oracle selector over the same set of parameters. If the conditions of theorem \ref{finitesample} are satisfied, then the following oracle inequality holds
     \begin{align*}
         \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \hat{a}_n }(P_{n, s}^{0}) , P) &\leq (1 + 2 \delta) \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \tilde{a}_n }(P_{n,s}^{0}), P) \\
-                                                                                     &+ (1 + \delta) \frac{16 \sqrt{K}}{\sqrt{n}} \log(1 + k(n)) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta ) \sqrt{K}}{\sqrt{n}} + \sqrt{v(\btheta)}\right].  
+                                                                                     &+ (1 + \delta) \frac{16 K}{n} \log(1 + k(n)) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta) K}{n} + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta} \right].  
     \end{align*}
 \end{theorem}
 \begin{proof}
-    Replace $ E_{\Sn} $ in theorem \ref{finitesample} with the average over the $ K $ folds and $ n_1$ with $n/K $, then by using $ p = 2 $ the desired result is obtained.  
+    Replace $ E_{\Sn} $ in theorem \ref{finitesample} with the average over the $ K $ folds and $ n_1$ with $n/K $, then by using $ p = 1 $ the desired result is obtained.  
 \end{proof}
 
 \begin{corollary}[Asymptotic equivalence]
