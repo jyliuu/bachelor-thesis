@@ -1,10 +1,10 @@
 # Fdb version 4
-["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1685111346 0
+["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1685135522 0
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1685111340 "main.tex" "out/main.pdf" "main" 1685111346 0
+["pdflatex"] 1685135520 "main.tex" "out/main.pdf" "main" 1685135522 0
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1680514707 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1680514707 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -32,6 +32,7 @@
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1680514707 1288 655e228510b4c2a1abe905c368440826 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmr6.tfm" 1680514707 1300 b62933e007d01cfd073f79b963c01526 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmr8.tfm" 1680514707 1292 21c1c5bfeaebccffdb478fd231a0997d ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmr9.tfm" 1680514707 1292 6b21b9c2c7bebb38aa2273f7ca0fb3af ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1680514707 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1680514707 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1680514707 1120 8b7d695260f3cff42e636090a8002094 ""
@@ -53,6 +54,7 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1680514707 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1680514707 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1680514707 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1680514707 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1680514707 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1680514707 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1680514707 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
@@ -83,6 +85,9 @@
   "/usr/share/texmf-dist/tex/latex/adjustbox/adjustbox.sty" 1678900920 56907 e3e515e490dbc35309a010b5bbe1bef5 ""
   "/usr/share/texmf-dist/tex/latex/adjustbox/tc-pdftex.def" 1678900920 4070 1677cfee6374067b93f61cf57ecd7144 ""
   "/usr/share/texmf-dist/tex/latex/adjustbox/trimclip.sty" 1678900920 7244 36558f478da08e083d7316a63ba4bcd6 ""
+  "/usr/share/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty" 1678901303 26750 ce139c05a983e19ddca355b43e29c395 ""
+  "/usr/share/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty" 1678901303 3457 d9077efe6b74c5a094199256af8d7d9a ""
+  "/usr/share/texmf-dist/tex/latex/algorithms/algorithm.sty" 1678901303 3249 15763257e50278eef5db1952ccde229c ""
   "/usr/share/texmf-dist/tex/latex/amscls/amsthm.sty" 1680514707 12594 0d51ac3a545aaaa555021326ff22a6cc ""
   "/usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty" 1680514707 5949 3f3fd50a8cc94c3d4cbf4fc66cd3df1c ""
   "/usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty" 1680514707 13829 94730e64147574077f8ecfea9bb69af4 ""
@@ -140,6 +145,7 @@
   "/usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def" 1680514707 14249 d947c5c09f3af04ae2f37fc11c7ac2f6 ""
   "/usr/share/texmf-dist/tex/latex/hyperref/puenc.def" 1680514707 117125 aa115cac3914abcf3769f370e6325117 ""
   "/usr/share/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty" 1678900920 2142 eae42205b97b7a3ad0e58db5fe99e3e6 ""
+  "/usr/share/texmf-dist/tex/latex/import/import.sty" 1678900920 6201 0ad8b5da8e12f60a88d546b2198a56f2 ""
   "/usr/share/texmf-dist/tex/latex/kvoptions/kvoptions.sty" 1680514707 22555 6d8e155cfef6d82c3d5c742fea7c992e ""
   "/usr/share/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty" 1680514707 13815 760b0c02f691ea230f5359c4e1de23a7 ""
   "/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1680514707 30429 213676d4c7327a21d91ddaed900e7b81 ""
@@ -158,6 +164,7 @@
   "/usr/share/texmf-dist/tex/latex/refcount/refcount.sty" 1680514707 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/usr/share/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1680514707 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "/usr/share/texmf-dist/tex/latex/standalone/standalone.sty" 1678900920 34855 01a6d48b146a4c824944925004b07205 ""
+  "/usr/share/texmf-dist/tex/latex/subfiles/subfiles.sty" 1678900920 5262 70ab9987ec94ed2beeb5c2d951d465f6 ""
   "/usr/share/texmf-dist/tex/latex/svn-prov/svn-prov.sty" 1678900920 6852 44ea8d7e58290cde708a34ebf3953571 ""
   "/usr/share/texmf-dist/tex/latex/textpos/textpos.sty" 1678900920 12842 35403bda336a71a37a5edc37b78e3ec3 ""
   "/usr/share/texmf-dist/tex/latex/tools/bm.sty" 1680514707 13231 b52297489a0e9d929aae403417d92a02 ""
@@ -177,7 +184,7 @@
   "figures/dsl_loss_jumps.png" 1684142710 95053 c5ef674936c3a9abc0d72f83201dc930 ""
   "figures/learner_vars.png" 1685032063 158198 5caa39ccbc4e0d2a2edafb25e3e15b6c ""
   "figures/predictpar.png" 1684352843 110762 8374fa17695fa39a7dbfebde3a13b936 ""
-  "figures/preds_n1k_dsl.png" 1685032129 73470 ec0995f68cb053c6a558a935fcfd0fee ""
+  "figures/preds_n1k_dsl.png" 1685129167 91230 8082c2e070e7172688a69be0fbc0ce77 ""
   "figures/simplex-3.tex.pdf" 1684828937 24164 23ac9cbdc0092215b58257da56352348 ""
   "figures/trueplot.png" 1684351352 76066 547f1bdcaa4938ec632de113d9cafcaa ""
   "figures/xgboost10k.png" 1684355158 78842 07f3f341b31f299d4f8d10af8b57f13e ""
@@ -185,11 +192,12 @@
   "logos/ku-logo.pdf" 1675697292 93879 31d1db24936015ee9fe960c856f01525 ""
   "logos/science-english.pdf" 1675697292 71141 827ec2c5d6f797163b848e34358df682 ""
   "main.bbl" 1685105837 11642 25ba502c9b83856c92126fb9a0de21ba "bibtex main"
-  "main.tex" 1685111339 79702 dedce00e76aa618c2ac6ebb9db4a3e06 ""
-  "out/main.aux" 1685111346 9994 dc513487ef8d03b92c1566fbbb23d54c "pdflatex"
-  "out/main.out" 1685111346 3394 9251778eb30b7dd4d943beeed0a58618 "pdflatex"
-  "out/main.run.xml" 1685111346 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
-  "out/main.toc" 1685111346 1940 95ca383ae40fe6a4c9d0e4836f09aef5 "pdflatex"
+  "main.tex" 1685133110 72236 9fb760e98db289297a5843de90e2d86e ""
+  "out/main.aux" 1685135522 10125 ebef907f6afab9c17740e5638c7b21d8 "pdflatex"
+  "out/main.out" 1685135522 3394 9251778eb30b7dd4d943beeed0a58618 "pdflatex"
+  "out/main.run.xml" 1685135522 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
+  "out/main.toc" 1685135522 1940 54d31280cf24c1f0de6ada121f3a1e01 "pdflatex"
+  "simulations.tex" 1685135520 9555 aedc9e5abc35be564c3aa7ae07a87244 ""
   (generated)
   "out/main.aux"
   "out/main.bcf"

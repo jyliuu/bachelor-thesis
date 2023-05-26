@@ -90,13 +90,24 @@ ggsave("figures/learner_vars_1000.png",
     units = "in")
 
 hist_dsl <- df_melted |>
-    filter(variable == 'result.4', id == 3) |>
-    ggplot(aes(x = value)) + 
+    filter(variable != 'result.2', id == 3) |>
+    ggplot(aes(x = value, fill = variable, alpha = variable)) + 
+    geom_histogram(color = "black", bins = 40, position = "identity") +
     theme_bw() +
+    theme(
+        legend.title = element_blank(),
+        legend.position = 'bottom',
+        legend.text = element_text(size = 10), # Change this for smaller text
+        legend.key.size = unit(1.5, "lines"),  # Change this for smaller keys
+        legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
+    ) +    
     labs(x = "Predicted probability", y = "Count") +
-    ggtitle("Discrete super learner predictions for n = 1000") +
-    geom_histogram(color = "black", bins = 40)
+    scale_x_continuous(breaks = seq(0, 1, by = 0.1)) +
+    scale_fill_discrete(labels = c("Main effects", "XGBoost", "Discrete super learner")) +
+    scale_alpha_manual(values = c(0.6, 0.4, 0.7)) +
+    guides(alpha = "none")
 
+hist_dsl
 ggsave("figures/preds_n1k_dsl.png",
     plot = hist_dsl,
     width = 10,

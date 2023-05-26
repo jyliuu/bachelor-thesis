@@ -15,7 +15,7 @@
 \contentsline {subsection}{\numberline {4.5}Choice of meta learning algorithm}{16}{subsection.4.5}%
 \contentsline {subsubsection}{Constrained regression and the $ k$-simplex}{16}{section*.2}%
 \contentsline {section}{\numberline {5}Simulation results}{17}{section.5}%
-\contentsline {subsection}{\numberline {5.1}The discrete super learner}{20}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.1}The discrete super learner}{21}{subsection.5.1}%
 \contentsline {subsection}{\numberline {5.2}Discussion}{22}{subsection.5.2}%
 \contentsline {subsection}{\numberline {5.3}The ensemble super learner}{23}{subsection.5.3}%
 \contentsline {subsection}{\numberline {5.4}Discussion}{23}{subsection.5.4}%
