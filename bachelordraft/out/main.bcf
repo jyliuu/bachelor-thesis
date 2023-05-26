@@ -2383,8 +2383,10 @@
     <bcf:citekey order="20" intorder="1">vaart06</bcf:citekey>
     <bcf:citekey order="21" intorder="1">vaart06</bcf:citekey>
     <bcf:citekey order="22" intorder="1">van2007super</bcf:citekey>
-    <bcf:citekey order="23" intorder="1">van2007super</bcf:citekey>
-    <bcf:citekey order="24" intorder="1">van2007super</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">breiman1996stacked</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">breiman1996stacked</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">van2007super</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">van2007super</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="ynt">

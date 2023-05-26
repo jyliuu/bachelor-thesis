@@ -246,11 +246,12 @@ where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of obse
             n \\ n_1
     \end{pmatrix}^{-1} \qquad \text{for each } s^n \in \{0,1\}^{n} \text{ where } \sum_{i} s^n_i = n_1,
     \end{align*}
-    this procedure is also known as Monte Carlo cross-validation \parencite{laan03}.
+    this procedure is also known as Monte Carlo cross-validation \parencite{laan03}. In practice one would have a hard time validating over all $ \begin{pmatrix} n \\ n_1\end{pmatrix} $ combinations as it can be very large, for $ n = 100 $ and $ n_1 = 10 $ corresponding to $ 10\% $ of the data being in the validation set, the number of combinations is around $ 1.7 \cdot 10^{13} $. One would instead approximate by randomly sampling possible combinations. However, by doing random sampling there is the possibility that some observations will not be in any of the sampled validation sets. The probability of this happening will become lower as we sample more times.  
 \end{example}
 \subsection{K-fold cross validation}
-The idea behind $ K $-fold cross validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. Furthermore, we will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set.  
+The idea behind $ K $-fold cross-validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. We will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set. 
 
+$ K $-fold cross-validation amounts to looking at a single split variable $ \Sn $ whose probability mass is equally distributed on the binary vectors indexed by $ s $. In practice one would select a $ K $ and use a random splitting procedure to generate $ K $ binary vectors such that the entire dataset is the disjoint union of the folds specified by each vector. It is also possible to run $ K $-fold cross-validation multiple times which amounts to multiple calls to the random splitting procedure.
 \subsection{Risks and selectors}
 We now provide the formal definitions for the expected loss associated with our learners. Recall that the expected $L^2$-loss (\ref{l2risk}) was the integral of the loss with respect to data-generating distribution $P$. Consider a learner or regression function $ \theta $. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
 \begin{align*}
@@ -530,8 +531,9 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 
 
 \section{The Ensemble Super Learner}
-The idea behind the \textit{ensemble super learner} is to combine the predictions made by each candidate learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The ensemble super learner can, therefore, be thought of as a way of balancing the weaknesses of each learner. We will begin by introducing $ K $-fold cross validation, which is used by the ensemble super learner.
+The idea behind the \textit{ensemble super learner} is to combine the predictions made by each candidate learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The idea of combining learners was examined in \cite{breiman1996stacked} which considered the construction of an ensemble learner by forming a linear combination of the learners in the library. The method of forming a linear combination of learners is known as \textit{stacked regression} or \textit{stacking}, and is a variant of the ensemble super learner. The ensemble super learner does not restrict to taking a linear combination of the learners but that we are able to apply a \textit{meta learning algorithm} on the \textit{level 1 data}. The ensemble super learner can be thought of as a general method of balancing the weaknesses of each learner by forming an ensemble. However, as we will see, $ K $-fold cross-validation is integral in forming the ensemble super learner. 
 
+We will now proceed to give the definitions and setup necessary to define the ensemble super learner.
 \subsection{Level 1 data}
 Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 covariates} of $ \lib $ applied to $ D_n $ as specified by a $ K $-fold cross validation procedure is  
 $$ \mathcal{Z} = \{Z_i = (\la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^0)(X_i) ) \}_{i = 1}^{n} \subseteq [0,1]^{k}, $$
@@ -553,7 +555,7 @@ The goal is to estimate the regression of $ Y $ given the predictions made by ou
 \begin{definition}[Meta learning algorithm]
     A \textit{meta learning algorithm} $ \Meta $ is a measurable map that creates a meta learner from our level 1 data $ \lone_{n} \mapsto \Meta(\lone_{n}) \in \mathcal{M} $. 
 \end{definition}
-A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. 
+A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. If a parametric learning algorithm is used, it is important to take into account that the level 1 covariates $ Z_i $ are highly correlated and that multicollinearity can occur. \cite{breiman1996stacked} suggests ridge regression as a possible way to shrink the coefficients. Another method is to use a non-negativity constraint, where we specify that the coefficients must sum to 1 in the case of a simple linear combination. 
 
 \subsection{Ensemble super learner}
 \begin{definition}[Ensemble super learner \parencite{van2007super}]

@@ -5,11 +5,11 @@
 \contentsline {subsection}{\numberline {3.1}Library of learners}{6}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Cross-validation methodology}{7}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}K-fold cross validation}{7}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Risks and selectors}{7}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.4}Risks and selectors}{8}{subsection.3.4}%
 \contentsline {subsection}{\numberline {3.5}Oracle property}{9}{subsection.3.5}%
 \contentsline {section}{\numberline {4}The Ensemble Super Learner}{13}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Level 1 data}{13}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Meta learners}{13}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.2}Meta learners}{14}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Ensemble super learner}{14}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Oracle property}{14}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Choice of meta learning algorithm}{16}{subsection.4.5}%
