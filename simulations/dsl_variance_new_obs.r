@@ -43,7 +43,6 @@ obs <- data.frame(
   Parasites = 2
 )
 true_prob <- trueModel(obs$Age, obs$Parasites)
-
 res_xgboost <- fit_and_predict_on_new_obs(xgboost_fit_predict, obs, 1000)
 res_logistic <- fit_and_predict_on_new_obs(logistic_fit_predict, obs, 1000)
 res_lib <- fit_library_on_new_obs(candidatesLogReg, obs, 1000)
@@ -64,14 +63,16 @@ df_combined <- bind_rows(res_lib_diff_ns, .id = "id")
 df_melted <- melt(ndf_combined, id.vars = "id")
 
 # Read old data
+load('data/learner_vars_1k_upto_3k.RData')
+df_melted <- leaner_vars_1k_upto_3k
 
-p <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
+boxplots <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
   theme_bw() +
   theme(
     legend.title = element_blank(),
     legend.position = 'bottom',
-    legend.text = element_text(size = 8), # Change this for smaller text
-    legend.key.size = unit(1, "lines"),  # Change this for smaller keys
+    legend.text = element_text(size = 10), # Change this for smaller text
+    legend.key.size = unit(2.3, "lines"),  # Change this for smaller keys
     legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
   )+
   geom_hline(aes(yintercept = true_prob), color = "red", linetype = "dashed") +
@@ -80,11 +81,25 @@ p <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
   scale_y_continuous(breaks = seq(0, 1, by = 0.1)) +
   geom_boxplot() +
   labs(x = "n", y = "Predicted probability", fill = "Model")
-p
-ggsave("learner_vars_1000.png",
-    plot = p,
+
+ggsave("figures/learner_vars_1000.png",
+    plot = boxplots,
     width = 10,
     height = 6,
     dpi = 360,
     units = "in")
 
+hist_dsl <- df_melted |>
+    filter(variable == 'result.4', id == 3) |>
+    ggplot(aes(x = value)) + 
+    theme_bw() +
+    labs(x = "Predicted probability", y = "Count") +
+    ggtitle("Discrete super learner predictions for n = 1000") +
+    geom_histogram(color = "black", bins = 40)
+
+ggsave("figures/preds_n1k_dsl.png",
+    plot = hist_dsl,
+    width = 10,
+    height = 6,
+    dpi = 360,
+    units = "in")

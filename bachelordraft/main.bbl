@@ -227,7 +227,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 22nd acm sigkdd international conference on knowledge discovery and data mining}
-      \field{title}{Xgboost: A scalable tree boosting system}
+      \field{title}{XGBoost: A scalable tree boosting system}
       \field{year}{2016}
       \field{pages}{785\bibrangedash 794}
       \range{pages}{10}

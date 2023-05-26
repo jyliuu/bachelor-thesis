@@ -11,18 +11,18 @@ library(reshape2)
 jump <- 100
 seed <- 23
 test_count <- 10^6
-candidates_with_SLs <- c(candidates, list(eSL = c(fit_eSl, predict_eSL), dSL = c(fit_dSL, predict_dSL)))
-losses_dsl <- get_losses_candidates(c(99, rep(jump, 34)), candidates_with_SLs, test_count = test_count, loss_fun = MSE, seed = seed)
-losses_dsl
+candidates_with_SLs <- c(candidates, list(eSL = c(fit_eSl_loss_weighted, predict_eSL), dSL = c(fit_dSL, predict_dSL)))
+losses <- get_losses_candidates(c(99, rep(jump, 34)), candidates_with_SLs, test_count = test_count, loss_fun = MSE, seed = seed)
+losses
 # Plot losses dsl 2
 # Idea: one way to make this more interesting could be to simulate data from a much more complicated distribution, with some of the features having high importance but occurs less frequently? 
 # Perhaps the risk can be calculated explicitly, since we have the model formula after all?
 
 
 # Convert the row numbers to a column for the x-axis
-losses_dsl_df <- as.data.frame(losses_dsl)
-losses_dsl_df$n <- (1:nrow(losses_dsl_df)) * jump
-df_melted <- melt(losses_dsl_df, id.vars = "n", variable.name = "Model", value.name = "Loss")
+losses_df <- as.data.frame(losses)
+losses_df$n <- (1:nrow(losses_df)) * jump
+df_melted <- melt(losses_df, id.vars = "n", variable.name = "Model", value.name = "Loss")
 
 # Melt the data to long format
 p <- plot_losses(df_melted,

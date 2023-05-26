@@ -84,11 +84,11 @@
 
 
 \section{Introduction}
-In the context of regression, $ O = (Y, X) $ is an observation or outcome-covariate pair for $ Y \in \mathbb{R} $ and $ X \in \mathbb{R}^{d} $. A natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ is minimized. It turns out that the conditional mean -- called the regression function or regression $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but consistent estimation of the regression requires a statistical model $ \mathcal{P} $ for the data-generating distribution $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a parametric family of distributions, for example a curved exponential family \parencite{lauritzen2023fundamentals}. In doing so we are able to identify through maximum likelihood techniques, the parameters of the distribution $ P $ and compute the regression from the estimated parameters.
+In the context of regression, $ O = (Y, X) $ is an observation for $ Y \in \mathbb{R} $ being the outcome and $ X \in \mathbb{R}^{d} $ the covariate. A natural goal is to estimate a regression function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ is minimized. It turns out that the conditional mean -- called the regression function or regression $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but consistent estimation of the regression requires us to specify a statistical model $ \mathcal{P} $ for the data-generating distribution $ P \in \mathcal{P} $ for which $ O \sim P $. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a parametric family of distributions, for example a curved exponential family \parencite{lauritzen2023fundamentals}. In doing so we are able to identify the parameters of the distribution $ P $ via maximum liklihood and compute the regression from the estimated parameters.
 
-However, if we are dealing with complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be wrong. In such situations, it is tempting to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests. Machine learning methods seek to estimate regression function directly, in contrast to parametric statistics where the parameters of the underlying model are estimated first, then a regression function derived as some analytical expression of these parameters and the covariates. The assumptions of these machine learning methods regarding the data-generating distribution are not explicitly specified, but it does not pose a problem for us in achieving our goal. Indeed, it is not necessary for us to identify $ P $ completely if $ P $ can be factored into the conditional distribution $ P_{Y \mid X} $ and the distribution over our covariates $ P_X $, here our goal of estimating the regression function is akin to estimating $ P_{Y \mid X} $.   
+However, if we are dealing with complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be wrong. In such situations, it is tempting to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests. Machine learning methods seek to estimate regression function directly, in contrast to parametric statistics where the parameters of the underlying model are estimated first, then a regression function derived as some analytical expression of these parameters and the covariates. The assumptions of these machine learning methods regarding the data-generating distribution are not explicitly specified, but it does not pose a problem for us in achieving our goal. Indeed, it is not necessary for us to identify $ P $ completely if $ P $ can be factored into the conditional distribution $ P_{Y \mid X} $ and the distribution over our covariates $ P_X $, here our goal of estimating the regression function is to estimate $ P_{Y \mid X} $.   
 
-Given an abundance of different ways we can tackle the problem of estimating the regression, we would like to be able to compare the different methods select the best one. In a practical scenario we might have set of different learning algorithms from which we can choose from. Cross-validation, for example, can help in determining the risk of each algorithm by splitting the data into training and validation sets, each algorithm would then be fitted on the training set and an empirical risk for each fitted model is then calculated by evaluating the model on the validation set. We would run cross-validation using a predefined splitting mechanism for each learning algorithm that we have. A popular choice in machine learning and statistics is $ K $-fold cross-validation. $ K $-fold cross-validation divides the data into $ K $ disjoint and exhaustive sets referred to as validation sets. For every $ k = 1, \dots , K $ the learning algorithm is trained using all data excluding the $ k $'th validation set. Subsequently, the risk of the fitted model is computed by applying it on the validation set that was held out from training. We obtain an estimate of the true risk of the model by repeating this procedure $ K $ times and then averaging the risks. The model with the lowest risk is then selected as our candidate estimate of the regression function. 
+Given an abundance of different ways we can tackle the problem of estimating the regression, we would like to be able to compare the different methods select the best one. In a practical scenario we might have set of different learning algorithms from which we can choose from. Cross-validation can then help determine the risk of each algorithm by splitting the data into training and validation sets, each algorithm would then be fitted on the training set and an empirical risk for each fitted model is then calculated by evaluating the model on the validation set. We would run cross-validation using a predefined splitting mechanism for each learning algorithm that we have. A popular choice in machine learning and statistics is $ K $-fold cross-validation. $ K $-fold cross-validation divides the data into $ K $ disjoint and exhaustive sets referred to as validation sets. For every $ k = 1, \dots , K $ the learning algorithm is trained using all data excluding the $ k $'th validation set. Subsequently, the risk of the fitted model is computed by applying it on the validation set that was held out from training. We obtain an estimate of the true risk of the model by repeating this procedure $ K $ times and then averaging the risks. The model with the lowest risk is then selected as our candidate estimate of the regression function. 
 
 This is the idea behind the cross-validation selector \parencite{laan03}. The discrete super learner \parencite{van2007super} is simply the learner (fitted model) that is created by applying the result of the cross-validation selector to our data. The cross-validation selector, given a library of learning algorithms and our data, applies cross-validation to each algorithm in the library. 
 
@@ -159,10 +159,10 @@ We will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n = (O_1 , \dots , 
     A learning algorithm is a measurable map $ \la : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
 We will throughout assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
-\begin{definition}[Learner]
+\begin{definition}[Learner (or fitted learner)]
     Given a learning algorithm $ \la $. A learner is a stochastic variable in $ \Theta $ representing the outcome of applying the learning algorithm to our data $ \btheta = \la(D_n) $.
 \end{definition}
-Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_3 = o_1, \dots, O_n = o_n $, and can subsequently apply our learning algorithm on $ d_n = (o_1 , \dots , o_n) $, which is a particular instance of a dataset. We will refer to the quantity, $ \la(d_n) $, as a \textit{fitted learner}. 
+Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_1 = o_1, \dots, O_n = o_n $, and can then apply our learning algorithm on the observed data. In machine learning, the procedure of applying an algorithm on the data is referred to as \textit{model training} or \textit{fitting}, the outcome of the training is a \textit{trained model} or simply a \textit{fit}. We will refer to the trained model as a learner which naturally depends on our data that we have observed. 
 
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learning algorithm is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
@@ -174,9 +174,9 @@ The parameters of the fitted XGBoost are not directly interpretable. Despite thi
 \end{example}
 We will denote the empirical measure obtained from the data $ D_n $ as
 \begin{align*}
-    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A}.
+    P_n(A) = \frac{1}{n} \sum_{i = 1}^{n} \delta_{O_i}(A)\qquad \text{ for } A \in \mathcal{A},
 \end{align*}
-When the observations are independent and identically distributed, then there is a one-to-one correspondence between the empirical measures obtained from $ n $ observations and $ D_n $. We can, therefore, write $ \la(P_n)$ as an alternative representation of the learner $\la(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
+where $ \delta_{O_i} $ is the Dirac measure over $ O_i $. When the observations are independent and identically distributed, then there is a one-to-one correspondence between the empirical measures obtained from $ n $ observations and $ D_n $. We can, therefore, write $ \la(P_n)$ as an alternative representation of the learner $\la(D_n)$, by adjusting the notation slightly without introducing ambiguity. The motivation for using this notation will become clearer in the subsequent section, where we introduce the discrete super learner.
 
 
 %\begin{example}[Regression functions $ \btheta $] \label{ex:regfunc}
@@ -224,13 +224,13 @@ When the observations are independent and identically distributed, then there is
 \section{The Discrete Super Learner}
 \subsection{Library of learners}
 We would now like to consider the scenario where we have a set of learning algorithms, $ \la_1, \ldots, \la_\ml $. From these algorithms, we can define the \textit{library of learning algorithms} 
-$$ \lib = \{\la_{\q} \mid 1 \leq \q \leq \ml \} $$
-of size $ \ml $. Our goal is to find $ \tilde{\la} \in \lib $ such that $ \tilde{\la}(P_n) $ that achieves the lowest risk among our learners 
-$$ \tilde{\la}  = \argmin_{\la \in \lib} R(\la(P_n) , P) $$
-We can only provide an estimate for $ \tilde{\la} $ since knowing it would require knowledge of the data-generating distribution. We will denote the estimate as $ \hat{\la} $. 
+$$ \lib = \{\la_{\q} \mid 1 \leq \q \leq \ml \}, $$
+of size $ \ml $. Our natural goal is to find $ \tilde{\la} \in \lib $ such that $ \tilde{\la}(P_n) $ that achieves the lowest risk among our learners 
+$$ \tilde{\la}  = \argmin_{\la \in \lib} R(\la(P_n) , P). $$
+However, we cannot compute the risk of a learner directly as it depends on $ P $. We seek to provide an estimate for $ \tilde{\la} $ which we will denote as $ \hat{\la} $. 
 
 \subsection{Cross-validation methodology}
-To provide $ \hat{\la} $ we have proceed via cross validation. In cross validation, we randomly split our data into a \textit{training set} and a \textit{test set}. Let the random binary vector -- from now on referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ O_1,\ldots, O_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is formally a tuple in $ \{0,1\}^{n} $, here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
+To provide the estimate $ \hat{\la} $ we will proceed via cross validation. Cross-validation randomly splits our data into a \textit{training set} and a \textit{test set} that our algorithms are trained and evaluated on. Let the random binary vector -- referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ D_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is formally a tuple in $ \{0,1\}^{n} $, here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
 \begin{align*}
     P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i} \\
     P_{n,\Sn}^{1} &= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
@@ -238,7 +238,7 @@ To provide $ \hat{\la} $ we have proceed via cross validation. In cross validati
 where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of observations in the test and training set respectively.
 
 \begin{example}[Random splits] \label{splits}
-   For $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the test set. It might not be desirable to define the discrete probabilities for $ \Sn $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/test data, since that would also include the combination where $ n_1 = 0 $. To ensure that there is always a certain amount of observations in our test set, let $ n_1 > 0 $ be given, we see that there are $ \begin{pmatrix}
+   For $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the test set. It might not be desirable to define the discrete probabilities for $ \Sn $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/test data, since that would also include the combination where $ n_1 = 0 $. To ensure that there is always a certain amount of observations in our test set, let $ 0 < n_1 < n $ be given, we see that there are $ \begin{pmatrix}
         n \\ n_1
     \end{pmatrix}$ ways of choosing both the test and training set. We can therefore define the distribution of $ \Sn $ as 
     \begin{align*}
@@ -246,26 +246,15 @@ where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of obse
             n \\ n_1
     \end{pmatrix}^{-1} \qquad \text{for each } s^n \in \{0,1\}^{n} \text{ where } \sum_{i} s^n_i = n_1,
     \end{align*}
-    this procedure is also known as Monte Carlo cross-validation.
+    this procedure is also known as Monte Carlo cross-validation \parencite{laan03}.
 \end{example}
-
-\begin{example}[Cross-validation loss]
-   The test size $ n_1 $ is formally a random variable as it depends on $ \Sn $.
-   Hold one out cross validation
-   \begin{align*}
-       E_{\Sn} R(\theta(P_{n, \Sn}^{0} , P_{n, \Sn}^{1}))= E_{\Sn} \frac{1}{n_1} \sum_{i : \Sn_i = 1} L(o_i, \theta) = E_{\Sn} L(o_{S_t}, \theta) = \frac{1}{n} \sum_{i = 1}^{n} L(o_i, \theta) 
-   \end{align*}
-  K-fold cross validation 
-  \begin{align*}
-      E_S R(\theta(P_{n, S}^{0} , P_{n, S}^{1}))= E_S \frac{1}{n_1} \sum_{i : S_i = 1} L(o_i, \theta) =  \frac{1}{K} \sum_{k = 1}^{K} \sum_{i:s_{k,i} = 1} L(o_i, \theta) 
-  \end{align*}
-  
-\end{example}
+\subsection{K-fold cross validation}
+The idea behind $ K $-fold cross validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. Furthermore, we will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set.  
 
 \subsection{Risks and selectors}
 We now provide the formal definitions for the expected loss associated with our learners. Recall that the expected $L^2$-loss (\ref{l2risk}) was the integral of the loss with respect to data-generating distribution $P$. Consider a learner or regression function $ \theta $. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
 \begin{align*}
-    R(\btheta , P_n) = \int L(o, \btheta) d P_{n}(o) 
+    R(\btheta , P_n) = \int L(o, \btheta) d P_{n}(o). 
 \end{align*}
 For example, if $\Sn$ is a split for our data $D_n$, the risk of our learner on the cross-validation test data can be expressed as
  \begin{align*}
@@ -286,12 +275,12 @@ The expectation $ E_{\Sn} $ is a simple average since $ \Sn $ is discrete. There
 
 
 \begin{definition}[Oracle selector \parencite{laan03}]
-    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest averaged expected loss is the \textit{oracle selected algorithm}
+    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest averaged expected loss is the \textit{oracle selected algorithm} for $ n $ observations
     \begin{align*}
-        \tilde{\la} := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P).
+        \tilde{\la}_n := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P).
     \end{align*}
 \end{definition}
-As we are never able to know what the oracle chooses, we must proceed via cross-validation to estimate $ \tilde{\la}  $. Cross-validation replaces $ P $ with $ P_{n, \Sn}^{1} $ in the second argument of $ R $.
+Estimating $ \tilde{\la}_n $ via cross-validation amounts to replacing $ P $ with $ P_{n, \Sn}^{1} $ in the second argument of $ R $.
 \begin{definition}[Cross-validation expected loss]
      Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The cross-validation expected loss for the learner, $\la(P_{n,s}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
     \begin{align*}
@@ -301,9 +290,9 @@ As we are never able to know what the oracle chooses, we must proceed via cross-
 \end{definition}
 
 \begin{definition}[Cross-validation selector \parencite{laan03}] \label{def:cvselector}
-    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest cross-validation risk is the \textit{cross-validation selected algorithm}
+    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest cross-validation risk is the \textit{cross-validation selected algorithm} for $ n $ observations
     \begin{align*}
-        \hat{\la} := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P_{n, \Sn}^{1}).
+        \hat{\la}_n := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P_{n, \Sn}^{1}).
     \end{align*}
 \end{definition}
 %We are interested in the risk difference between the cross-validation selector and and the oracle selector, we remark that the optimal risk is attained at the true value $ \btheta_0 $ 
@@ -317,23 +306,23 @@ As we are never able to know what the oracle chooses, we must proceed via cross-
 %                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
 %\end{align*}
 %
-The oracle selector and cross-validation selector are simply procedures for selecting a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. We are now ready to give the definition of the \textit{discrete super learner}  
+The oracle selector and cross-validation selector are simply what chooses a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. We are now ready to give the definition of the \textit{discrete super learner}  
 \begin{definition}[Discrete super learner]
-    The \textit{discrete super learner}, $ \hat{\la}(P_n) $, created from a library $ \lib $ is the cross-validation selected algorithm fitted to the entire dataset 
+    The \textit{discrete super learner}, $ \hat{\la}_n(P_n) $, created from a library $ \lib $ is the cross-validation selected algorithm fitted to the entire dataset 
     \begin{align*}
-        \mathcal{X} \ni x \mapsto \hat{\la}(P_n)(x). 
+        \mathcal{X} \ni x \mapsto \hat{\la}_n(P_n)(x). 
     \end{align*}
 \end{definition}
-Formally, the map above is a random map as $ P_n $ is stochastic. The discrete super learner is not a specific learner among the learners in the library, but the result of after applying the cross-validation selector to the library. 
+Formally, the map above is a random map as $ P_n $ is stochastic. The discrete super learner is not a specific learner among the learners in the library, but the result of applying the cross-validation selector to the library. 
 
 \subsection{Oracle property}
 We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, \Sn}^{i} f = \sqrt{n}(P_{n, \Sn}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ i = 0 $ or $ i = 1 $.
 
 In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
 \begin{lemma}[Lemma 2.1 in \parencite{vaart06}] \label{finitesampledecomp}
-    Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}  $ and $ \tilde{\la} $ denote the cross-validation- and oracle selected algorithms from $ \lib $ of size $ \ml $ respectively. For $ \delta > 0 $ it holds that
+    Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}_n  $ and $ \tilde{\la}_n $ denote the cross-validation- and oracle selected algorithms from $ \lib $ respectively. For $ \delta > 0 $ it holds that
    \begin{align*}
-       E_{\Sn} &R( \hat{\la}(P_{n, \Sn}^{0}), P) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P ) \\ 
+       E_{\Sn} &R( \hat{\la}_n(P_{n, \Sn}^{0}), P) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}_n(P_{n, \Sn}^{0}) , P ) \\ 
                                                                 &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)  \\
                                                                 &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int-L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)(o).
    \end{align*}
@@ -379,14 +368,14 @@ The expectation $ E_{D_n} $ is taken wrt. the joint probability measure over our
 \begin{theorem}[Theorem 2.3 in \parencite{vaart06}] \label{finitesample}
    Let $ \lib $ be a library of learning algorithms of size $ \ml $. For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
-       E_{D_n} E_{\Sn} &R(\hat{\la}(P_{n, \Sn}^{0}), P) \leq(1 + 2 \delta) E_{D_n} E_{\Sn} R( \tilde{\la}(P_{n,\Sn}^{0}), P) +\\
+       E_{D_n} E_{\Sn} &R(\hat{\la}_n(P_{n, \Sn}^{0}), P) \leq(1 + 2 \delta) E_{D_n} E_{\Sn} R( \tilde{\la}_n(P_{n,\Sn}^{0}), P) +\\
                        &(1 + \delta) E_{\Sn} \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right).
    \end{align*}
-   Where $ \hat{\la} $ and $ \tilde{\la} $ are the cross-validation- and the oracle selected algorithms from $ \lib $. 
+   Where $ \hat{\la}_n $ and $ \tilde{\la}_n $ are the cross-validation- and the oracle selected algorithms from $ \lib $. 
 \end{theorem}
 In the expectations above, we are taking the expectation wrt. the random split-variable $ \Sn $ as well as the joint distribution of our observations. In a more verbose manner one would write 
 \begin{align*}
-    E_{D_n} E_{\Sn}  R(\hat{\la}(P_{n, \Sn}^{0}), P) = \int R(\hat{\la}(P_{n, \Sn}^{0}), P) d (P_{\Sn} \otimes  P^{n}_O ).
+    E_{D_n} E_{\Sn}  R(\hat{\la}_n(P_{n, \Sn}^{0}), P) = \int R(\hat{\la}_n(P_{n, \Sn}^{0}), P) d (P_{\Sn} \otimes  P^{n}_O ).
 \end{align*}
 
 \begin{proof}[Proof]
@@ -408,7 +397,7 @@ Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we 
 \end{align*}
 Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above as lemma \ref{finitesamplebound} is also valid for $ -L $. It is now immediate from lemma \ref{finitesampledecomp} that 
 \begin{align*}
-    E_{D_n} E_{\Sn} &\int L(o, \hat{\la}(P_{n, \Sn}^{0})) d P(o) \leq (1 + 2 \delta) E_{D_n} E_{\Sn} \int L(o, \tilde{\la}(P_{n, \Sn}^{0})) d P(o) \\
+    E_{D_n} E_{\Sn} &\int L(o, \hat{\la}_n(P_{n, \Sn}^{0})) d P(o) \leq (1 + 2 \delta) E_{D_n} E_{\Sn} \int L(o, \tilde{\la}_n(P_{n, \Sn}^{0})) d P(o) \\
                     &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]\\
                     &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right].
 \end{align*}
@@ -421,43 +410,40 @@ In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\
 \begin{corollary}[Asymptotic equivalence] \label{cor:dslasymptoticequivalence}
     If there exists an $ \varepsilon > 0 $ such that 
    \begin{align*}
-       E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n, \Sn}^{0}), P) > \varepsilon \qquad \text{for all } n \in \mathbb{N},
+       E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n, \Sn}^{0}), P) > \varepsilon \qquad \text{for all } n \in \mathbb{N},
    \end{align*}
    and if $ n_1 \to \infty $ as $ n \to \infty $, then the risk of the super learner is asymptotically equivalent to the risk of the oracle selected learner, that is
    \begin{align*}
-       \lim_{n \to \infty} \frac{E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n, \Sn}^{0}), P)} = 1.
+       \lim_{n \to \infty} \frac{E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n, \Sn}^{0}), P)} = 1.
    \end{align*}
 \end{corollary}
 For the sake of simplicity and the previous remark we will consider $ n_1 $ as a sequence of numbers polynomial in $ n $, this will allow us to remove $ E_{\Sn} $ in the remainder term. 
 \begin{proof}
     We let $ \delta $ depend on $ n $, define $ \delta_n := \frac{1}{\log(n)} $.  By choosing $ p = 1 $ in theorem \ref{finitesample} and substituting $ \delta $ with $ \delta_n $, we obtain
     \begin{align*}
-        E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P) &\leq(1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)\\
+        E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P) &\leq(1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)\\
                                                         &+(1 + \delta_n) \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta, P)} \cdot \frac{1 + \delta_n}{\delta_n}  \right]\\
-                                                        &= (1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)\\
+                                                        &= (1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)\\
                                                         &+(1 + \delta_n) \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta, P)} \cdot (\log(n) + 1) \right].
     \end{align*}
     In the above inequality the remainder term goes to $ 0 $ as $ n_1 $ increases. The $ \log(n) $ term in the supremum will be dominated by the $ \frac{1}{n_1} $ that is multiplied in the front. By dividing the oracle risk on both sides, we obtain
     \begin{align*}
-        \frac{E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)} 
-        &\leq 
-        1 + 2 \delta_n
-        + 
-        \frac{(1 + \delta_n)\frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta , P)} \cdot (\log(n) + 1) \right]}{E_{D_n} E_{\Sn} R( \tilde{\la}(P_{n,\Sn}^{0}), P)} .
+        \frac{E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)} 
+        &\leq 1 + 2 \delta_n\\
+        &+\frac{(1 + \delta_n)\frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta , P)} \cdot (\log(n) + 1) \right]}{E_{D_n} E_{\Sn} R( \tilde{\la}_n(P_{n,\Sn}^{0}), P)}.
     \end{align*}
     The fraction on the right hand side will converge to $ 0 $ as $ n \to \infty $, since $ n_1 $ is polynomial in $ n $ and the oracle risk is bounded away from $ 0 $ by assumption. We also note that by the definition of the oracle, we have 
     \begin{align*}
-        E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P) \leq E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P),
+        E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P) \leq E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P),
     \end{align*}
     implying that 
         \begin{align*}
-            1 \leq \frac{E_{D_n} E_{\Sn} R(\hat{\la}(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}(P_{n,\Sn}^{0}), P)}, 
+            1 \leq \frac{E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)}, 
     \end{align*}
     applying the squeeze theorem thus yields the desired result.         
 \end{proof}
-For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as $ n \to \infty $. This is a reasonable assumption for cross-validation schemes such as $ K $-fold cross-validation or if $ n_1 = np $ for $ p \in (0,1) $ where the test size increases with the amount of available data. Note that the condition is not satisfied for leave-one-out cross-validation since $ n_1$ is equal to $ 1 $ for every $ n $.  
-
 In the proof of the asymptotic result we have chosen $ \delta_n = \frac{1}{\log(n)} $, in doing so, the remainder converges to $ 0 $ at a rate of $ \frac{\log(n)}{n} $. An immediate consequence of this is that if we have a library of parametric learning algorithms and one of them corresponds to the true regression, then the oracle risk might very well converge at a rate of $ \frac{1}{n} $, implying that the risk of the discrete super learner achieves an almost parametric rate of convergence of $ \frac{\log(n)}{n} $ to the oracle \parencite{van2007super}.  
+For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as $ n \to \infty $. This is a reasonable assumption for cross-validation schemes such as $ K $-fold cross-validation or if $ n_1 = np $ for $ p \in (0,1) $ where the test size increases with the amount of available data. Note that the condition is not satisfied for leave-one-out cross-validation since $ n_1$ is equal to $ 1 $ for every $ n $.  
 
 \begin{example}[Regression]
    In a regression context with quadratic loss, the risk for a learner can never be zero unless the outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
@@ -546,9 +532,6 @@ In the proof of the asymptotic result we have chosen $ \delta_n = \frac{1}{\log(
 \section{The Ensemble Super Learner}
 The idea behind the \textit{ensemble super learner} is to combine the predictions made by each candidate learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The ensemble super learner can, therefore, be thought of as a way of balancing the weaknesses of each learner. We will begin by introducing $ K $-fold cross validation, which is used by the ensemble super learner.
 
-\subsection{K-fold cross validation}
-The idea behind cross validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. Furthermore, we will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set.  
-
 \subsection{Level 1 data}
 Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 covariates} of $ \lib $ applied to $ D_n $ as specified by a $ K $-fold cross validation procedure is  
 $$ \mathcal{Z} = \{Z_i = (\la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^0)(X_i) ) \}_{i = 1}^{n} \subseteq [0,1]^{k}, $$
@@ -568,7 +551,7 @@ We now define $ \mathcal{M} $ as the class of all measurable functions that map 
 \end{definition}
 The goal is to estimate the regression of $ Y $ given the predictions made by our learners, $ \mathcal{Z} \ni z \mapsto E(Y \mid Z = z) $, which is an element in $ \mathcal{M} $. We accomplish this by applying a \textit{meta learning algorithm} to the level 1 data. 
 \begin{definition}[Meta learning algorithm]
-    A \textit{meta learning algorithm} is a measurable map that creates a meta learner from our level 1 data $ \lone_{n} \mapsto \Meta(\lone_{n}) \in \mathcal{M} $. 
+    A \textit{meta learning algorithm} $ \Meta $ is a measurable map that creates a meta learner from our level 1 data $ \lone_{n} \mapsto \Meta(\lone_{n}) \in \mathcal{M} $. 
 \end{definition}
 A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. 
 
@@ -576,7 +559,7 @@ A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example
 \begin{definition}[Ensemble super learner \parencite{van2007super}]
     Let a library of learning algorithms $ \lib $ be given and let $ \lone_{n} $ be the level 1 data obtained by fitting each learning algorithm according to some $ K $-fold cross validation procedure. Let $ \meta = \Meta(\lone_{n}) $ be the outcome of applying a meta learning algorithm to the level 1 data, then the map 
     \begin{align*}
-       x \mapsto \meta(\la_1(P_{n})(x), \ldots, \la_k(P_{n})(x) ),
+       x \mapsto \esl(P_n)(x) = \meta(\la_1(P_{n})(x), \ldots, \la_k(P_{n})(x) ),
     \end{align*}
     is called the \textit{ensemble super learner} and we will denote it by $ \esl(P_{n}) $. 
 \end{definition}
@@ -644,12 +627,13 @@ The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \ma
 \begin{align*}
     \min_{b_n \in \mathcal{A}_n } \norm{a - b_n} \leq \frac{1}{n}.
 \end{align*}
-This is possible by choosing a lattice in $ \mathbb{R}^{\ml} $, the lattice can be made to intersect the $ k $-simplex and the density of points increase with $ n $. It thus follows that we can find a sequence of points $ b_n \in \mathcal{A}_n $ such that $ \meta_{b_n} \to \meta_{a} $ for any $ a \in \mathcal{A}$. The conclusion is that if $ \tilde{a} $ specified the learner $ \meta_{ \tilde{a} } $ with the minimum risk, then by applying the cross-validation selector and letting $ n \to \infty $, the meta learner adopted by the ensemble super learner will eventually converge to $ \meta_{ \tilde{a} } $. 
+This is clearly possible by figure \ref{fig:simplex}. It thus follows that we can find a sequence of points $ b_n \in \mathcal{A}_n $ such that $ \meta_{b_n} \to \meta_{a} $ for any $ a \in \mathcal{A}$. The conclusion is that if $ \tilde{a} $ specified the learner $ \meta_{ \tilde{a} } $ with the minimum risk, then by applying the cross-validation selector and letting $ n \to \infty $, the meta learner adopted by the ensemble super learner will eventually converge to $ \meta_{ \tilde{a} } $. 
 
 \begin{figure}[H]
     \centering
     \includestandalone[width=0.5\textwidth]{figures/simplex-3.tex}
     \caption{The parameter set $ \mathcal{A} $ as a $ \ml $-simplex for $ \ml = 3 $. Here $ \mathcal{A}_n $ is visualized as points on the surface.}
+    \label{fig:simplex}
 \end{figure}
 A noteworthy point is that the discrete super learner is a special case of the ensemble super learner that utilizes constrained regression. If $ a_i = 1 $ for any $ i \leq k $, this implies that the ensemble super learner predicts the same as the $ i $'th learner. Consequently, the discrete super learner can, therefore, be seen as constrained regression optimizing for $ a $ over the vertices of the $ k $-simplex.
 
@@ -686,7 +670,7 @@ We can also visualize the predictions of the learning algorithms in the library 
 
 The plot for the intercept only logistic regression is omitted, as its appearance is as one would expect -- the plot is simply an orange square. The intercept only logistic regression is included as a baseline, the predicted probability of the intercept model is simply the average of the observed $ Y_i$'s. 
 
-From figure \ref{fig:predictpar} we can observe a clear difference in the predicted probabilities between the logistic regression and the tree-based XGBoost. The main effects logistic regression is a parametric model that assumes that the regression function is a smooth transformation of the linear predictor $ X\beta $. XGBoost, in contrast, is made up of decision trees, which explains the patchwork pattern in its prediction plot. For small samples and as we will see in the simulations, XGBoost has a high risk in comparison to the misspecified main effects logistic regression. However, XGBoost becomes increasingly better at approximating the true regression when the number of observations becomes large as seen in figure \ref{fig:xgboost10k}. By applying a super learning algorithm to the library, we will see that the cross-validation selector is able to qualitatively assess and select the best learning algorithm to apply given the amount of data at hand. The cross-validation selector selects the main effects logistic regression in the beginning with few training samples, but as the predictions of XGBoost become more stable with more samples, the selector is likely to shift its preference towards XGBoost.  
+From figure \ref{fig:predictpar} we can observe a clear difference in the predicted probabilities between the logistic regression and the tree-based XGBoost. The main effects logistic regression is a parametric model that assumes that the regression function is a smooth transformation of the linear predictor $ X\beta $. XGBoost, in contrast, is made up of many decision trees, which explains the patchwork pattern in its prediction plot. For small samples and as we will see in the simulations, XGBoost has a high risk in comparison to the misspecified main effects logistic regression. However, XGBoost becomes increasingly better at approximating the true regression when the number of observations becomes large as seen in figure \ref{fig:xgboost10k}. By applying a super learning algorithm to the library, we will see that the cross-validation selector is able to qualitatively assess and select the best learning algorithm to apply given the amount of data at hand. The cross-validation selector selects the main effects logistic regression in the beginning with few training samples, but as the predictions of XGBoost become more stable with more samples, the selector is likely to shift its preference towards XGBoost.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/xgboost10k.png}
@@ -721,6 +705,13 @@ In our setup, we will consider a discrete super learner that uses 10-fold cross 
     \label{fig:pred_probs_boxplot}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/preds_n1k_dsl.png}
+    \caption{Predictions for a single observation by the discrete super learner fitted on $ n = 1000 $}
+    \label{fig:dsl_preds_n1k}
+\end{figure}
+
 \subsection{Discussion}
 Figures \ref{fig:loss_min_of_both} and \ref{fig:loss_jumps} illustrate how the discrete super learner performs in comparison to the learners in terms of loss over number of training samples. The plots are generated for two runs where the model is fitted on $ n = 100, 200, \dots , 3500 $ observations, as indicated on the $ x $-axis, then the empirical risk is calculated by evaluating each fitted learner on a fixed test sample of size of $ 10^{6} $. The test data is sampled from the data-generating distribution.  
 
@@ -730,8 +721,9 @@ The second run shows that the discrete super learner might be unable to determin
 
 Figure \ref{fig:pred_probs_boxplot} illustrates the variance in the predictions of each learner for a single observation, whose true probability is indicated by the red dashed line. Each learner has been trained $ K = 1000 $ times on $ n = 150, 500, \dots 3000 $ samples taken from the distribution and is used to predict $ K $ times after each training. The box plots are created from the $ K $ predictions. 
 
-We observe that the machine learning model, XGBoost, has the highest prediction variance across all training sample sizes. Recall that we only had two covariates, here having 1500 observations limits the range of predictions of our main effects model to be between $ 0.27 $ and $ 0.46 $. Whereas for XGBoost the predictions can vary from below $ 0.1 $ to above $ 0.9 $. While XGBoost is extremely efficient at minimizing loss, its predictions are unreliable unless one has a lot of training data. 
+We observe that the machine learning model, XGBoost, has the highest prediction variance across all training sample sizes. Recall that we only had two covariates, here having 1500 observations limits the range of predictions of our main effects model to be between $ 0.27 $ and $ 0.46 $. Whereas for XGBoost the predictions can vary from below $ 0.1 $ to above $ 0.9 $. While XGBoost is extremely efficient at minimizing loss, its predictions have a high variance unless one has a lot of training data. 
 
+The discrete super learner p
 \subsection{The ensemble super learner}
 \subsection{Discussion}
 
@@ -741,43 +733,43 @@ We observe that the machine learning model, XGBoost, has the highest prediction 
 \section{Appendix}
 \subsection{Proof of lemma \ref{finitesampledecomp}}
 \begin{proof}
-    We first note that the minimizing property of $ \hat{\la} $ (definition \ref{def:cvselector}) implies that 
+    We first note that the minimizing property of $ \hat{\la}_n $ (definition \ref{def:cvselector}) implies that 
     \begin{align}
-        E_{\Sn} R( \hat{\la}(P_{n, \Sn}^{0}), P_{n, \Sn}^{1} ) \leq E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P_{n, \Sn}^{1}  ). \label{eq:minizing} 
+        E_{\Sn} R( \hat{\la}_n(P_{n, \Sn}^{0}), P_{n, \Sn}^{1} ) \leq E_{\Sn} R( \tilde{\la}_n(P_{n, \Sn}^{0}) , P_{n, \Sn}^{1}  ). \label{eq:minizing} 
     \end{align}
    We can write (\ref{eq:minizing}) as  
    \begin{align*}
-       E_{\Sn} R( \hat{\la}(P_{n, \Sn}^{0} )&, P_{n, \Sn}^{1}) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P ) \\ 
-               &+E_{\Sn} \frac{1}{\sqrt{n_1} } R(\tilde{\la} (P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)\\
-               &-E_{\Sn} \frac{1}{\sqrt{n_1} } R(\hat{\la}(P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)  .
+       E_{\Sn} R( \hat{\la}_n(P_{n, \Sn}^{0} )&, P_{n, \Sn}^{1}) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}_n(P_{n, \Sn}^{0}) , P ) \\ 
+               &+E_{\Sn} \frac{1}{\sqrt{n_1} } R(\tilde{\la}_n (P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)\\
+               &-E_{\Sn} \frac{1}{\sqrt{n_1} } R(\hat{\la}_n(P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)  .
    \end{align*}
   Indeed, by examining the risk in the second term on the right hand we obtain 
   \begin{align*}
-      R(\tilde{\la} &(P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)\\
-                    &= (1 + \delta) R(\tilde{\la} (P_{n, \Sn}^{0}), G_{n,\Sn}^{1}) - \delta \sqrt{n_1} R(\tilde{\la} (P_{n, \Sn}^{0}), P) \\ 
-                    &= (1 + \delta) \left[\sqrt{n_1} R(\tilde{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1} R(\tilde{\la} (P_{n, \Sn}^{0}), P)\right] - \delta \sqrt{n_1} R(\tilde{\la} (P_{n, \Sn}^{0}), P)\\ 
-                    &= (1 + \delta) \sqrt{n_1} R(\tilde{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - (1 + 2\delta)\sqrt{n_1}   R(\tilde{\la} (P_{n, \Sn}^{0}), P).
+      R&(\tilde{\la}_n (P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)\\
+                    &= (1 + \delta) R(\tilde{\la}_n (P_{n, \Sn}^{0}), G_{n,\Sn}^{1}) - \delta \sqrt{n_1} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P) \\ 
+                    &= (1 + \delta) \left[\sqrt{n_1} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P)\right] - \delta \sqrt{n_1} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P)\\ 
+                    &= (1 + \delta) \sqrt{n_1} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - (1 + 2\delta)\sqrt{n_1}   R(\tilde{\la}_n (P_{n, \Sn}^{0}), P).
   \end{align*}
   And for the third term 
   \begin{align*}
-     R&(\hat{\la}(P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)\\
-       &= (1 + \delta) R(\hat{\la} (P_{n, \Sn}^{0}), G_{n,\Sn}^{1}) + \delta \sqrt{n_1} R(\hat{\la} (P_{n, \Sn}^{0}), P) \\ 
-       &= (1 + \delta) \left[\sqrt{n_1} R(\hat{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1} R(\hat{\la} (P_{n, \Sn}^{0}), P)\right] + \delta \sqrt{n_1} R(\hat{\la} (P_{n, \Sn}^{0}), P)\\ 
-       &=(1 + \delta) \sqrt{n_1} R(\hat{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1}   R(\hat{\la} (P_{n, \Sn}^{0}), P).
+     R&(\hat{\la}_n(P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)\\
+       &= (1 + \delta) R(\hat{\la}_n (P_{n, \Sn}^{0}), G_{n,\Sn}^{1}) + \delta \sqrt{n_1} R(\hat{\la}_n (P_{n, \Sn}^{0}), P) \\ 
+       &= (1 + \delta) \left[\sqrt{n_1} R(\hat{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1} R(\hat{\la}_n (P_{n, \Sn}^{0}), P)\right] + \delta \sqrt{n_1} R(\hat{\la}_n (P_{n, \Sn}^{0}), P)\\ 
+       &=(1 + \delta) \sqrt{n_1} R(\hat{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1}   R(\hat{\la}_n (P_{n, \Sn}^{0}), P).
   \end{align*}
   The $ \sqrt{n_1} $ in each term will disappear after we multiply with $ \frac{1}{\sqrt{n_1}} $. We now add the first and second term on the right hand side 
   \begin{align*}
-      &(1 + 2 \delta) E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P ) +E_{\Sn} \frac{1}{\sqrt{n_1} } R(\tilde{\la} (P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)\\ 
-      &= (1 + 2 \delta) E_{\Sn} R( \tilde{\la}(P_{n, \Sn}^{0}) , P ) + E_{\Sn} \left[(1 + \delta) R(\tilde{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - (1 + 2\delta)R(\tilde{\la} (P_{n, \Sn}^{0}), P) \right]\\
-      &=(1 + \delta) E_{\Sn} R(\tilde{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}).
+      &(1 + 2 \delta) E_{\Sn} R( \tilde{\la}_n(P_{n, \Sn}^{0}) , P ) +E_{\Sn} \frac{1}{\sqrt{n_1} } R(\tilde{\la}_n (P_{n, \Sn}^{0}), (1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)\\ 
+      &= (1 + 2 \delta) E_{\Sn} R( \tilde{\la}_n(P_{n, \Sn}^{0}) , P ) + E_{\Sn} \left[(1 + \delta) R(\tilde{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - (1 + 2\delta)R(\tilde{\la}_n (P_{n, \Sn}^{0}), P) \right]\\
+      &=(1 + \delta) E_{\Sn} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}).
   \end{align*}
 Now by combining all terms on the right hand side we get
 \begin{align*}
-    &(1 + \delta) E_{\Sn} R(\tilde{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1})\\
-    &-E_{\Sn} \frac{1}{\sqrt{n_1} } \left[ (1 + \delta) \sqrt{n_1} R(\hat{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1}   R(\hat{\la} (P_{n, \Sn}^{0}), P) \right] \\
-    &= (1 + \delta) E_{\Sn} R(\tilde{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1})- (1 + \delta)E_{\Sn}R(\hat{\la} (P_{n, \Sn}^{0}), P_{n,\Sn}^{1})+ E_{\Sn} R(\hat{\la} (P_{n, \Sn}^{0}), P).
+    &(1 + \delta) E_{\Sn} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1})\\
+    &-E_{\Sn} \frac{1}{\sqrt{n_1} } \left[ (1 + \delta) \sqrt{n_1} R(\hat{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1}) - \sqrt{n_1}   R(\hat{\la}_n (P_{n, \Sn}^{0}), P) \right] \\
+    &= (1 + \delta) E_{\Sn} R(\tilde{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1})- (1 + \delta)E_{\Sn}R(\hat{\la}_n (P_{n, \Sn}^{0}), P_{n,\Sn}^{1})+ E_{\Sn} R(\hat{\la}_n (P_{n, \Sn}^{0}), P).
 \end{align*}
-By the minimizing property the difference between the second and first term must be positive. Since we are adding a positive number to $ E_{\Sn} R(\hat{\la} (P_{n, \Sn}^{0}), P) $, it follows that it must be less than whatever is on the right. In the final lemma we replace $ \hat{\la}  $ and $ \tilde{\la}  $ by the maximum over $ \lib $.  
+By the minimizing property the difference between the second and first term must be positive. Since we are adding a positive number to $ E_{\Sn} R(\hat{\la}_n (P_{n, \Sn}^{0}), P) $, it follows that it must be less than whatever is on the right. In the final lemma we replace $ \hat{\la}_n  $ and $ \tilde{\la}_n  $ by the maximum over $ \lib $.  
   
 \end{proof}
 \printbibliography

@@ -1,10 +1,10 @@
 # Fdb version 4
-["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1684934025 0
+["bibtex main"] 1682525856 "main.aux" "main.bbl" "main" 1685093479 0
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1684934022 "main.tex" "out/main.pdf" "main" 1684934025 0
+["pdflatex"] 1685093477 "main.tex" "out/main.pdf" "main" 1685093479 0
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1680514707 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1680514707 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -175,20 +175,21 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1681656533 8204108 01e5e5f6eea5d709dc5cb9980b73620a ""
   "figures/dsl_loss.png" 1684142396 95681 aa4089924b3e0ec10db2bddc81437f02 ""
   "figures/dsl_loss_jumps.png" 1684142710 95053 c5ef674936c3a9abc0d72f83201dc930 ""
-  "figures/learner_vars.png" 1684242905 180720 925057d232ddffd6a219535de2ba8ac1 ""
+  "figures/learner_vars.png" 1685032063 158198 5caa39ccbc4e0d2a2edafb25e3e15b6c ""
   "figures/predictpar.png" 1684352843 110762 8374fa17695fa39a7dbfebde3a13b936 ""
+  "figures/preds_n1k_dsl.png" 1685032129 73470 ec0995f68cb053c6a558a935fcfd0fee ""
   "figures/simplex-3.tex.pdf" 1684828937 24164 23ac9cbdc0092215b58257da56352348 ""
   "figures/trueplot.png" 1684351352 76066 547f1bdcaa4938ec632de113d9cafcaa ""
   "figures/xgboost10k.png" 1684355158 78842 07f3f341b31f299d4f8d10af8b57f13e ""
   "ku-frontpage.sty" 1683637883 12952 7d85eb9cafe159b397d3014f50d766a1 ""
   "logos/ku-logo.pdf" 1675697292 93879 31d1db24936015ee9fe960c856f01525 ""
   "logos/science-english.pdf" 1675697292 71141 827ec2c5d6f797163b848e34358df682 ""
-  "main.bbl" 1684593405 10470 c8f6bf36e6723c6e5c0a7b87392b79ad "bibtex main"
-  "main.tex" 1684934021 77567 420233fb6c666cf8c1f512f3e7cf0f2e ""
-  "out/main.aux" 1684934025 9137 f3b8ab287be0b3a65b05661dc29de87f "pdflatex"
-  "out/main.out" 1684934025 3394 6b34297f306498e8af5d17354b6013f8 "pdflatex"
-  "out/main.run.xml" 1684934025 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
-  "out/main.toc" 1684934025 1941 05c03ff5c48ae834c754729ef1cb2579 "pdflatex"
+  "main.bbl" 1685084198 10470 59a3668daf605a7f28d5ddd7e9bddc63 "bibtex main"
+  "main.tex" 1685093477 77531 25a5e99ad453e829ae658145f210017f ""
+  "out/main.aux" 1685093479 9761 dc372e42f82eff1c5656c69c2c2af48f "pdflatex"
+  "out/main.out" 1685093479 3394 9251778eb30b7dd4d943beeed0a58618 "pdflatex"
+  "out/main.run.xml" 1685093479 2308 0c76667d696198f5ed375a73ee83bd48 "pdflatex"
+  "out/main.toc" 1685093479 1940 165cc0d86918c7f78a936386e4221355 "pdflatex"
   (generated)
   "out/main.aux"
   "out/main.bcf"

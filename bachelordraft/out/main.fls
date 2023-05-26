@@ -1174,6 +1174,11 @@ INPUT ./figures/learner_vars.png
 INPUT figures/learner_vars.png
 INPUT ./figures/learner_vars.png
 INPUT ./figures/learner_vars.png
+INPUT ./figures/preds_n1k_dsl.png
+INPUT ./figures/preds_n1k_dsl.png
+INPUT figures/preds_n1k_dsl.png
+INPUT ./figures/preds_n1k_dsl.png
+INPUT ./figures/preds_n1k_dsl.png
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT out/main.aux
 INPUT out/main.out
