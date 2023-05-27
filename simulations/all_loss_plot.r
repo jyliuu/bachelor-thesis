@@ -11,7 +11,7 @@ library(reshape2)
 jump <- 100
 seed <- 23
 test_count <- 10^6
-candidates_with_SLs <- c(candidates, list(eSL = c(fit_eSl_loss_weighted, predict_eSL), dSL = c(fit_dSL, predict_dSL)))
+candidates_with_SLs <- c(candidates, list(eSL = c(fit_eSl_quad_prog, predict_eSL), dSL = c(fit_dSL, predict_dSL)))
 losses <- get_losses_candidates(c(99, rep(jump, 34)), candidates_with_SLs, test_count = test_count, loss_fun = MSE, seed = seed)
 losses
 # Plot losses dsl 2
@@ -30,7 +30,7 @@ p <- plot_losses(df_melted,
   alpha = c(1, 1, 1, 0.6, 0.6),
   linetypes = c('dashed', 'dashed', 'dashed', 'solid', 'solid')
 )
-
+p
 # Save the plot
 ggsave("figures/losses_esl_s23.png", plot = p, width = 6, height = 4, dpi = 360, units = "in")
 

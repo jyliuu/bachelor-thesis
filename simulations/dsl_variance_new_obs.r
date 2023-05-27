@@ -89,10 +89,15 @@ ggsave("figures/learner_vars_1000.png",
     dpi = 360,
     units = "in")
 
-hist_dsl <- df_melted |>
-    filter(variable != 'result.2', id == 3) |>
+all_except_baseline <- df_melted |>
+    filter(variable != 'result.2', id == 4)
+
+mean_and_sds <- all_except_baseline |> group_by(variable) |> summarize(mean = mean(value), sd = sd(value))
+
+hist_dsl <- all_except_baseline |>
     ggplot(aes(x = value, fill = variable, alpha = variable)) + 
     geom_histogram(color = "black", bins = 40, position = "identity") +
+    geom_vline(aes(xintercept = mean, color = variable), linetype = "dashed", size = 1, data = mean_and_sds, show.legend = FALSE) +  # Grouped vertical lines
     theme_bw() +
     theme(
         legend.title = element_blank(),
@@ -112,5 +117,38 @@ ggsave("figures/preds_n1k_dsl.png",
     plot = hist_dsl,
     width = 10,
     height = 6,
+    dpi = 360,
+    units = "in")
+
+## DSL shift
+
+dSL_shift_dist <- df_melted |>
+    filter(variable == 'result.4')
+
+
+hist_dsl_shift <- dSL_shift_dist |>
+    ggplot(aes(x = value, fill = id, alpha = 0.5)) + 
+    geom_histogram(color = "black", bins = 25, position = "identity") +
+    theme_bw() +
+    theme(
+        legend.title = element_blank(),
+        legend.position = 'bottom',
+        legend.text = element_text(size = 10), # Change this for smaller text
+        legend.key.size = unit(1.5, "lines"),  # Change this for smaller keys
+        legend.background = element_rect(color = "black", linewidth = 0.15),  # Add a box with black border around the legend
+        strip.background = element_blank(),  # Remove background from facet labels
+        strip.text = element_blank()  # Remove facet labels
+    ) +    
+    labs(x = "Predicted probability", y = "Count") +
+    scale_x_continuous(breaks = seq(0, 1, by = 0.5)) +
+    scale_fill_discrete(labels = c("n = 150", "n = 500", "n = 1000", "n = 1500", "n = 3000")) +
+    guides(alpha = "none") +
+    facet_wrap(~ id, nrow = 1)
+
+hist_dsl_shift
+ggsave("figures/preds_dsl_shift.png",
+    plot = hist_dsl_shift,
+    width = 10,
+    height = 4,
     dpi = 360,
     units = "in")

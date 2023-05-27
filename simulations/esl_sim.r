@@ -29,5 +29,5 @@ eslplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = eSL)) +
   ylab("X2") + 
   ggtitle("Ensemble super learner") +
   labs(fill = "Predictions")
-
-ggsave('figures/esl_preds_quad_prog.png', plot = eslplot, width = 6, height = 5, dpi = 360, units = 'in')
+eslplot
+ggsave('figures/esl_preds_quad_prog2.png', plot = eslplot, width = 6, height = 5, dpi = 360, units = 'in')
