@@ -290,6 +290,40 @@
       \field{title}{Fundamentals of Mathematical Statistics}
       \field{year}{2023}
     \endentry
+    \entry{github}{misc}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=42b89a12ddb002b5a5094080e006b979}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Jinyang},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {GitHub}%
+      }
+      \strng{namehash}{42b89a12ddb002b5a5094080e006b979}
+      \strng{fullhash}{42b89a12ddb002b5a5094080e006b979}
+      \strng{bibnamehash}{42b89a12ddb002b5a5094080e006b979}
+      \strng{authorbibnamehash}{42b89a12ddb002b5a5094080e006b979}
+      \strng{authornamehash}{42b89a12ddb002b5a5094080e006b979}
+      \strng{authorfullhash}{42b89a12ddb002b5a5094080e006b979}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{GitHub Repository}
+      \field{title}{Source code for simulations}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://github.com/jyliuu/bachelor-thesis
+      \endverb
+      \verb{url}
+      \verb https://github.com/jyliuu/bachelor-thesis
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

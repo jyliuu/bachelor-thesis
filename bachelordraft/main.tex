@@ -148,7 +148,7 @@ Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional
                                                        &= E[ (\theta(X) - m(X)) ( m(X) - m(X)) ] \\
                                                        &= 0.
     \end{align*}
-    We conclude that 
+    We conclude that
     \begin{align*}
         \int L(o, \theta) d P(o) &= E| \theta(X) - m(X) |^2 + E | m(X) - Y |^2.
     \end{align*}
@@ -311,7 +311,9 @@ Estimating $ \tilde{\la}_n $ via cross-validation amounts to replacing $ P $ wit
 %                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
 %\end{align*}
 %
-The oracle selector and cross-validation selector are simply what chooses a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. We are now ready to give the definition of the \textit{discrete super learner}  
+The oracle selector and cross-validation selector are simply what chooses a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. 
+
+\subsection{Discrete super learner}
 \begin{definition}[Discrete super learner]
     The \textit{discrete super learner}, $ \hat{\la}_n(P_n) $, created from a library $ \lib $ is the cross-validation selected algorithm fitted to the entire dataset 
     \begin{align*}
@@ -626,9 +628,9 @@ Given the level 1 data, $ \lone_n $, the meta learning algorithm seeks to optimi
 \cite{van2007super} mentions that it is also possible to use a non-parametric learning algorithm as the meta learning algorithm, or even apply a super learning algorithm on the level 1 data. In this case $ \mathcal{A} $ could be measurable functions from $ \mathcal{Z} $ to $ [0, 1] $. The learner $ \meta_a $ for $ a \in \mathcal{A} $ will then be the map $ z \mapsto a(z) $.
 
 \subsubsection{Constrained regression and the $ \ml $-simplex}
-Here we examine a simple meta learning algorithm, which is to do a constrained regression on the level 1 data. The goal is to essentially fit a weighted combination of the learners, such that the weights sum to $ 1 $. We can achieve this by parametrizing $ \mathcal{A} $ as the $ \ml $-simplex given by
+Here we examine a simple meta learning algorithm which is to do a constrained regression on the level 1 data. The reason for examining this particular meta learning algorithm is because the discrete super learner is a special case of the ensemble super learner that utilizes this algorithm. The goal is to fit a weighted combination of the learners, such that the weights sum to $ 1 $. We can achieve this by parametrizing $ \mathcal{A} $ as the $ \ml $-simplex given by
 \begin{align*}
-    \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{i = 1}^{\ml} a_i = 1 , a_i \geq 0 \text{ for } 1 \leq i \leq k \right\}. 
+    \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{\q = 1}^{\ml} a_\q = 1 , a_\q \geq 0 \text{ for } 1 \leq \q \leq k \right\}. 
 \end{align*}
 The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \mapsto z \cdot a $. By Cauchy-Schwarz we have $ z \cdot a \leq \norm{z} \norm{a} \leq 1 $ meaning that the range of $ \meta_a $ is $ [0,1] $. The ensemble super learner that applies $ \meta_a $ is, therefore, a valid learner in $ \Theta $. To apply the oracle results, we will cover $ \mathcal{A} $ with equidistant points on the simplex surface. For every $ n $, we specify $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of points in $ \mathcal{A}_n $ increases with $ n $ at a polynomial rate, and that for any $ a \in \mathcal{A} $ we have 
 \begin{align*}
@@ -642,14 +644,16 @@ This is clearly possible by figure \ref{fig:simplex}. It thus follows that we ca
     \caption{The parameter set $ \mathcal{A} $ as a $ \ml $-simplex for $ \ml = 3 $. Here $ \mathcal{A}_n $ is visualized as points on the surface.}
     \label{fig:simplex}
 \end{figure}
-A noteworthy point is that the discrete super learner is a special case of the ensemble super learner that utilizes constrained regression. If $ a_i = 1 $ for any $ i \leq k $, this implies that the ensemble super learner predicts the same as the $ i $'th learner. Consequently, the discrete super learner can, therefore, be seen as constrained regression optimizing for $ a $ over the vertices of the $ k $-simplex.
+
+The discrete super learner is essentially a special case of the ensemble super learner that utilizes constrained regression. If $ a_\q = 1 $ for any $ 1 \leq \q \leq k $ then the ensemble super learner predicts the same as the $ \q $'th learner. The discrete super learner can, therefore, be seen as constrained regression optimizing for $ a $ over the vertices of the $ k $-simplex. Consequently we conclude that the ensemble super learner that uses constrained regression must outperform the discrete super learner at minimizing risk since it minimizes over the entire $ k $-simplex.  
+
 
 \begin{remark}
 In reality the optimization procedure that is available on our hardware can only optimize over finite subset of $ \mathcal{A} $. The finite subset is determined by the floating-point precision of the processor, and perhaps also the internal parameters of the optimization procedure itself. For example, gradient descent algorithms usually have a hyperparameter such as `step size' or `learning rate' which controls how large of a step the algorithm takes in the direction of the minimum. The parameter set $ \mathcal{A}_n $ which depends on $ n $ also does not correspond to our actual optimization procedure. We do not choose some grid of points in the parameter set that depends on the number of observations such that for each point the risk is evaluated and then the minimum is picked. The minimum is optimized over all feasible points, for example if the risk is convex, then the minimum can sometimes be solved explicitly or there will exist procedures that guarantee convergence to the minimum. 
 \end{remark}
 
 \subfile{simulations}
-
+\newpage
 \section{Appendix}
 \subsection{Proof of lemma \ref{finitesampledecomp}}
 \begin{proof}
