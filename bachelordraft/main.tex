@@ -121,7 +121,7 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
 \begin{equation} \label{l2risk}
     R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
-Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $. 
+Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
 \begin{theorem} \label{minrisk}
     Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
@@ -154,19 +154,17 @@ Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional
     \end{align*}
     The first term after the equality is always positive and is $ 0 $ only when $ \theta = m $, this proves that $ m $ minimizes the expression above. 
 \end{proof}
-It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. As we do not have access to the data-generating distribution $ P $, our goal is to estimate $ \btheta^{*} $, this means to \textit{learn} the true regression function from our data. 
-We will therefore introduce the terminology \textit{learning algorithm} and \textit{learner} in the context of learning from our data.  
-
+It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. Our goal is to estimate $ \btheta^{*} $, which means to \textit{learn} the true regression function from our data. We will introduce the terminology \textit{learning algorithm} and \textit{learner} in the context of learning from our data.  
 \subsection{Learning algorithms and learners}
 We will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n = (O_1 , \dots , O_n) $ as our observations and data respectively. 
 \begin{definition}[Learning algorithm]
     A learning algorithm is a measurable map $ \la : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
 \end{definition}
 We will throughout assume that the learning algorithm is well defined for each $ n \in \mathbb{N} $, and that permuting the observations have no effect on the outcome, i.e., the algorithm is symmetric in the observations.  
-\begin{definition}[Learner (or fitted learner)]
+\begin{definition}[Learner or fitted learner]
     Given a learning algorithm $ \la $. A learner is a stochastic variable in $ \Theta $ representing the outcome of applying the learning algorithm to our data $ \btheta = \la(D_n) $.
 \end{definition}
-Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would have observed $ O_1 = o_1, \dots, O_n = o_n $, and can then apply our learning algorithm on the observed data. In machine learning, the procedure of applying an algorithm on the data is referred to as \textit{model training} or \textit{fitting}, the outcome of the training is a \textit{trained model} or simply a \textit{fit}. We will refer to the trained model as a learner which naturally depends on our data that we have observed. 
+Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would observe $ O_1 = o_1, \dots, O_n = o_n $, following which we can employ our learning algorithm on the observed data. In machine learning, the process of applying an algorithm on the data is usually referred to as \textit{model training} or \textit{fitting}, the outcome of the training is a \textit{trained model} or simply a \textit{fit}. We will refer to the trained model as a learner which naturally depends on our data that we have observed. 
 
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learning algorithm is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $. The parameter $ \beta $ can be estimated via maximum likelihood.   
@@ -460,7 +458,7 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
    \begin{align*}
        \int (Y - E(Y \mid X))^2 d P \geq 0. 
    \end{align*}
-   Since the integrand is positive, the integral is zero if and only if $ Y = E(Y \mid X) $ almost surely. That is only the case when $ Y $ is deterministic given $ X $, i.e. $ Y $ is $ X $-measurable. Assuming, therefore, that $ Y $ is not deterministic given $ X $, then we note that by the fact that the quadratic loss is strictly proper, then we have for any $ \theta \in \Theta $
+   Since the integrand is positive, the integral is zero if and only if $ Y = E(Y \mid X) $ almost surely. That is only the case when $ Y $ is deterministic given $ X $, i.e. $ Y $ is $ X $-measurable. Assuming, therefore, that $ Y $ is not deterministic given $ X $, then we note that by the fact that the quadratic loss is strictly proper due to theorem \ref{minrisk}, it holds for any $ \theta \in \Theta $ that
    \begin{align*}
        R(\theta, P) \geq R(\theta^*, P) > 0,
    \end{align*}
@@ -623,11 +621,11 @@ The following finite sample oracle inequality is a direct consequence of the ora
     The $ \log(1 + k(n)) $ term is less than $ 1 + \log(k(n)) = 1 + p \log(n) $, which is of lower order than $ \sqrt{n} $, thus the remainder term goes to zero as $ n \to \infty $.
 \end{proof}
 
-\subsection{Choice of meta learning algorithm}
+\subsection{Choice of meta learning algorithm} \label{simplex}
 Given the level 1 data, $ \lone_n $, the meta learning algorithm seeks to optimize over the parameter set $ \mathcal{A}_n \subseteq \mathcal{A} $. The interpretation of $ \mathcal{A} $ depends on the chosen learning algorithm. If a parametric learning algorithm is used, for example logistic regression, then $ \mathcal{A} $ is $ \mathbb{R}^{\ml} $ where $ \ml $ is the number of learners in $ \lib $. The learner $ \meta_a $ for $ a \in \mathcal{A} $ will then be the map $ z \mapsto \expit(az) $.
 \cite{van2007super} mentions that it is also possible to use a non-parametric learning algorithm as the meta learning algorithm, or even apply a super learning algorithm on the level 1 data. In this case $ \mathcal{A} $ could be measurable functions from $ \mathcal{Z} $ to $ [0, 1] $. The learner $ \meta_a $ for $ a \in \mathcal{A} $ will then be the map $ z \mapsto a(z) $.
 
-\subsubsection{Constrained regression and the $ \ml $-simplex}
+\subsubsection{Constrained regression and the $ \ml $-simplex} 
 Here we examine a simple meta learning algorithm which is to do a constrained regression on the level 1 data. The reason for examining this particular meta learning algorithm is because the discrete super learner is a special case of the ensemble super learner that utilizes this algorithm. The goal is to fit a weighted combination of the learners, such that the weights sum to $ 1 $. We can achieve this by parametrizing $ \mathcal{A} $ as the $ \ml $-simplex given by
 \begin{align*}
     \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{\q = 1}^{\ml} a_\q = 1 , a_\q \geq 0 \text{ for } 1 \leq \q \leq k \right\}. 
@@ -654,6 +652,7 @@ In reality the optimization procedure that is available on our hardware can only
 
 \subfile{simulations}
 \newpage
+
 \section{Appendix}
 \subsection{Proof of lemma \ref{finitesampledecomp}}
 \begin{proof}
