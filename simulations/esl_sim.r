@@ -3,31 +3,35 @@ library(tidyverse)
 source('esl.r')
 source('model.r')
 
-# obs <- data.frame(
-#   Age = c(15),
-#   Parasites = c(7)
-# )
+fit_esl_and_plot <- function(simDat, title) {
 
-# eSL <- fit_eSl_quad_prog(simulateMalariaData(10^4))
-# predict_eSL(eSL, obs)
+  # create a grid of values for Age and Parasites
+  grid <- expand.grid(Age = seq(0.5, 15, length.out = 50),
+                      Parasites = seq(0, 7, length.out = 50))
 
-N <- 10^4
+  eSL <- fit_eSl_quad_prog(simDat)
+  print(eSL$fitted_meta)
+  grid$eSL <- predict_eSL(eSL, grid)                
+
+  eslplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = eSL)) + 
+    theme_bw() +
+    geom_tile() + 
+    scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+    xlab("X1") + 
+    ylab("X2") + 
+    ggtitle(title) +
+    labs(fill = "Predictions")
+  eslplot
+}
+
+N <- 1000
 simDat <- simulateMalariaData(N)
+eslplot1k <- fit_esl_and_plot(simDat, "eSL predictions n = 1000")
 
-# create a grid of values for Age and Parasites
-grid <- expand.grid(Age = seq(0.5, 15, length.out = 50),
-                     Parasites = seq(0, 7, length.out = 50))
+N <- 9000
+simDat9k <- simulateMalariaData(N)
+eslplot10k <- fit_esl_and_plot(rbind(simDat, simDat9k), "eSL predictions (n = 10,000)")
 
-eSL <- fit_eSl_quad_prog(simDat)
-grid$eSL <- predict_eSL(eSL, grid)                
-
-eslplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = eSL)) + 
-  theme_bw() +
-  geom_tile() + 
-  scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
-  xlab("X1") + 
-  ylab("X2") + 
-  ggtitle("Ensemble super learner") +
-  labs(fill = "Predictions")
-eslplot
-ggsave('figures/esl_preds_quad_prog2.png', plot = eslplot, width = 6, height = 5, dpi = 360, units = 'in')
+parplot <- eslplot1k + theme(legend.position = "none") | eslplot10k
+parplot
+ggsave('figures/esl_preds_par.png', plot = parplot, width = 10, height = 5, dpi = 360, units = 'in')
