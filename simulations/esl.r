@@ -3,7 +3,7 @@ source('loss.r')
 source('crossvalidation.r')
 source('model.r')
 
-library(limSolve)
+library(lsei)
 
 # Insane currying once again
 fit_eSL_with_candidates <- function(candidates, meta_learning_algorithm, k=10) function(dat) {
@@ -59,12 +59,12 @@ quad_prog_meta_fit <- function(cv_lvl1_and_loss) {
     # Solve quadratic programming
     Y <- cv_lvl1_and_loss$lvl1[,1]
     X <- cv_lvl1_and_loss$lvl1[,-1]
-    sol <- lsei(X, Y, rep(1, ncol(X)), 1)
+    sol <- lsei(a = X, b = Y, c = rep(1, ncol(X)), d = 1, lower = 0)
     sol
 }
 
 quad_prog_meta_predict <- function(meta_model, lvl_1_covariates) {
-    weights_normalized <- meta_model$X
+    weights_normalized <- meta_model
     lvl_1_covariates  %*% weights_normalized
 }
 
