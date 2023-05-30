@@ -9,9 +9,9 @@ seed <- 23
 test_count <- 10^6
 jump <- 100
 
-fit_eSl_quad_prog <- fit_eSL_with_candidates(candidatesWithTrue, meta_learning_algorithm_quad_prog)
+fit_eSL_quad_prog <- fit_eSL_with_candidates(candidatesWithTrue, meta_learning_algorithm_quad_prog)
 
-to_eval <- c(list(logRegTrue = c(fit_logreg_true, predict_logreg), eSL = c(fit_eSl_quad_prog, predict_eSL), dSL = c(fit_dSL, predict_dSL)))
+to_eval <- c(list(logRegTrue = c(fit_logreg_true, predict_logreg), eSL = c(fit_eSL_quad_prog, predict_eSL), dSL = c(fit_dSL, predict_dSL)))
 losses <- get_losses_candidates(c(99, rep(jump, 34)), to_eval, test_count = test_count, loss_fun = MSE, seed = seed)
 
 losses_df <- as.data.frame(losses)

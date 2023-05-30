@@ -72,8 +72,8 @@ meta_learning_algorithm <- c(logistic_meta_fit, logistic_meta_predict)
 meta_learning_algorithm_loss_weighted <- c(loss_weighted_meta_fit, loss_weighted_meta_predict)
 meta_learning_algorithm_quad_prog <- c(quad_prog_meta_fit, quad_prog_meta_predict)
 
-fit_eSl <- fit_eSL_with_candidates(candidates, meta_learning_algorithm)
-fit_eSl_loss_weighted <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_loss_weighted)
-fit_eSl_quad_prog <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_quad_prog)
+fit_eSL <- fit_eSL_with_candidates(candidates, meta_learning_algorithm)
+fit_eSL_loss_weighted <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_loss_weighted)
+fit_eSL_quad_prog <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_quad_prog)
 
 predict_eSL <- function(esl, dat) esl$predict_fun(esl$fitted_meta, dat)

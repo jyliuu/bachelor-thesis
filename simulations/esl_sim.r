@@ -14,6 +14,7 @@ fit_eSL_quad_prog <- fit_eSL_with_candidates(candidatesWithTrue, meta_learning_a
 eSL <- fit_eSL_quad_prog(simDat)
 print(eSL$fitted_meta)
 
+# Plot predicted values
 
 fit_esl_and_plot <- function(simDat, title) {
 
@@ -21,7 +22,7 @@ fit_esl_and_plot <- function(simDat, title) {
   grid <- expand.grid(Age = seq(0.5, 15, length.out = 50),
                       Parasites = seq(0, 7, length.out = 50))
 
-  eSL <- fit_eSl_quad_prog(simDat)
+  eSL <- fit_eSL_quad_prog(simDat)
   print(eSL$fitted_meta)
   grid$eSL <- predict_eSL(eSL, grid)                
 
@@ -48,3 +49,38 @@ parplot <- eslplot1k + theme(legend.position = "none") | eslplot10k
 parplot
 ggsave('figures/esl_preds_par.png', plot = parplot, width = 10, height = 5, dpi = 360, units = 'in')
 
+# Plot weights against n 
+
+get_weights_over_obs <- function(obs_counts, seed=19) {
+  set.seed(seed)
+  train_set <- simulateMalariaData(1)
+
+  fitted_metas <- foreach (j = obs_counts, .combine = 'rbind') %do% { 
+      train_set <- rbind(train_set, simulateMalariaData(j))
+      esl <- fit_eSL_quad_prog(train_set)
+      esl$fitted_meta
+  }
+
+  fitted_metas
+}
+
+obs_counts <- c(99, rep(100, 39))
+res <- get_weights_over_obs(obs_counts) |> as_tibble() 
+  
+res$n <- cumsum(obs_counts) + 1
+res <- res |> pivot_longer(-n, names_to = "Model", values_to = "Weight")
+p <- res |> 
+  mutate(Model = fct_recode(Model, "Intercept only" = "14", "Main effects" = "V1", "XGBoost" = "15")) |>
+  ggplot(aes(x = n, y = Weight, fill = Model)) +
+  geom_bar(position="stack", stat="identity") +
+  theme_bw() +
+  labs(x = "n", y = "Weight", fill = "") +
+  scale_x_continuous(breaks = c(100, seq(500, 4000, by = 500))) +
+  theme(
+    legend.title = element_blank(),
+    legend.position = 'bottom',
+    legend.text = element_text(size = 12), # Change this for smaller text
+    legend.key.size = unit(1.5, "lines"),  # Change this for smaller keys
+    legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
+  )
+ggsave("figures/esl_weights.png", plot = p, width = 10, height = 6, dpi = 360, units = "in")

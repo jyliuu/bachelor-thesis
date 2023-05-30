@@ -123,7 +123,6 @@ The ensemble super learner uses the same library of algorithms as the discrete s
 \State \textbf{Output:} ensemble super learner $ \esl(P_n) $
 %\State $\ell \gets \text{empty array of dimensions } V \times k$ \Comment{Array of risks} 
 \State $\lone_n \gets \text{empty array of dimensions } n \times (k+1)$ \Comment{Level 1 data} 
-\State $ \lone_n[i, 1] \gets Y_i $ 
 \State $s \gets \text{create random folds}(P_n, V)$ \Comment{Randomly assign observations to folds}
 \For{$s \in \{1, \dots, V\}$}
     \State $P_{n, s}^{1} \gets \{O_i \in P_n \mid s(i) = s\} $
@@ -131,6 +130,7 @@ The ensemble super learner uses the same library of algorithms as the discrete s
     \For{$\la \in \lib$}
         \State $ \la(P_{n,s}^{0}) \gets \text{fit}(\la, P_{n, s}^{0})$
         \For{$ (Y_i, X_i) = O_i \in P_{n,s}^{1} $}
+            \State $ \lone_n[i, 1] \gets Y_i $ 
             \State $ \lone_n[i, \la] \gets Z_{i, \la} = \la(P_{n,s}^{0})(X_i) $ \Comment{Save out-of-fold predictions}
         \EndFor
     \EndFor
@@ -143,7 +143,7 @@ The ensemble super learner uses the same library of algorithms as the discrete s
 \State \textbf{return} $ \esl(P_n) $
 \end{algorithmic}
 \end{algorithm}
-We visualize the predictions made by the ensemble super learner as we have done in figure \ref{fig:predictpar}. In figure \ref{fig:esl_preds_quad_prog} we have visualized the predictions of the ensemble super learner fitted on 1000 and $ 10\,000 $ observations using the constrained regression meta algorithm. To do constrained regression we use the R package \textit{lsei} \parencite{lsei}, which solves the quadratic programming problem under constraints.  
+We visualize the predictions made by the ensemble super learner as we have done in figure \ref{fig:predictpar}. Figure \ref{fig:esl_preds_quad_prog} displays the predictions of the ensemble super learner fitted on 1000 and $ 10\,000 $ observations using the constrained regression meta algorithm. To do constrained regression we use the R package \textit{lsei} \parencite{lsei}, which is used to solve quadratic programming problems under constraints.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/esl_preds_par.png}
@@ -162,7 +162,7 @@ From the weights we see that the predictions of intercept only logistic regressi
     a_{\text{main effects}} &= 0.136615961, \\
     a_{\text{XGBoost}} &= 0.863274573.
 \end{align*}
-The intercept only model is weighted very little, and the main effects model is weighted a lot less than the XGBoost model. This is in line with our findings from the discrete super learner, where we saw that the main effects model was less likely to be selected for larger samples. Note, however, these weights depend on the data, so they are not necessarily the same when the data is generated each time. With more simulation runs we can determine the distribution of the weights and how they are centered. 
+The intercept only model is weighted very little, and the main effects model is weighted a lot less than the XGBoost model. This is in line with our findings from the discrete super learner, where we saw that the main effects model was less likely to be selected for larger samples. Note, however, these weights depend on the data, so they are not necessarily the same when the data is generated each time. With more simulation runs it is possible determine the distribution of the weights and how they are centered. 
 
 \subsubsection{Ensemble super learner performance}
 \begin{figure}[H]
@@ -186,20 +186,29 @@ Figure \ref{fig:learner_vars_w_esl_1000} compares the variances of the ensemble 
     \caption{Predictions for a single observation by the ensemble super learner varied over number of training samples}
     \label{fig:hist_esl_dist}
 \end{figure}
-Figure \ref{fig:hist_esl_dist} show the predictions of the ensemble super learner for a single observation varied over number of training samples. We see that the distribution is much more centered and that the variance also seems to decrease with more samples. 
+Figure \ref{fig:hist_esl_dist} shows the predictions of the ensemble super learner for a single observation varied over number of training samples. We see that the distribution of predictions is much more centered and that the variance seems to also decrease steadily with more samples. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/esl_weights.png}
+    \caption{Weighting of the different learners selected by the ensemble super learner varied over number of training samples}
+    \label{fig:esl_weights}
+\end{figure}
+The weighting of the different learners by the ensemble super learner is visualized in figure \ref{fig:esl_weights}. We see that the weighting of the intercept only model is very low, and that the main effects model has more weight than XGBoost for small samples, however, this trend reverses as the number of training samples increases. An interesting observation is that XGBoost begins to outweigh the main effects logistic regression when the training size is between 1000 and 1500, which coincides with when XGBoost begins to achieve a lower loss compared to the main effects model as seen in figures \ref{fig:loss_min_of_both} and \ref{fig:loss_jumps}.
 
 
-The predictions of the 
-We have fitted the ensemble super learner 
+\section{Discussion}
 
-- predictions of ensemble super learner
-- weights selected by ensemble super learner histogram plot
-- weights selected bar plot over n 
-- loss plot
-- explain quadratic programming
-- variance plot
-- performance of ensemble in ms
+\subsection{Regularity on the parameter space} 
+The statistical model needs to be bla bla bla, and the parameter space needs to be bla bla bla.
 
-\subsection{Discussion}
+\subsection{Applicability of finite sample results}
+\subsection{Repeated K-fold cross-validation}
+Running $ K $-fold multiple times was not investigated..
+
+
+\subsection{Other algorithms to potentially include}
+
+
+
 \end{document}
 
