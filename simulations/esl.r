@@ -1,7 +1,6 @@
 source('learners.r')
 source('loss.r')
 source('crossvalidation.r')
-source('model.r')
 
 library(lsei)
 

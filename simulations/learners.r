@@ -29,4 +29,5 @@ candidatesLogReg <- list(logReg = c(fit_logreg, predict_logreg),
 
 candidatesTree <- list(xgboost = c(fit_xgboost, predict_xgboost))
 candidates <- c(candidatesLogReg, candidatesTree)
+candidatesWithTrue <- c(candidatesLogReg, candidatesTree, list(logRegTrue = c(fit_logreg_true, predict_logreg)))
 

@@ -1,39 +1,7 @@
 source('dsl.r')
 source('model.r')
-
+source('simulation_functions.r')
 library(reshape2)
-fit_and_predict_on_new_obs <- function(fit_predict, new_obs, n, K = 1000) {
-    model_fun <- fit_predict[[1]]
-    predict_fun <- fit_predict[[2]]
-
-    preds <- foreach (k = 1:K, .combine = 'c') %do% {
-        print(paste('Predicting for k = ', k))
-        train_set <- simulateMalariaData(n)
-        fit <- model_fun(train_set)
-        pred <- predict_fun(fit, new_obs)
-
-        pred
-    }
-    preds
-}
-
-fit_library_on_new_obs <- function(lib, new_obs, n, K = 1000) {
-    preds <- foreach (k = 1:K, .combine = 'rbind') %do% {
-        print(paste('Predicting for k = ', k))
-        train_set <- simulateMalariaData(n)
-
-        row <- foreach(i = seq_along(lib), .combine = 'cbind') %do% {
-            fit <- lib[[i]][[1]](train_set)
-            pred <- lib[[i]][[2]](fit, new_obs)
-
-            pred
-        }
-        row
-    }
-
-    preds
-}
-
 # Test
 xgboost_fit_predict <- c(fit_xgboost, predict_xgboost)
 logistic_fit_predict <- c(fit_logreg, predict_logreg)
@@ -60,7 +28,7 @@ res_lib_diff_ns <- foreach(n = training_counts) %do% {
 
 # Bind all dataframes into one and add an id column
 df_combined <- bind_rows(res_lib_diff_ns, .id = "id")
-df_melted <- melt(ndf_combined, id.vars = "id")
+df_melted <- melt(df_combined, id.vars = "id")
 
 # Read old data
 load('data/learner_vars_1k_upto_3k.RData')

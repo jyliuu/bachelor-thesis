@@ -1,7 +1,7 @@
 source('dsl.r')
 source('esl.r')
 source('model.r')
-source('get_losses_candidates.r')
+source('simulation_functions.r')
 library(reshape2)
 
 

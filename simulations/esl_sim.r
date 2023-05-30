@@ -2,6 +2,18 @@ library(tidyverse)
 
 source('esl.r')
 source('model.r')
+source('learners.r')
+
+
+## Test with truth
+simDat <- simulateMalariaData(3000)
+candidatesWithTrue <- c(candidatesLogReg, candidatesTree, 
+list(logRegTrue = c(fit_logreg_true, function(mod, obs) trueModel(obs$Age, obs$Parasites))))
+
+fit_eSL_quad_prog <- fit_eSL_with_candidates(candidatesWithTrue, meta_learning_algorithm_quad_prog)
+eSL <- fit_eSL_quad_prog(simDat)
+print(eSL$fitted_meta)
+
 
 fit_esl_and_plot <- function(simDat, title) {
 
@@ -35,3 +47,4 @@ eslplot10k <- fit_esl_and_plot(rbind(simDat, simDat9k), "eSL predictions (n = 10
 parplot <- eslplot1k + theme(legend.position = "none") | eslplot10k
 parplot
 ggsave('figures/esl_preds_par.png', plot = parplot, width = 10, height = 5, dpi = 360, units = 'in')
+
