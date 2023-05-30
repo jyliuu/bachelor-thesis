@@ -83,7 +83,7 @@ The discrete super learner in our simulations uses 10-fold cross-validation and 
     \caption{The risk of the discrete super learner compared to other learners. $ N = 3500 $}
     \label{fig:loss_jumps}
 \end{figure}
-Figures \ref{fig:loss_min_of_both} and \ref{fig:loss_jumps} illustrate how the discrete super learner performs in comparison to the learners in terms of loss over number of training samples. The plots are generated for two runs where the model is fitted on $ n = 100, 200, \dots , 3500 $ observations, as indicated on the $ x $-axis, then the empirical risk is calculated by evaluating each fitted learner on a fixed test sample of size of $ 10^{6} $. The test data is sampled from the data-generating distribution.  
+Figures \ref{fig:loss_min_of_both} and \ref{fig:loss_jumps} illustrate how the discrete super learner performs in comparison to the learners in terms of loss over number of training samples. The plots are generated for two runs where the model is fitted on $ n = 100, 200, \dots , N = 3500 $ observations, as indicated by the $ x $-axis, then the empirical risk is calculated by evaluating each fitted learner on a fixed test sample of size of $ 10^{6} $. The test data is sampled from the data-generating distribution.  
 
 The first run perfectly illustrates how the discrete super learner is able to achieve the minimum risk. For small training sample sizes, the machine learning method XGBoost has a higher risk than the main effects logistic regression, and it is therefore more desirable for the discrete super learner to choose logistic regression despite that it is misspecified. The discrete super learner consequently achieves the same risk as the logistic regression in the beginning, but for $ n > 1200 $ the risk of the discrete super learner becomes smaller than the logistic regression. Here XGBoost begins to achieve a lower risk than the misspecified logistic regression, and so the discrete super learner chooses to use XGBoost instead. 
 
@@ -92,7 +92,7 @@ The second run shows that the discrete super learner might be unable to determin
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/learner_vars.png}
-    \caption{Variances of learner predictions for a single observation, each trained on $n $ samples and evaluated $ K = 1000 $ times on a single observation}
+    \caption{Variances of learner predictions for a single observation, each trained on $n$ samples and evaluated $ K = 1000 $ times on a single observation}
     \label{fig:pred_probs_boxplot}
 \end{figure}
 Figure \ref{fig:pred_probs_boxplot} illustrates the variance in the predictions of each learner for a single observation, whose true probability is indicated by the red dashed line at $ p = 0.5 $. Each learner has been trained $ K = 1000 $ times on $ n = 150, 500, \dots 3000 $ samples taken from the distribution and is used to predict $ K $ times after each training. The box plots are created from the $ K $ predictions. 
@@ -143,7 +143,7 @@ The ensemble super learner uses the same library of algorithms as the discrete s
 \State \textbf{return} $ \esl(P_n) $
 \end{algorithmic}
 \end{algorithm}
-We visualize the predictions made by the ensemble super learner as we have done in figure \ref{fig:predictpar}. In figure \ref{fig:esl_preds_quad_prog} we have visualized the predictions of the ensemble super learner fitted on 1000 and $ 10\,000 $ observations using the constrained regression meta algorithm.
+We visualize the predictions made by the ensemble super learner as we have done in figure \ref{fig:predictpar}. In figure \ref{fig:esl_preds_quad_prog} we have visualized the predictions of the ensemble super learner fitted on 1000 and $ 10\,000 $ observations using the constrained regression meta algorithm. To do constrained regression we use the R package \textit{lsei} \parencite{lsei}, which solves the quadratic programming problem under constraints.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/esl_preds_par.png}
@@ -162,19 +162,43 @@ From the weights we see that the predictions of intercept only logistic regressi
     a_{\text{main effects}} &= 0.136615961, \\
     a_{\text{XGBoost}} &= 0.863274573.
 \end{align*}
-The intercept only model is weighted very little, and the main effects model is weighted a lot less than the XGBoost model. This is in line with our findings from the discrete super learner, where we saw that the main effects model was less likely to be selected for larger samples. Note, however, these weights depend on the data, so they are not necessarily the same when the data is randomly generated each time. With more simulation runs we can determine the distribution of the weights and how they are centered. 
-
+The intercept only model is weighted very little, and the main effects model is weighted a lot less than the XGBoost model. This is in line with our findings from the discrete super learner, where we saw that the main effects model was less likely to be selected for larger samples. Note, however, these weights depend on the data, so they are not necessarily the same when the data is generated each time. With more simulation runs we can determine the distribution of the weights and how they are centered. 
 
 \subsubsection{Ensemble super learner performance}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/losses_esl_s23.png}
+    \caption{The risk of the ensemble super learner compared to other learners. $ N = 3500 $}
+    \label{fig:losses_esl_s23}
+\end{figure}
+Figure \ref{fig:losses_esl_s23} shows that the ensemble super learner achieves a lower loss than any of the learners, including the discrete super learner. The result agrees with the conclusion in section \ref{simplex}, where we argued that because the ensemble super learner optimizes over the entire $ \ml $-simplex, its risk is lower compared to the discrete super learner. However we must keep in mind that when examining finite samples, the conclusion is that the ensemble super learner will achieve the lowest risk on the training data, it is, therefore, not necessarily the case that the validation risk is always lower for the ensemble super learner. One can imagine a scenario where the true regression is a part of the library. The ensemble super learner might not assign all weight to the true regression due to limited samples. Consequently, the discrete super learner which selects the learning algorithm with the least cross-validation risk, might choose the true regression, thus achieving the minimum validation risk.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/learner_vars_w_esl_1000.png}
+    \caption{The variance of the ensemble super learner compared to other learners, each trained on $n$ samples and evaluated $ K = 1000 $ times on a single observation}
+    \label{fig:learner_vars_w_esl_1000}
+\end{figure}
+Figure \ref{fig:learner_vars_w_esl_1000} compares the variances of the ensemble super learner to the other learners. The ensemble super learner does not exihibit the same behavior as the discrete super learner, which tends to predict many outliers; its distribution seems to be consistently centered, as evidenced in figure \ref{fig:hist_esl_dist}. This is coherent with the fact that the ensemble super learner is a continuous combination of different learners. We also note that the ensemble super learner achieves a lower variance than both the XGBoost and the discrete super learner, but has a variance than the parameteric logistic regression models. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/hist_esl_dist.png}
+    \caption{Predictions for a single observation by the ensemble super learner varied over number of training samples}
+    \label{fig:hist_esl_dist}
+\end{figure}
+Figure \ref{fig:hist_esl_dist} show the predictions of the ensemble super learner for a single observation varied over number of training samples. We see that the distribution is much more centered and that the variance also seems to decrease with more samples. 
+
+
 The predictions of the 
 We have fitted the ensemble super learner 
 
 - predictions of ensemble super learner
 - weights selected by ensemble super learner histogram plot
+- weights selected bar plot over n 
 - loss plot
 - explain quadratic programming
 - variance plot
-
+- performance of ensemble in ms
 
 \subsection{Discussion}
 \end{document}
