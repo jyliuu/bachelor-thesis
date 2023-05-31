@@ -6,7 +6,7 @@ get_losses_candidates <- function(obs_counts, models_fit_predict, test_count = 5
   train_set <- simulateMalariaData(1)
 
   p  <- length(models_fit_predict)
-  preds <- foreach (j = obs_counts, .combine = 'rbind') %do% { 
+  losses_all <- foreach (j = obs_counts, .combine = 'rbind') %do% { 
       train_set <- rbind(train_set, simulateMalariaData(j))
       print(paste('Getting losses with train set of size', nrow(train_set)))
 
@@ -18,10 +18,10 @@ get_losses_candidates <- function(obs_counts, models_fit_predict, test_count = 5
           
           loss_fun(test_set$y, out_of_split_preds)
       }
-      cbind(losses)
+      losses
   }
-
-  preds
+  colnames(losses_all) <- names(models_fit_predict)
+  losses_all
 }
 
 fit_and_predict_on_new_obs <- function(fit_predict, new_obs, n, K = 1000) {

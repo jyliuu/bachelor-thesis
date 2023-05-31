@@ -21,7 +21,7 @@ source('crossvalidation.r')
 # 3. Finally, use the dSL to predict on the left out fold 
 dSL <- function (candidates, dataset, k=5, loss_fun=MSE) {
     cv_errors <- cross_validate_multiple(candidates, dataset, k=k)
-    avg_cv_errors <- rowMeans(cv_errors)
+    avg_cv_errors <- colMeans(cv_errors)
     return(list(cv_errors, avg_cv_errors, which.min(avg_cv_errors))) 
 }
 

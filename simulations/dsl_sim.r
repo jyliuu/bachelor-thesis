@@ -17,9 +17,9 @@ dSL_mod
 predict_dSL(dSL_mod, simDat)
 
 # Cross validation of discrete super learner
-rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(100), k=100))
-rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(2000), k=30))
-rowMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(10000), k=10))
+colMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(100), k=100))
+colMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(2000), k=30))
+colMeans(cross_validate_multiple(candidates_with_dSL, simulateMalariaData(10000), k=10))
 
 # Seems like the discrete super learner is at least as good as the best learner for larger and larger n's
 
