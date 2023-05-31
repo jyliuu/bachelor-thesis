@@ -20,15 +20,25 @@ head(lvl1)
 
 clusterRes <- kmeans(lvl1[c("logReg", "xgboost")], centers = 4)
 
-predictions <- ggplot(aes(x = logReg, y = xgboost, color = truth, shape=as.factor(clusterRes$cluster)), data = lvl1) +
-  geom_point(size = 2.5) + 
+predictions <- ggplot(aes(x = logReg, y = xgboost, color = truth), data = lvl1) +
+  geom_point(size = 1) + 
   theme_bw() +
   scale_x_continuous(limits = c(0, 1)) +
   scale_y_continuous(limits = c(0, 1)) +
-  labs(x = "Main effects", y = "XGBoost", color = "Probabilities", shape = "K-means cluster") +
+  labs(x = "Main effects", y = "XGBoost", color = "Probabilities") +
   scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red"))
 predictions
+ggsave("figures/esl_preds_xgboost_vs_main.png", plot = predictions, width = 6, height = 4, dpi = 360, units = "in")
 
+predictions_kmeans <- ggplot(aes(x = logReg, y = xgboost, color = truth, shape = as.factor(clusterRes$cluster)), data = lvl1) +
+  geom_point(size = 1) + 
+  theme_bw() +
+  scale_x_continuous(limits = c(0, 1)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "Main effects", y = "XGBoost", color = "Probabilities", shape = "k-means cluster") +
+  scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red"))
+predictions_kmeans
+ggsave("figures/esl_preds_xgboost_vs_main_kmeans.png", plot = predictions_kmeans, width = 6, height = 4, dpi = 360, units = "in")
 
 
 # Plot predicted values
@@ -56,13 +66,16 @@ fit_esl_and_plot <- function(simDat, title, esl_fitter) {
 
 N <- 1000
 simDat <- simulateMalariaData(N)
-eslplotQuadProg <- fit_esl_and_plot(simDat, "eSL predictions n = 10000", fit_eSL_quad_prog)
-eslplotKmeans <- fit_esl_and_plot(simDat, "eSL predictions n = 10000", fit_eSL_kmeans)
-eslplotQuadProg
-eslplotKmeans
-parplot <- eslplotQuadProg + theme(legend.position = "none") | eslplotKmeans
+eslplotKmeans1k <- fit_esl_and_plot(simDat, "Locally weighted eSL predictions (n = 1000)", fit_eSL_kmeans)
+
+
+N <- 10000
+simDat <- simulateMalariaData(N)
+eslplotKmeans10k <- fit_esl_and_plot(simDat, "Locally weighted eSL predictions (n = 10 000)", fit_eSL_kmeans)
+
+parplot <- eslplotKmeans1k + theme(legend.position = "none") | eslplotKmeans10k
 parplot
-ggsave('figures/esl_preds_par.png', plot = parplot, width = 10, height = 5, dpi = 360, units = 'in')
+ggsave('figures/esl_preds_lw.png', plot = parplot, width = 10, height = 5, dpi = 360, units = 'in')
 
 # Plot weights against n 
 

@@ -82,7 +82,7 @@ kmeans_meta_fit <- function(cv_lvl1_and_loss) {
     list(kmeans_model = kmeans_model, solutions = solutions)
 }
 
-kmeans_meta_predict <- function(meta_model, lvl_1_covariates, k=9) {
+kmeans_meta_predict <- function(meta_model, lvl_1_covariates, k=4) {
     kmeans_model <- meta_model$kmeans_model
     predicted <- rep(0, if (k == 0) nrow(lvl_1_covariates) else k)
     predicted_clusters <- cl_predict(kmeans_model, newdata = lvl_1_covariates)

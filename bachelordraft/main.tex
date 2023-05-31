@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper]{article}
+\documentclass[11pt, a4paper]{article} 
 \usepackage[margin=3cm]{geometry} 
 \usepackage[english, science, hyperref]{ku-frontpage}
 \usepackage[justification=centering]{caption}
@@ -110,20 +110,20 @@ he choice to focus on binary regression stems from its significance in various f
 
 Our setup and notation is similar to \cite{vaart06} and \cite{laan03}:
 Let a statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
-We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1]\} $, which represents the set of \textit{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize.
+We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable}\} $, which represents the set of \textit{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize.
 \begin{definition}[Quadratic loss]
     The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
     L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
 \end{align*}
 \end{definition}
-A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected quadratic loss, or conditional risk $R: \btheta \to \mathbb{R}$ given by 
+A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected quadratic loss, or risk $R: \btheta \to \mathbb{R}$ given by 
 \begin{equation} \label{l2risk}
     R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
 Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
 \begin{theorem} \label{minrisk}
-    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions of the form $ \btheta : \mathcal{X} \to [0,1] $. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
+    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
         \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta, P)= \argmin_{\btheta \in \Theta} \int L(o, \btheta)  dP(o),
     \end{align*}
@@ -232,7 +232,7 @@ $$ \tilde{\la}  = \argmin_{\la \in \lib} R(\la(P_n) , P). $$
 However, we cannot compute the risk of a learner directly as it depends on $ P $. We seek to provide an estimate for $ \tilde{\la} $ which we will denote as $ \hat{\la} $. 
 
 \subsection{Cross-validation methodology}
-To provide the estimate $ \hat{\la} $ we will proceed via cross validation. Cross-validation randomly splits our data into a \textit{training set} and a \textit{test set} that our algorithms are trained and evaluated on. Let the random binary vector -- referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ D_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is formally a tuple in $ \{0,1\}^{n} $, here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
+To provide the estimate $ \hat{\la} $ we will proceed via cross validation. Cross-validation randomly splits our data into a \textit{training set} and a \textit{test set} that our algorithms are trained and evaluated on. Let the random binary vector -- referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ D_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is a tuple in $ \{0,1\}^{n} $, here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
 \begin{align*}
     P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i} \\
     P_{n,\Sn}^{1} &= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
@@ -255,17 +255,17 @@ The idea behind $ K $-fold cross-validation is to split the data into $ K $ equa
 
 $ K $-fold cross-validation amounts to looking at a single split variable $ \Sn $ whose probability mass is equally distributed on the binary vectors indexed by $ s $. In practice one would select a $ K $ and use a random splitting procedure to generate $ K $ binary vectors such that the entire dataset is the disjoint union of the folds specified by each vector. It is also possible to run $ K $-fold cross-validation multiple times which amounts to multiple calls to the random splitting procedure.
 \subsection{Risks and selectors}
-We now provide the formal definitions for the expected loss associated with our learners. Recall that the expected quadratic loss (\ref{l2risk}) was the integral of the loss with respect to data-generating distribution $P$. Consider a learner or regression function $ \theta $. Upon observing our data $D_n$, we can define the empirical risk as the integral of the loss function with respect to $P_n$, as follows
-\begin{align*}
-    R(\btheta , P_n) = \int L(o, \btheta) d P_{n}(o). 
-\end{align*}
-For example, if $\Sn$ is a split for our data $D_n$, the risk of our learner on the cross-validation test data can be expressed as
+In the context where we apply a learning algorithm on the training data, we would write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner should be then evaluated on the test data. Given that the risk (\ref{l2risk}) was the integral of the loss function with respect to data-generating distribution $P$, we can define the emprical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
  \begin{align*}
-     R(\theta, P_{n, \Sn}^{1}) =  \int L(o, \btheta) d P_{n,\Sn}^{1}(o).
+     R(\la(P_{n, S^{n}}^{0}), P_{n, \Sn}^{1}) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P_{n,\Sn}^{1}(o),
  \end{align*}
- The following definitions are analogous to what is stated in section 1 and 2 of  \parencite{laan03}.
- \begin{definition}[Expected loss averaged over splits \parencite{vaart06}]
-     Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The expected loss for the learner, $\la(P_{n,\Sn}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
+where $\Sn$ is some split for our data $D_n$. Our motivation for defining the empirical risk is that we can then compare it with the true risk of the learner where we integrate with respect to the data-generating distribution 
+\begin{align*}
+     R(\la(P_{n, S^{n}}^{0}), P) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P(o).
+\end{align*}
+The following definitions are analogous to what is stated in section 1 and 2 of  \parencite{laan03}.
+ \begin{definition}[Risk averaged over splits \parencite{vaart06}]
+     Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The risk for the learner, $\la(P_{n,\Sn}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
     \begin{align*}
         E_{\Sn} R( \la(P_{n,\Sn}^{0}), P),
     \end{align*}
@@ -273,19 +273,19 @@ For example, if $\Sn$ is a split for our data $D_n$, the risk of our learner on 
 \end{definition}
 The expectation $ E_{\Sn} $ is a simple average since $ \Sn $ is discrete. Therefore, for a given $ \la $ we have 
 \begin{align*}
-    E_{\Sn} R( \la(P_{n,\Sn}^{0}), P) &= \sum_{s^{n} \in \{0,1\}^{n}} R(\la(P_{n, s^{n}}^{0}), P) \cdot P(\Sn = s^{n}). 
+    E_{\Sn} R( \la(P_{n,\Sn}^{0}), P) &= \sum_{s \in \{0,1\}^{n}} R(\la(P_{n, s}^{0}), P) \cdot P(\Sn = s). 
 \end{align*}
 
 
 \begin{definition}[Oracle selector \parencite{laan03}]
-    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest averaged expected loss is the \textit{oracle selected algorithm} for $ n $ observations
+    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest averaged risk is the \textit{oracle selected algorithm} for $ n $ observations
     \begin{align*}
         \tilde{\la}_n := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P).
     \end{align*}
 \end{definition}
-Estimating $ \tilde{\la}_n $ via cross-validation amounts to replacing $ P $ with $ P_{n, \Sn}^{1} $ in the second argument of $ R $.
-\begin{definition}[Cross-validation expected loss]
-     Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The cross-validation expected loss for the learner, $\la(P_{n,s}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
+The cross-validation selector replaces $ P $ with $ P_{n, \Sn}^{1} $ in the second argument of $ R $.
+\begin{definition}[Cross-validation risk]
+     Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The cross-validation risk for the learner, $\la(P_{n,s}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
     \begin{align*}
         E_{\Sn} R( \la(P_{n,\Sn}^{0}), P_{n, \Sn}^{1}),
     \end{align*}
@@ -335,7 +335,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{proof}
     See appendix.
 \end{proof}
-To control the bounds for the expected loss we introduce Bernstein pairs 
+To control the bounds for the risk we introduce Bernstein pairs 
 \begin{definition}[Bernstein pair \parencite{vaart06}]
     Given a measurable function $ f: \mathcal{O} \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
     \begin{equation} \label{bernstein}
@@ -538,7 +538,7 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 
 
 \section{The Ensemble Super Learner}
-The idea behind the \textit{ensemble super learner} is to combine the predictions made by each candidate learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The idea of combining learners was examined in \cite{breiman1996stacked} which considered the construction of an ensemble learner by forming a linear combination of the learners in the library. The method of forming a linear combination of learners is known as \textit{stacked regression} or \textit{stacking}, and is a variant of the ensemble super learner. The ensemble super learner does not restrict to taking a linear combination of the learners but that we are able to apply a \textit{meta learning algorithm} on the \textit{level 1 data}. The ensemble super learner can be thought of as a general method of balancing the weaknesses of each learner by forming an ensemble. However, as we will see, $ K $-fold cross-validation is integral in forming the ensemble super learner. 
+The idea behind the \textit{ensemble super learner} is to combine the predictions made by each learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The idea of combining learners was examined in \cite{breiman1996stacked} which considered how a linear combination of the learners in the library could be formed. This approach, also known as \textit{stacked regression} or \textit{stacking} is a variant of the ensemble super learner. The ensemble super learner, however, does not limit itself to linear combinations but uses a \textit{meta learning algorithm} on the \textit{level 1 data} -- the predictions made by the learners. It is a broad approach of balancing the weaknesses of each learner by forming an ensemble. However, as we will see, $ K $-fold cross-validation is integral in forming the ensemble super learner. 
 
 We will now proceed to give the definitions and setup necessary to define the ensemble super learner.
 \subsection{Level 1 data}
@@ -562,7 +562,7 @@ The goal is to estimate the regression of $ Y $ given the predictions made by ou
 \begin{definition}[Meta learning algorithm]
     A \textit{meta learning algorithm} $ \Meta $ is a measurable map that creates a meta learner from our level 1 data $ \lone_{n} \mapsto \Meta(\lone_{n}) \in \mathcal{M} $. 
 \end{definition}
-A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. If a parametric learning algorithm is used, it is important to take into account that the level 1 covariates $ Z_i $ are highly correlated and that multicollinearity can occur. \cite{breiman1996stacked} suggests ridge regression as a possible way to shrink the coefficients. Another method is to use a non-negativity constraint, where we specify that the coefficients must sum to 1 in the case of a simple linear combination. 
+A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example be a parametric learning algorithm such as logistic regression. If a parametric learning algorithm is used, it is important to take into account that the level 1 covariates $ Z_i $ are highly correlated and that multicollinearity can occur. \cite{breiman1996stacked} suggests ridge regression as a possible way to shrink the coefficients. Another method is to use a non-negativity constraint, where we specify that the coefficients are positive and must sum to 1 in the case of a simple linear combination. 
 
 \subsection{Ensemble super learner}
 \begin{definition}[Ensemble super learner \parencite{van2007super}]
@@ -580,7 +580,7 @@ The meta learning algorithm, $ \Meta $, fits the learner that most accurately pr
 \begin{align} \label{eq:meta_learning_algorithm}
     \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta_{a}) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
 \end{align}
-The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta_{ \hat{a} } $, which is the meta learner with the empirical lowest risk on the level 1 data. We will now consider $ \mathcal{A}_n \subseteq \mathcal{A} $ such that $ \ml(n) = |\mathcal{A}_{n}| $ depends on $ n $. Denote the ensemble super learner that uses the meta learner $ \meta_{ a } $ as 
+The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta_{ \hat{a} } $, which is the meta learner with the lowest empirical risk on the level 1 data. We will now consider $ \mathcal{A}_n \subseteq \mathcal{A} $ such that $ \ml(n) = |\mathcal{A}_{n}| $ depends on $ n $. Denote the ensemble super learner that uses the meta learner $ \meta_{ a } $ as 
 \begin{align*}
     \esl_{a}(P_{n}) := \meta_{a}(\la_1(P_{n}), \ldots, \la_k(P_{n})).
 \end{align*}
@@ -589,7 +589,7 @@ Denote the cross-validation- and oracle selector of $ a $ as
     \hat{a}_n &:= \argmin_{a \in \mathcal{A}_{n}} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}), P_{n, s}^{1}), \\
     \tilde{a}_n &:= \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}) , P),
 \end{align*}
-where $ P $ is the distribution of the observations in our level 0 data. Note that for each $ s' $ up to $ K $ 
+where $ P $ is the data-generating distribution in our level 0 data. Note that for each $ s' $ up to $ K $ 
 $$ \esl_a(P_{n, s'}^{0})(X_i) = \meta_{a}(\la_{1}(P_{n, s'}^{0})(X_i) , \dots , \la_{\ml}(P_{n, s'}^{0})(X_i) ) = \meta_{a}(Z_i). $$ 
 holds true for each $ i $ if $ s(i)$ equals $ s' $, i.e. when $ X_i $ is in the validation set $ s' $. By using the fact that the $ K $ folds are disjoint and exhaustive, we can express $ \hat{a}_n $ as  
 \begin{align} \label{eq:meta_learning_algorithm_cv}
@@ -650,6 +650,18 @@ In reality the optimization procedure that is available on our hardware can only
 \end{remark}
 
 \subfile{simulations}
+\section{Discussion}
+
+\subsection{Regularity conditions} 
+We specify a learning algorithm as a measurable function from $ \mathcal{O}^{n} $ to $ \Theta $. Formally, the measurability definition only makes sense if we have defined sigma algebras on the two spaces. One  
+
+\subsection{Applicability of finite sample results}
+\subsection{Repeated K-fold cross-validation}
+Running $ K $-fold multiple times was not investigated..
+
+
+\subsection{Other algorithms to potentially include}
+
 \newpage
 
 \section{Appendix}

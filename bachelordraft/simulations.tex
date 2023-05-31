@@ -195,19 +195,35 @@ Figure \ref{fig:hist_esl_dist} shows the predictions of the ensemble super learn
 \end{figure}
 The weighting of the different learners by the ensemble super learner is visualized in figure \ref{fig:esl_weights}. We see that the weighting of the intercept only model is very low, and that the main effects model has more weight than XGBoost for small samples, however, this trend reverses as the number of training samples increases. An interesting observation is that XGBoost begins to outweigh the main effects logistic regression when the training size is between 1000 and 1500, which coincides with when XGBoost begins to achieve a lower loss compared to the main effects model as seen in figures \ref{fig:loss_min_of_both} and \ref{fig:loss_jumps}.
 
+\subsection{Locally weighted ensemble super learner}
+By using the ensemble super learner with the constrained regression meta learning algorithm we can combine different learners to achieve a lower risk than any of the learners in the library. However, the resulting ensemble is a global combination of the learners, meaning that the weights are the same for all observations. In this section I will consider a meta learning algorithm where $ k $-means clustering is used to cluster the observations into groups and a local weighted combination is fitted for each group.
 
-\section{Discussion}
+\subsubsection{Motivation}
+By examining the level 1 data obtained during the process of fitting an ensemble super learner fit, it is possible to compare the predictions of each learner against eachother as in figure \ref{fig:esl_preds_xgboost_vs_main}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/esl_preds_xgboost_vs_main.png}
+    \caption{Predictions of XGBoost vs main effects model, colors indicate the true probability}
+    \label{fig:esl_preds_xgboost_vs_main}
+\end{figure}
+We notice that the the main effects model does not predict the same as the XGBoost. If they had predicted the same, then the predictions would lie on the identity line. There is significant disagreement between the two algorithms, as seen in the lower right corner where the main effects model predicts certain observations to have a probability of over 0.7, while XGBoost assigns these a probability of less than 0.1. A natural idea is to be able to group the observations based on the predicted probabilities such that for certain groups certain algorithms are weighed more than others. The naive approach implements $ k $-means clustering to group the observations into $ k = 4 $ groups as shown in figure \ref{fig:esl_preds_xgboost_vs_main_kmeans} 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/esl_preds_xgboost_vs_main_kmeans.png}
+    \caption{Predictions of XGBoost vs main effects model, observations are clustered into 4 groups using $ k $-means}
+    \label{fig:esl_preds_xgboost_vs_main_kmeans}
+\end{figure}
+The figures above plots the predictions of two learners against eachother, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data corresponding to that group. To then predict using the ensemble super learner we will first apply the learners to the new observation, and determine which of the clusters the predicted probabilities belong to. Once that is determined, the predictions will be combined according to the weighted combination corresponding to that group. 
 
-\subsection{Regularity on the parameter space} 
-The statistical model needs to be bla bla bla, and the parameter space needs to be bla bla bla.
+\subsubsection{Simulation results}
+The locally weighted ensemble super learner was implemented using $ k = 4 $ clusters and the same library of learners as in the previous section. The results are shown in figure \ref{fig:esl_preds_lw}
 
-\subsection{Applicability of finite sample results}
-\subsection{Repeated K-fold cross-validation}
-Running $ K $-fold multiple times was not investigated..
-
-
-\subsection{Other algorithms to potentially include}
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/esl_preds_lw.png}
+    \caption{Predictions of the locally weighted ensemble super learner fitted on $ 1000 $ observations}
+    \label{fig:esl_preds_lw}
+\end{figure}
 
 
 \end{document}
