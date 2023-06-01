@@ -707,6 +707,30 @@ By the minimizing property the difference between the second and first term must
   
 \end{proof}
 
+\subsection{locally weighted ensemble super learner plots}
+\begin{figure}[H]
+    \centering
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled.png}}
+    \caption{Raw predictions vs stratified according to the weighted most learner as seen in figure \ref{fig:esl_preds_lw_stratified}}
+\end{figure}
+ 
+\begin{figure}[H]
+    \centering
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled2.png}}
+    \caption{Example where XGBoost seems to be more preferred when the predicted probability is around $ 0.5 $}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled3.png}}
+    \caption{Example where XGBoost is the highest weighted learner globally}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled4.png}}
+    \caption{Example where XGBoost is weighted the highest when the predicted probabilities are around $ p = 0.5 $ and above $ 0.7$}
+\end{figure}
 
 \newpage
 \printbibliography

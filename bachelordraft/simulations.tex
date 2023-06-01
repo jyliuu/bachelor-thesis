@@ -213,18 +213,26 @@ We notice that the the main effects model does not predict the same as the XGBoo
     \caption{Predictions of XGBoost vs main effects model, observations are clustered into 4 groups using $ k $-means}
     \label{fig:esl_preds_xgboost_vs_main_kmeans}
 \end{figure}
-The figures above plots the predictions of two learners against eachother, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data corresponding to that group. To then predict using the ensemble super learner we will first apply the learners to the new observation, and determine which of the clusters the predicted probabilities belong to. Once that is determined, the predictions will be combined according to the weighted combination corresponding to that group. 
+The figures above plots the predictions of two learners against eachother, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data of that group. To then predict using the ensemble super learner we will first apply the learners to the new observation, and determine which of the clusters the level 1 covariates belong to. Once that has been determined, the predictions will be combined according to the weighted combination in that group. 
 
 \subsubsection{Simulation results}
-The locally weighted ensemble super learner was implemented using $ k = 4 $ clusters and the same library of learners as in the previous section. The results are shown in figure \ref{fig:esl_preds_lw}
-
+The locally weighted ensemble super learner examined in this section is implemented with $ k = 4 $ clusters and the same library as in the previous section. The number clusters was chosen arbitrarily, the results are shown in figure \ref{fig:esl_preds_lw}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/esl_preds_lw.png}
     \caption{Predictions of the locally weighted ensemble super learner fitted on $ 1000 $ observations}
     \label{fig:esl_preds_lw}
 \end{figure}
+For each grid point in figure \ref{fig:esl_preds_lw} the prediction on that grid point comes from some cluster with a particular weighting scheme. It is therefore possible to give a visual representation of which learner was weighted most in each prediction. Figure \ref{fig:esl_preds_lw_stratified} visualizes the predictions on each grid point but also shows which learner contributed most to the prediction. We observe that the predictions are segregrated into two groups depending on whether the predicted probability is above or below $ p = 0.5 $. XGBoost appears to have the highest weight for predictions where the predicted probability is greater than $ 0.5 $, whereas the main effects model is favored when the predictions are below $ 0.5 $. 
 
+The segregation explains the behavior of the super learner when $ n = 1000 $ in figure \ref{fig:esl_preds_lw} where it appears that the predictions are smoother when the predicted probabilities are less than $ 0.5 $. The explanation is that the super learner weighted the logistic regression the most when $ p < 0.5 $, and since it is a smooth parametric model, the predicted probabilities will assume a gradient. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/esl_preds_lw_stratified.png}
+    \caption{Predictions of the locally weighted ensemble super learner fitted on $ 1000 $ observations, grouped by which learner was weighted most}
+    \label{fig:esl_preds_lw_stratified}
+\end{figure}
+A plot of the non-stratified predictions displayed in figure \ref{fig:esl_preds_lw_stratified} can be found in the appendix. We also include numerous other examples of predicted probabilities using the locally weighted ensemble super learner.
 
 \end{document}
 

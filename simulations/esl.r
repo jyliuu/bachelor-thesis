@@ -82,18 +82,22 @@ kmeans_meta_fit <- function(cv_lvl1_and_loss) {
     list(kmeans_model = kmeans_model, solutions = solutions)
 }
 
-kmeans_meta_predict <- function(meta_model, lvl_1_covariates, k=4) {
+kmeans_meta_predict_weights <- function(meta_model, lvl_1_covariates, k=2) {
     kmeans_model <- meta_model$kmeans_model
-    predicted <- rep(0, if (k == 0) nrow(lvl_1_covariates) else k)
+    results <- data.frame(predicted = rep(NA, nrow(lvl_1_covariates)), most_weighted = rep(NA, nrow(lvl_1_covariates)))
     predicted_clusters <- cl_predict(kmeans_model, newdata = lvl_1_covariates)
     for (class in unique(predicted_clusters)) {
         weights_normalized <- meta_model$solutions[[class]]
         covariates <- lvl_1_covariates[predicted_clusters == class,]
         local_predictions <- covariates %*% weights_normalized
-        predicted[predicted_clusters == class] <- local_predictions
+        results$predicted[predicted_clusters == class] <- local_predictions
+        results$most_weighted[predicted_clusters == class] <- which.max(weights_normalized)
     }
-    predicted
+    results
 }
+
+kmeans_meta_predict <- function(meta_model, lvl_1_covariates) 
+    kmeans_meta_predict_weights(meta_model, lvl_1_covariates)$predicted
 
 meta_learning_algorithm <- c(logistic_meta_fit, logistic_meta_predict)
 meta_learning_algorithm_loss_weighted <- c(loss_weighted_meta_fit, loss_weighted_meta_predict)
