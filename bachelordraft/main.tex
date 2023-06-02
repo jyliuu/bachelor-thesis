@@ -104,7 +104,7 @@ As we will demonstrate, given a library of learning algorithms, the super learne
 
 To formalize the notion of the best learner in the library, we define the oracle selector. The oracle selector knows $ P $ -- hence it is called the oracle -- and selects the learner with the lowest risk given its knowledge of $ P $. In this thesis we show that the cross-validation selector is asymptotically equivalent to the oracle selector as the sample size goes to infinity. 
 
-We adopt the setup and notation similar to those in \cite{vaart06} and \cite{laan03}. Our objective is to illustrate the performance of super learning algorithms when applied to binary regression, where we are regressing a binary outcome $ Y \in {0,1} $ against covariates $ X $ that belong to $ \mathcal{X} \subseteq \mathbb{R}^{d} $. Here the conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X) $. The simulation results in section \ref{sec:simulations} show that the super learner is able to achieve the minimum risk with increasing training samples. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. We assess a library of learning algorithms consisting of logistic regression and XGBoost, from which we construct the super learner and evaluate its performance in relation to the individual algorithms.
+We adopt the setup and notation similar to those in \cite{vaart06} and \cite{laan03}. Our objective is to illustrate the performance of super learning algorithms when applied to binary regression, where we are regressing a binary outcome $ Y \in {0,1} $ against covariates $ X $ that belong to $ \mathcal{X} \subseteq \mathbb{R}^{d} $. Here the conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X) $. The simulation results in \Cref{sec:simulations} show that the super learner is able to achieve the minimum risk with increasing training samples. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. We assess a library of learning algorithms consisting of logistic regression and XGBoost, from which we construct the super learner and evaluate its performance in relation to the individual algorithms.
 
 he choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ x \mapsto P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
 
@@ -123,7 +123,7 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
 \begin{equation} \label{l2risk}
     R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
-Theorem \ref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
+Theorem \Cref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
 \begin{theorem} \label{minrisk}
     Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
@@ -257,7 +257,7 @@ The idea behind $ K $-fold cross-validation is to split the data into $ K $ equa
 
 $ K $-fold cross-validation amounts to looking at a single split variable $ \Sn $ whose probability mass is equally distributed on the binary vectors indexed by $ s $. In practice one would select a $ K $ and use a random splitting procedure to generate $ K $ binary vectors such that the entire dataset is the disjoint union of the folds specified by each vector. It is also possible to run $ K $-fold cross-validation multiple times which amounts to multiple calls to the random splitting procedure.
 \subsection{Risks and selectors}
-In the context where we apply a learning algorithm on the training data, we would write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner should be then evaluated on the test data. Given that the risk (\ref{l2risk}) was the integral of the loss function with respect to data-generating distribution $P$, we can define the emprical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
+In the context where we apply a learning algorithm on the training data, we would write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner should be then evaluated on the test data. Given that the risk \cref{l2risk} was the integral of the loss function with respect to data-generating distribution $P$, we can define the emprical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
  \begin{align*}
      R(\la(P_{n, S^{n}}^{0}), P_{n, \Sn}^{1}) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P_{n,\Sn}^{1}(o),
  \end{align*}
@@ -358,7 +358,7 @@ To control the bounds for the risk we introduce Bernstein pairs
 \end{proof}
 
 \begin{example}[Binary regression] \label{ex:bernsteinexample}
-    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f_{\btheta}(o) = L(o, \btheta) = (Y - \theta(X))^2$ can be found by applying proposition \ref{unifbernstein}. By requiring that $ \theta(x) \in [0,1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ o \in \mathcal{O} $ since $ Y \in \{0,1\} $. We also note that the Bernstein pair for $ f_{\btheta} $ satisfies $ 0 \leq \norm{f_\theta}_{\infty} \leq 1 $ and $ 0 \leq \frac{3}{2}Pf_{\btheta}^2 \leq 1 $, so they are bounded. 
+    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f_{\btheta}(o) = L(o, \btheta) = (Y - \theta(X))^2$ can be found by applying \Cref{unifbernstein}. By requiring that $ \theta(x) \in [0,1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ o \in \mathcal{O} $ since $ Y \in \{0,1\} $. We also note that the Bernstein pair for $ f_{\btheta} $ satisfies $ 0 \leq \norm{f_\theta}_{\infty} \leq 1 $ and $ 0 \leq \frac{3}{2}Pf_{\btheta}^2 \leq 1 $, so they are bounded. 
 
 \end{example}
 
@@ -386,23 +386,23 @@ In the expectations above, we are taking the expectation wrt. the random split-v
 \end{align*}
 
 \begin{proof}[Proof]
-    We will apply lemma \ref{finitesamplebound} to the second and third terms on the left hand side of the inequality in lemma \ref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to each algorithm in our library $ \lib$. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
+    We will apply \Cref{finitesamplebound} to the second and third terms on the left hand side of the inequality in \Cref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to each algorithm in our library $ \lib$. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
 
-First, we take the expectation wrt. $ D_n $ on both sides in lemma \ref{finitesampledecomp}. For the second term we have 
+First, we take the expectation wrt. $ D_n $ on both sides in \Cref{finitesampledecomp}. For the second term we have 
 \begin{align*}
 &E_{D_n} E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)\\
 &= 
 E_{D_n}E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o)\\
 &=E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } E_{D_n}\max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o).
 \end{align*}
-Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we can always consider $ n_1 $ as fixed given $ D_n $, now applying lemma \ref{finitesamplebound} to the expression above with $ n = n_1 $ yields 
+Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we can always consider $ n_1 $ as fixed given $ D_n $, now applying \Cref{finitesamplebound} to the expression above with $ n = n_1 $ yields 
 \begin{align*}
 &E_\Sn\frac{1 + \delta}{\sqrt{n_1} } E_{D_n} \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
 &\leq E_{\Sn} \frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{\la \in \lib} \left[ \frac{M(\la(P_{n,\Sn}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\la(P_{n,\Sn}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\la(P_{n,S}^{0}), P)^{2-p}} \right)^{1/p} \right] \\
 &\leq E_{\Sn}\frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta,P)^{2-p}} \right)^{1/p} \right] \\
 &= (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta,P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right].  
 \end{align*}
-Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above as lemma \ref{finitesamplebound} is also valid for $ -L $. It is now immediate from lemma \ref{finitesampledecomp} that 
+Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above as \Cref{finitesamplebound} is also valid for $ -L $. It is now immediate from \Cref{finitesampledecomp} that 
 \begin{align*}
     E_{D_n} E_{\Sn} &\int L(o, \hat{\la}_n(P_{n, \Sn}^{0})) d P(o) \leq (1 + 2 \delta) E_{D_n} E_{\Sn} \int L(o, \tilde{\la}_n(P_{n, \Sn}^{0})) d P(o) \\
                     &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]\\
@@ -416,7 +416,7 @@ One might notice that $ \Sn $ still appears in the remainder of the bound above,
 \end{remark}
 
 
-In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\btheta)) $ are bounded over $ \Theta $, thus taking the supremum over $ \Theta $ will not result in the remainder being infinite. The assumption is indeed valid for binary regression as we have commented in example \ref{ex:bernsteinexample}. 
+In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\btheta)) $ are bounded over $ \Theta $, thus taking the supremum over $ \Theta $ will not result in the remainder being infinite. The assumption is indeed valid for binary regression as we have commented in \Cref{ex:bernsteinexample}. 
 \begin{corollary}[Asymptotic equivalence] \label{cor:dslasymptoticequivalence}
     If there exists an $ \varepsilon > 0 $ such that 
    \begin{align*}
@@ -429,7 +429,7 @@ In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\
 \end{corollary}
 For the sake of simplicity and the previous remark we will consider $ n_1 $ as a sequence of numbers polynomial in $ n $, this will allow us to remove $ E_{\Sn} $ in the remainder term. 
 \begin{proof}
-    We let $ \delta $ depend on $ n $, define $ \delta_n := 1/\log(n) $.  By choosing $ p = 1 $ in theorem \ref{finitesample} and substituting $ \delta $ with $ \delta_n $, we obtain
+    We let $ \delta $ depend on $ n $, define $ \delta_n := 1/\log(n) $.  By choosing $ p = 1 $ in \Cref{finitesample} and substituting $ \delta $ with $ \delta_n $, we obtain
     \begin{align*}
         E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P) &\leq(1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)\\
                                                         &+(1 + \delta_n) \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta, P)} \cdot \frac{1 + \delta_n}{\delta_n}  \right]\\
@@ -460,7 +460,7 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
    \begin{align*}
        \int (Y - E(Y \mid X))^2 d P \geq 0. 
    \end{align*}
-   Since the integrand is positive, the integral is zero if and only if $ Y = E(Y \mid X) $ almost surely. That is only the case when $ Y $ is deterministic given $ X $, i.e. $ Y $ is $ X $-measurable. Assuming, therefore, that $ Y $ is not deterministic given $ X $, then we note that by the fact that the quadratic loss is strictly proper due to theorem \ref{minrisk}, it holds for any $ \theta \in \Theta $ that
+   Since the integrand is positive, the integral is zero if and only if $ Y = E(Y \mid X) $ almost surely. That is only the case when $ Y $ is deterministic given $ X $, i.e. $ Y $ is $ X $-measurable. Assuming, therefore, that $ Y $ is not deterministic given $ X $, then we note that by the fact that the quadratic loss is strictly proper due to \Cref{minrisk}, it holds for any $ \theta \in \Theta $ that
    \begin{align*}
        R(\theta, P) \geq R(\theta^*, P) > 0,
    \end{align*}
@@ -597,20 +597,20 @@ holds true for each $ i $ if $ s(i)$ equals $ s' $, i.e. when $ X_i $ is in the 
 \begin{align} \label{eq:meta_learning_algorithm_cv}
     \hat{a}_n = \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s' = 1}^{K} \frac{K}{n} \sum_{i: s(i) = s'} (Y_i - \esl_{a}(P_{n,s'}^{0}) (X_i))^2 = \argmin_{a \in \mathcal{A}_n} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
 \end{align}
-Equation (\ref{eq:meta_learning_algorithm_cv}) shows that the cross-validation selector, $ \hat{a}_n $, is exactly the objective of the meta learning algorithm defined in \eqref{eq:meta_learning_algorithm}. 
+\Cref{eq:meta_learning_algorithm_cv} shows that the cross-validation selector, $ \hat{a}_n $, is exactly the objective of the meta learning algorithm defined in \eqref{eq:meta_learning_algorithm}. 
 
 The way that $ \hat{a}_n  $ and $ \tilde{a}_n $ are defined fit directly into our existing framework for the discrete super learner. Recall that the cross-validation selector selected the algorithm that had the lowest cross-validation risk averaged across some split variable $ \Sn $. By using a $ K $-fold cross-validation scheme, the averaged risk over $ \Sn $ becomes the averaged risk over the $ K $ folds, which is exactly the above definition of $ \hat{a}_n $. In the case of the ensemble super learner, the learning algorithm, $ \meta_{a} $, is determined by the parameter $ a $, so the selection problem reduces to selecting the most optimal parameter over a finite parameter set $ \mathcal{A}_n $. The parameter set $ \mathcal{A}_n $ indexes the meta learning algorithms, and is what the cross-validation selector acts upon. It is, therefore, possible to think of $ \mathcal{A}_n $ as approximating the entire parameter set $ \mathcal{A} $ using a grid of points such that the approximation becomes finer as the number of points increase. The key difference lies in the fact that the ensemble super learner is a completely new learner, whereas the discrete super learner is an algorithm selected from the library $ \lib $ fitted on the dataset.
 
-The following finite sample oracle inequality is a direct consequence of the oracle inequality for the discrete super learner, theorem \ref{finitesample}.
+The following finite sample oracle inequality is a direct consequence of the oracle inequality for the discrete super learner, \Cref{finitesample}.
 \begin{theorem}[Finite sample oracle inequality]
-    Let $ \lib $ be a library of learning algorithms of size $ k $. Let $ \esl_{ \hat{a}_{n} } $ be the ensemble super learner over $ \lib $ obtained by applying the cross-validation selector over a finite parameter space $ \mathcal{A}_n $ using the $ K $-fold cross-validation scheme. Let $ \esl_{ \tilde{a}_n } $ be the oracle ensemble learner obtained by applying the oracle selector over the same set of parameters. If the conditions of theorem \ref{finitesample} are satisfied, then the following oracle inequality holds
+    Let $ \lib $ be a library of learning algorithms of size $ k $. Let $ \esl_{ \hat{a}_{n} } $ be the ensemble super learner over $ \lib $ obtained by applying the cross-validation selector over a finite parameter space $ \mathcal{A}_n $ using the $ K $-fold cross-validation scheme. Let $ \esl_{ \tilde{a}_n } $ be the oracle ensemble learner obtained by applying the oracle selector over the same set of parameters. If the conditions of \Cref{finitesample} are satisfied, then the following oracle inequality holds
     \begin{align*}
         \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \hat{a}_n }(P_{n, s}^{0}) , P) &\leq (1 + 2 \delta) \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \tilde{a}_n }(P_{n,s}^{0}), P) \\
                                                                                      &+ (1 + \delta) \frac{16 K}{n} \log(1 + k(n)) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta) K}{n} + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta} \right].  
     \end{align*}
 \end{theorem}
 \begin{proof}
-    Replace $ E_{\Sn} $ in theorem \ref{finitesample} with the average over the $ K $ folds and $ n_1$ with $n/K $, then by using $ p = 1 $ the desired result is obtained.  
+    Replace $ E_{\Sn} $ in \Cref{finitesample} with the average over the $ K $ folds and $ n_1$ with $n/K $, then by using $ p = 1 $ the desired result is obtained.  
 \end{proof}
 
 \begin{corollary}[Asymptotic equivalence] \label{cor:esl_asymptotic_equivalence}
@@ -636,7 +636,7 @@ The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \ma
 \begin{align*}
     \min_{b_n \in \mathcal{A}_n } \norm{a - b_n} \leq \frac{1}{n}.
 \end{align*}
-This is clearly possible by figure \ref{fig:simplex}. It thus follows that we can find a sequence of points $ b_n \in \mathcal{A}_n $ such that $ \meta_{b_n} \to \meta_{a} $ for any $ a \in \mathcal{A}$. The conclusion is that if $ \tilde{a} $ specified the learner $ \meta_{ \tilde{a} } $ with the minimum risk, then by applying the cross-validation selector and letting $ n \to \infty $, the meta learner adopted by the ensemble super learner will eventually converge to $ \meta_{ \tilde{a} } $. 
+This is clearly possible by \Cref{fig:simplex}. It thus follows that we can find a sequence of points $ b_n \in \mathcal{A}_n $ such that $ \meta_{b_n} \to \meta_{a} $ for any $ a \in \mathcal{A}$. The conclusion is that if $ \tilde{a} $ specified the learner $ \meta_{ \tilde{a} } $ with the minimum risk, then by applying the cross-validation selector and letting $ n \to \infty $, the meta learner adopted by the ensemble super learner will eventually converge to $ \meta_{ \tilde{a} } $. 
 
 \begin{figure}[H]
     \centering
@@ -652,10 +652,10 @@ The discrete super learner is essentially a special case of the ensemble super l
 
 \subfile{simulations}
 \section{Discussion}
-In this thesis super learners and their applicability to binary regression have been investigated. Theoretical results, namely Corollaries \ref{cor:dslasymptoticequivalence} and \ref{cor:esl_asymptotic_equivalence}, prove that super learners are asymptotically equivalent with the oracle selector that selects the best learning algorithm based on its knowledge of the data-generating distribution $ P $. We conclude that super learning is a valid method for creating a strong learner by combining a library of different learning algorithms. The two super learners that were investigated,  the discrete and ensemble super learner, have been benchmarked and compared to a library consisting of logistic regression and XGBoost. They are shown to outperform these algorithms in terms of validation risk. Furthermore, we see that while the variances in super learner predictions are higher than parametric logistic regression, they are still less than the variances of the machine learning method XGBoost. Finally, a new meta algorithm for combining learner predictions has been investigated which has shown to achieve acceptable results.  
+In this thesis super learners and their applicability to binary regression have been investigated. Theoretical results, namely \Cref{cor:dslasymptoticequivalence,cor:esl_asymptotic_equivalence}, prove that super learners are asymptotically equivalent with the oracle selector that selects the best learning algorithm based on its knowledge of the data-generating distribution $ P $. We conclude that super learning is a valid method for creating a strong learner by combining a library of different learning algorithms. The two super learners that were investigated,  the discrete and ensemble super learner, have been benchmarked and compared to a library consisting of logistic regression and XGBoost. They are shown to outperform these algorithms in terms of validation risk. Furthermore, we see that while the variances in super learner predictions are higher than parametric logistic regression, they are still less than the variances of the machine learning method XGBoost. Finally, a new meta algorithm for combining learner predictions has been investigated which has shown to achieve acceptable results.  
 
 \subsection{Local weighting of learners}
-Section \ref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might to fit a locally weighted ensemble pertaining to each segrated region. The naive implementation applies $ k $-means clustering to the level 1 data, and has shown the possibility of segregating the predictions into regions as seen in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4}. 
+\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might to fit a locally weighted ensemble pertaining to each segrated region. The naive implementation applies $ k $-means clustering to the level 1 data, and has shown the possibility of segregating the predictions into regions as seen in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4}. 
 
 Another motivation for this procedure is to find a way to `smoothen' the patchwork pattern in the predictions of tree methods such as XGBoost as seen in \Cref{fig:predictpar}. The patchy pattern in the predictions is undesirable for two reasons. One, the predicted probabilities of neighbouring covariates can be very different, and likely do not model the actual data-generating distribution that well. One can imagine if one of the covariates was age and the outcome was whether one has a certain disease, then it does not make sense that the predicted probability of having the disease given age would be $ 0.5 $ when age is $ <7 $ or $ >9 $ but $ 0 $ when it is between $ 7 $ and $ 9 $. This behavior simply does not model the actual biological process. Second, the patchiness is an indication that the tree method has not been trained on enough observations, and thus the prediction variance will be very high, as seen in \Cref{fig:pred_probs_boxplot}. 
 The ensemble super learner should, preferably, be able to combine the predictions from a smooth parametric model with the loss-minimizing machine learning method to create a learner that minimizes loss, but also sanely models the data-generating distribution. The locally weighted ensemble super learner is an attempt at doing that, and some of the results do show promise that this goal is attainable. By examining \Cref{fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5}, we see that the patchiness is reduced around the edges of strip where $ p = 0.5 $ due to the fact that the main effects model is weighted higher in those regions.
@@ -720,7 +720,7 @@ By the minimizing property the difference between the second and first term must
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled.png}}
-    \caption{Raw predictions vs stratified according to the weighted most learner as seen in figure \ref{fig:esl_preds_lw_stratified}}
+    \caption{Raw predictions vs stratified according to the weighted most learner as seen in \Cref{fig:esl_preds_lw_stratified}}
     \label{fig:esl_preds_lw_stratified_tiled}
 \end{figure}
  
