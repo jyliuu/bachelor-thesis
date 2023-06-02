@@ -68,6 +68,6 @@ cross_validate_multiple_lvl1 <- function(models_fit_predict, dataset, k=10, loss
     # Compute loss for each column using sapply
     losses <- sapply(2:ncol(res), function(i) loss_fun(res[,1], res[,i]))
     names(losses) <- names(models_fit_predict)
-    return(list(lvl1 = res, losses = losses))
+    return(list(lvl1 = res, losses = losses, dataset = dataset))
 }
 

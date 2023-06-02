@@ -21,7 +21,10 @@ fit_eSL_with_candidates <- function(candidates, meta_learning_algorithm, k=10) f
     )
     predict_esl <- function (meta_model, observation) {
         lvl_1_covariates <- sapply(candidates_fitted_predict, function(cand) cand$predict_fun(cand$fitted_model, observation))
-        meta_predict(meta_model, lvl_1_covariates)
+        if (isTRUE(meta_model$pass_observation))
+            meta_predict(meta_model, lvl_1_covariates, observation)
+        else
+            meta_predict(meta_model, lvl_1_covariates)
     }
 
     list(cv_lvl1_and_loss = cv_lvl1_and_loss, fitted_meta = meta_model, predict_fun = predict_esl)
@@ -82,7 +85,7 @@ kmeans_meta_fit <- function(cv_lvl1_and_loss) {
     list(kmeans_model = kmeans_model, solutions = solutions)
 }
 
-kmeans_meta_predict_weights <- function(meta_model, lvl_1_covariates, k=2) {
+kmeans_meta_predict_weights <- function(meta_model, lvl_1_covariates, k=4) {
     kmeans_model <- meta_model$kmeans_model
     results <- data.frame(predicted = rep(NA, nrow(lvl_1_covariates)), most_weighted = rep(NA, nrow(lvl_1_covariates)))
     predicted_clusters <- cl_predict(kmeans_model, newdata = lvl_1_covariates)
@@ -99,14 +102,47 @@ kmeans_meta_predict_weights <- function(meta_model, lvl_1_covariates, k=2) {
 kmeans_meta_predict <- function(meta_model, lvl_1_covariates) 
     kmeans_meta_predict_weights(meta_model, lvl_1_covariates)$predicted
 
+kmeans_location_meta_fit <- function(cv_lvl1_and_loss) {
+    covariates <- cv_lvl1_and_loss$dataset[,c("Age", "Parasites")]
+    lvl1 <- cv_lvl1_and_loss$lvl1
+
+    kmeans_model <- kmeans(cbind(lvl1[,-1], covariates), centers = ncol(lvl1)) 
+    clusters <- kmeans_model$cluster
+
+    solutions <- list()
+    for (i in 1:nrow(kmeans_model$centers)) {
+        lvl1_cluster <- lvl1[clusters == i,]
+        sol <- quad_prog_meta_fit(list(lvl1 = lvl1_cluster))
+        solutions[[i]] <- sol
+    }
+    list(kmeans_model = kmeans_model, solutions = solutions, pass_observation = TRUE)
+}
+
+kmeans_location_meta_predict <- function(meta_model, lvl_1_covariates, observation) {
+    kmeans_model <- meta_model$kmeans_model
+    results <- data.frame(predicted = rep(NA, nrow(lvl_1_covariates)), most_weighted = rep(NA, nrow(lvl_1_covariates)))
+    predicted_clusters <- cl_predict(kmeans_model, newdata = cbind(lvl_1_covariates, observation[,c("Age", "Parasites")]))
+    for (class in unique(predicted_clusters)) {
+        weights_normalized <- meta_model$solutions[[class]]
+        covariates <- lvl_1_covariates[predicted_clusters == class,]
+        local_predictions <- covariates %*% weights_normalized
+        results$predicted[predicted_clusters == class] <- local_predictions
+        results$most_weighted[predicted_clusters == class] <- which.max(weights_normalized)
+    }
+    results
+}
+
+
 meta_learning_algorithm <- c(logistic_meta_fit, logistic_meta_predict)
 meta_learning_algorithm_loss_weighted <- c(loss_weighted_meta_fit, loss_weighted_meta_predict)
 meta_learning_algorithm_quad_prog <- c(quad_prog_meta_fit, quad_prog_meta_predict)
 meta_learning_algorithm_kmeans <- c(kmeans_meta_fit, kmeans_meta_predict)
+meta_learning_algorithm_kmeans_location <- c(kmeans_location_meta_fit, kmeans_location_meta_predict)
 
 fit_eSL <- fit_eSL_with_candidates(candidates, meta_learning_algorithm)
 fit_eSL_loss_weighted <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_loss_weighted)
 fit_eSL_quad_prog <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_quad_prog)
 fit_eSL_kmeans <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_kmeans)
+fit_eSL_kmeans_location <- fit_eSL_with_candidates(candidates, meta_learning_algorithm_kmeans_location)
 
 predict_eSL <- function(esl, dat) esl$predict_fun(esl$fitted_meta, dat)

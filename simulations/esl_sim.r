@@ -112,6 +112,7 @@ plot_weights_over_n <- function() {
     )
   ggsave("figures/esl_weights.png", plot = p, width = 10, height = 6, dpi = 360, units = "in")
 }
+
 # Plot predicted stratified according to k-means
 plot_predicted_values_kmeans_stratified <- function(N = 3000) {
   fit_eSL_kmeans <- fit_eSL_with_candidates(candidates, c(kmeans_meta_fit, kmeans_meta_predict_weights))
@@ -153,13 +154,48 @@ plot_predicted_values_kmeans_stratified <- function(N = 3000) {
   p <- fit_esl_and_plot(simDat)
   ggsave('figures/esl_preds_lw_stratified.png', plot = p[[1]], width = 6, height = 5, dpi = 360, units = 'in')
   ggsave('figures/esl_preds_lw_tiled.png', plot = p[[2]], width = 6, height = 5, dpi = 360, units = 'in')
-  p
+  tiled <- p[[2]] + theme(legend.position = "none") | p[[1]] 
+  ggsave('figures/esl_preds_lw_stratified_tiled.png', plot = tiled, width = 10, height = 5, dpi = 360, units = 'in')
 }
 
+plot_predicted_values_kmeans_location <- function() {
+  fit_esl_and_plot <- function(simDat) {
 
-res <- plot_predicted_values_kmeans_stratified()
-p <- res[[2]] + theme(legend.position = "none") | res[[1]] 
-ggsave('figures/esl_preds_lw_stratified_tiled.png', plot = p, width = 10, height = 5, dpi = 360, units = 'in')
+    # create a grid of values for Age and Parasites
+    grid <- expand.grid(Age = seq(0.5, 15, length.out = 50),
+                        Parasites = seq(0, 7, length.out = 50))
 
-p1 <- res[[1]] + scale_shape_manual(values = c(3, 16, 17))
-ggsave('figures/esl_preds_lw_stratified.png', plot = p1, width = 6, height = 5, dpi = 360, units = 'in')
+    eSL <- fit_eSL_kmeans_location(simDat)
+    res <- predict_eSL(eSL, grid)                
+    grid$predicted <- res$predicted
+    grid$most_weighted <- factor(res$most_weighted, labels = c("Main effects", "Intercept only", "XGBoost")[unique(res$most_weighted)])
+
+    eslplot_stratified <- ggplot(grid, aes(x = Age, y = Parasites, color = predicted, shape = most_weighted)) + 
+      theme_bw() +
+      geom_point(size = 2) + 
+      scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+      scale_shape_manual(values = c(16, 3, 17)) +
+      xlab("X1") + 
+      ylab("X2") + 
+      ggtitle("Locally weighted eSL predictions grouped (n = 1000)") +
+      labs(color = "Predictions", shape = "Most weighted") +
+      guides(color = guide_colorbar(order = 0), shape = guide_legend(order = 1))
+
+    eslplot_tiled <- ggplot(grid, aes(x = Age, y = Parasites, fill = predicted)) + 
+      theme_bw() +
+      geom_tile() + 
+      scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+      xlab("X1") + 
+      ylab("X2") + 
+      ggtitle("Locally weighted eSL predictions (n = 1000)") +
+      labs(fill = "Predictions")
+    list(eslplot_stratified, eslplot_tiled)
+  }
+  N <- 1000
+  simDat <- simulateMalariaData(N)
+  p <- fit_esl_and_plot(simDat)
+  ggsave('figures/esl_preds_lw_stratified_location.png', plot = p[[1]], width = 6, height = 5, dpi = 360, units = 'in')
+  ggsave('figures/esl_preds_lw_stratified_location_tiled.png', plot = p[[2]], width = 6, height = 5, dpi = 360, units = 'in')
+}
+
+plot_predicted_values_kmeans_location()

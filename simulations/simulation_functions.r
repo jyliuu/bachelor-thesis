@@ -70,4 +70,4 @@ plot_losses <- function(df_melted, labels, alpha, linetypes) ggplot(df_melted, a
   scale_linetype_manual(values = linetypes, 
                     labels = labels) +
   scale_alpha_manual(values=alpha) +
-  guides(alpha = FALSE)
+  guides(alpha = "none")

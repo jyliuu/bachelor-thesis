@@ -8,7 +8,7 @@ library(reshape2)
 # Seed 21 super learner == xgboost
 # Seed 22 is perfect, takes min of logreg and xgboost
 jump <- 100
-seed <- 22
+seed <- 23
 test_count <- 10^6
 candidates_with_dSL <- c(candidates, list(dSL = c(fit_dSL, predict_dSL)))
 losses_dsl <- get_losses_candidates(c(99, rep(jump, 34)), candidates_with_dSL, test_count = test_count, loss_fun = MSE, seed = seed)
