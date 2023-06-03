@@ -2,7 +2,7 @@
 
 \begin{document}
 \section{Simulations} \label{sec:simulations}
-In the following section we show the results of applying the discrete super learner to a simulated dataset. The simulations are carried out using the R programming language and the corresponding source code can be found on the GitHub repository for this project \parencite{github}. The simulated dataset consists of a binary outcome, $Y$, which depends on two covariates $X_1$ and $X_2$. The setup is as follows
+In the following section we show the results of applying the two super learners to a simulated dataset. The simulations are carried out using the R programming language and the corresponding source code can be found on the GitHub repository for this project \parencite{github}. The simulated dataset consists of a binary outcome, $Y$, which depends on two covariates $X_1$ and $X_2$. The setup is as follows
 \begin{align*}
     X_1 &\sim \operatorname{Unif}(0.5, 15),\\
     X_2 \mid X_1 = x_1 &\sim \mathcal{N}(3.5-0.03x_1, 1),\\
@@ -21,6 +21,8 @@ The regression is captured by the logistic regression model with interaction ter
     \item Logistic regression with main effects: $E[Y \mid X_1, X_2] = \expit(\beta_0 + \beta_1 X_1 + \beta_2 X_2)$
     \item XGBoost with hyperparameters: \texttt{max\_depth=3, eta=0.3,\\ n\_rounds=100, objective='binary:logistic', booster='dart', nthread=5}
 \end{enumerate}
+The intercept only logistic regression is included as a baseline, the predicted probability by the intercept model is simply the sample average over the observed $ Y_i$'s. 
+
 We can visualize the predictions of the learning algorithms in the library in the same way as we have done for the data-generating regression. In \Cref{fig:predictpar} we visualize the predictions of the main effects logistic regression and XGBoost fitted using 1000 observations sampled from the distribution. 
 \begin{figure}
     \centering
@@ -28,14 +30,13 @@ We can visualize the predictions of the learning algorithms in the library in th
     \caption{The predictions of the main effects logistic regression and XGBoost fitted on 1000 observations.}
     \label{fig:predictpar}
 \end{figure}
+The plot for the intercept model is omitted, as its appearance is as one would expect -- the plot is simply an orange square. 
 
-The plot for the intercept only logistic regression is omitted, as its appearance is as one would expect -- the plot is simply an orange square. The intercept only logistic regression is included as a baseline, the predicted probability by the intercept model is simply the sample average over the observed $ Y_i$'s. 
-
-From \Cref{fig:predictpar} we can observe a clear difference in the predicted probabilities between the logistic regression and the tree-based XGBoost. The main effects logistic regression is a parametric model that assumes that the regression function is a smooth transformation of the linear predictor $ X\beta $. XGBoost, in contrast, is made up of many decision trees, which explains the patchwork pattern in its prediction plot. For small samples and as we will see in the simulations, XGBoost has a high risk in comparison to the misspecified main effects logistic regression. However, XGBoost becomes increasingly better at approximating the true regression when the number of observations becomes large as seen in \Cref{fig:xgboost10k}. 
+From \Cref{fig:predictpar} we can observe a clear difference in the predicted probabilities between the logistic regression and the tree-based XGBoost. The main effects logistic regression is a parametric model that assumes that the regression function is a smooth transformation of the linear predictor $ X\beta $. XGBoost, in contrast, is made up of many decision trees, which explains the patchwork pattern in its prediction plot. For small samples and as we will see in the simulations, XGBoost has a high risk in comparison to the misspecified main effects logistic regression. However, XGBoost becomes increasingly better at approximating the regression when the number of observations becomes large as seen in \Cref{fig:xgboost10k}. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/xgboost10k.png}
-    \caption{XGBoost becoming better at approximating the true regression as the sample size increases. Here the predictions of XGBoost is visualized for a training sample size of $ 10\,000 $. They appears to be more stable in comparison to \Cref{fig:predictpar}.}
+    \caption{XGBoost becoming better at approximating the regression as the sample size increases. Here the predictions of XGBoost is visualized for a training sample size of $ 10\,000 $. They appears to be more stable in comparison to \Cref{fig:predictpar}.}
     \label{fig:xgboost10k}
 \end{figure}
 \subsection{Discrete super learner}
@@ -45,7 +46,7 @@ By applying the discrete super learning algorithm to the library, we will see th
     \item The variance of the discrete super learner's prediction for a single new observation does not always exhibit a steady descent and depends on the other learners in the library
 \end{enumerate}
 
-The discrete super learner in our simulations uses 10-fold cross-validation and the internal loss function will be the quadratic loss. The super learner will only run the cross-validation procedure once given the training data. The following snippet is pseudocode for the discrete super learner algorithm:
+The discrete super learner in our simulations uses 10-fold cross-validation and the internal loss function will be the quadratic loss. While it is possible to do repeated $ K $-fold cross-validation, in our simulations the super learner will only run the cross-validation procedure once given the training data. The following snippet is pseudocode for the discrete super learner algorithm:
 \begin{algorithm}[H]
 \caption{Discrete super learner}
 \begin{algorithmic}[1]
@@ -71,7 +72,7 @@ The discrete super learner in our simulations uses 10-fold cross-validation and 
 \end{algorithm}
 
 \subsubsection{Discrete super learner performance}
-The true regression achieves a risk of $ 0.059 $ using the quadratic loss function on a validation set of size $ 10^{6} $. This is also the lower bound for the risk of any learning algorithm on this particular data. The intercept model -- which is equivalent to predicting an average of the outcomes -- achieves a risk of $ 0.11 $, which serves a basic benchmark if no effort was made to learn from the data at all. If any learning algorithm performs worse than the benchmark, then it should naturally be discarded from the library.  
+The true regression achieves a risk of $ 0.059 $ using the quadratic loss function on a validation set of size $ 10^{6} $. This risk represents the minimum achievable risk for any learning algorithm operating on this dataset. The intercept model -- which is equivalent to predicting an average of the outcomes -- achieves a risk of $ 0.11 $, which serves a basic benchmark if no effort was made to learn from the data at all. If any learning algorithm performs worse than the benchmark, then it should naturally be discarded from the library.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/dsl_loss.png}
@@ -84,9 +85,9 @@ The true regression achieves a risk of $ 0.059 $ using the quadratic loss functi
     \caption{Same experiment as illustrated in \Cref{fig:loss_min_of_both} but in another run. The training data is drawn from the data-generating distribution and is therefore subject to seed randomness, the resulting fitted learners will not be the same the two runs.}
     \label{fig:loss_jumps}
 \end{figure}
-\Cref{fig:loss_min_of_both,fig:loss_jumps} illustrate how the discrete super learner performs in comparison to the learners in terms of loss over number of training samples. The plots are generated for two runs where the algorithms are fitted on $ n = 100, 200, \dots , N = 3500 $ observations, as indicated by the $ x $-axis. Then the validation risk is calculated by evaluating each fitted learner on a fixed validation set of $ 10^{6} $ observations which is sampled from the data-generating distribution.  
-The risk for XGBoost is around $ 0.062 $ when it is trained on a training set of size $ 3500 $, it is above the optimal risk of $ 0.059 $, but better than to the main effects model that has a risk of $ 0.066 $. XGBoost is a lot better compared the benchmark which has a risk of $ 0.11 $. 
-The first run perfectly illustrates how the discrete super learner is able to achieve the minimum risk. For small training sample sizes, the machine learning method XGBoost has a higher risk than the main effects logistic regression, and it is therefore more desirable for the discrete super learner to select logistic regression despite that it is misspecified. The discrete super learner consequently achieves the same risk as the logistic regression in the beginning, but for $ n > 1200 $ the risk of the discrete super learner becomes smaller than the logistic regression. Here XGBoost begins to achieve a lower risk than the misspecified logistic regression, and so the discrete super learner chooses to use XGBoost instead. 
+\Cref{fig:loss_min_of_both,fig:loss_jumps} illustrate how the discrete super learner performs in comparison to the learners in terms of loss over number of training samples. The plots are generated for two runs where the algorithms are fitted on $ n = 100, 200, \dots , N = 3500 $ observations, as indicated by the horizontal axis. Then the validation risk is calculated by evaluating each fitted learner on a fixed validation set of $ 10^{6} $ observations which was sampled from the data-generating distribution.  
+The risk for XGBoost is around $ 0.062 $ when it is trained on $ 3500 $ observations. While it is above the optimal risk of $ 0.059 $, it surpasses the main effects model that has a risk of $ 0.066 $. When compared to the benchmark intercept model that has a risk of $ 0.11 $, XGBoost clearly superior. 
+The first run perfectly illustrates how the discrete super learner is able to achieve the minimum risk. For small training sample sizes, the machine learning method XGBoost has a higher risk than the main effects logistic regression, and it is therefore more desirable for the discrete super learner to select logistic regression despite that it is misspecified. The discrete super learner consequently achieves the same risk as the logistic regression in the beginning, but for $ n > 1200 $ the risk of the discrete super learner becomes smaller. Here XGBoost begins to achieve a lower risk than the misspecified logistic regression, and so the discrete super learner chooses to use XGBoost instead. 
 
 The second run shows that the discrete super learner might be unable to determine the learner with the lowest risk when the training sample size is small, which results in it moving in a zig-zag pattern between two learners that have quite similar risks. However, we see that the discrete super learner eventually chooses XGBoost as the number of training samples grows.  
 
@@ -96,11 +97,11 @@ The second run shows that the discrete super learner might be unable to determin
     \caption{Variances of learner predictions for a single observation. Each learning algorithm is fitted $ K = 1000 $ on $n$ samples. Each time they are fitted, they are used to predict on a single fixed observation whose true probability is $ 0.5 $.}
     \label{fig:pred_probs_boxplot}
 \end{figure}
-\Cref{fig:pred_probs_boxplot} illustrates the variance in the predictions of each learner for a single observation, whose true probability is indicated by the red dashed line at $ p = 0.5 $. Each learner has been trained $ K = 1000 $ times on $ n = 150, 500, \dots 3000 $ samples taken from the distribution and is used to predict $ K $ times after each training. The box plots are created from the $ K $ predictions. 
+\Cref{fig:pred_probs_boxplot} illustrates the variance in the predictions by each learner for a single observation, whose true probability is indicated by the red dashed line at $ p = 0.5 $. Each learner has been trained $ K = 1000 $ times on $ n = 150, 500, \dots 3000 $ samples taken from the distribution and is used to predict $ K $ times after each training. The box plots are created from the $ K $ predictions. 
 
 We observe that the machine learning model, XGBoost, has the highest prediction variance across all training sample sizes. Recall that we only had two covariates, here having 1500 observations limits the range of predictions of our main effects model to be between $ 0.27 $ and $ 0.46 $, whereas for XGBoost it can vary from below $ 0.1 $ to above $ 0.9 $. While XGBoost is extremely efficient at minimizing loss, its predictions have a high variance unless one has a lot of training data. 
 
-The discrete super learner is able to achieve a lower variance than XGBoost for all training sample sizes. This is because it selects the main effects logistic regression when the training sample size is small, which has a lower variance than XGBoost. However, the variance of the discrete super learner increases when $ n \geq 1000 $ and the boxplots become wider. This is due to the discrete super learner predicting the same as XGBoost since around these numbers of training samples since XGBoost begins to achieve a lower risk in comparison to the main effects logistic regression. 
+The discrete super learner achieves a lower variance than XGBoost for all training sample sizes, which can be attributed to its preference of the main effects logistic regression when the training sample size is small, that has a lower variance than XGBoost. However, the variance of the discrete super learner increases when $ n \geq 1000 $ and the box plots become wider. This is due to the discrete super learner predicting the same as XGBoost since around these numbers of training samples since XGBoost begins to achieve a lower risk in comparison to the main effects logistic regression. 
 
 \begin{figure}[H]
     \centering
@@ -108,7 +109,7 @@ The discrete super learner is able to achieve a lower variance than XGBoost for 
     \caption{Predictions for a single observation by the discrete super learner varied over number of training samples. The predictions made by the discrete super learner from \Cref{fig:pred_probs_boxplot} is extracted and plotted as histograms.}
     \label{fig:dsl_shift}
 \end{figure}
-By examining \Cref{fig:dsl_shift}, we see that the distribution of the predictions by the discrete super learner changes with the number of training samples. The figure explains the outlier points that for the discrete super learner boxplots in \Cref{fig:pred_probs_boxplot}. The conclusion here is a reiteration of what we have already pointed out before. In the beginning for $ n = 150 $ to $ n = 500 $ the discrete super learner prefers the predictions made by the main effects logistic regression which results in a spikey distribution that is centered around $ p = 0.4 $. The discrete super learner assigns more importance to XGBoost predictions when $n \geq 1000$, which leads to more predictions for $p > 0.4$ and forms a tail distribution. At some point between $ n = 1500 $ and $ n = 3000 $, the discrete super learner is no longer uncertain that XGBoost achieves the lowest risk, and so it begins predicting the same as XGBoost. 
+By examining \Cref{fig:dsl_shift}, we see that the distribution of the predictions by the discrete super learner changes with the number of training samples. The figure explains the outlier points that for the discrete super learner box plots in \Cref{fig:pred_probs_boxplot}. The conclusion here is a reiteration of what we have already pointed out before. In the beginning for $ n = 150 $ to $ n = 500 $ the discrete super learner prefers the predictions made by the main effects logistic regression which results in a spiked distribution that is centered around $ p = 0.4 $. The discrete super learner assigns more importance to XGBoost predictions when $n \geq 1000$, which leads to more predictions for $p > 0.4$ and forms a tail distribution. At some point between $ n = 1500 $ and $ n = 3000 $, the discrete super learner is no longer uncertain that XGBoost achieves the lowest risk, and so it begins predicting the same as XGBoost. 
 
 \subsection{Ensemble super learner}
 We will compare the performance of the ensemble super learner with the discrete super learner on the simulated dataset from before, we show that by using the constrained regression meta learning algorithm
@@ -117,7 +118,7 @@ We will compare the performance of the ensemble super learner with the discrete 
     \item The ensemble super learner has a lower prediction variance on a single new observations than the discrete super learner
 \end{enumerate}
 
-The ensemble super learner uses the same library of algorithms as the discrete super learner, they are the intercept only logistic regression (baseline), the main effects logistic regression and the gradient boosting algorithm XGBoost. The ensemble super learner does internal $ K $-fold cross-validation the same way as the discrete super learner, except that the out-of-fold predictions are saved in order to create the level 1 dataset. The following snippet is the psuedocode for the ensemble super learner algorithm:
+The ensemble super learner will use the same library of algorithms as the discrete super learner, they are the intercept only logistic regression (baseline), the main effects logistic regression and the gradient boosting algorithm XGBoost. The ensemble super learner does internal $ 10 $-fold cross-validation similarly to the discrete super learner, except that the out-of-fold predictions are saved in order to create the level 1 dataset. The following snippet is the pseudocode for the ensemble super learner algorithm:
 \begin{algorithm}[H]
 \caption{Ensemble super learner}
 \begin{algorithmic}[1]
@@ -145,28 +146,28 @@ The ensemble super learner uses the same library of algorithms as the discrete s
 \State \textbf{return} $ \esl(P_n) $
 \end{algorithmic}
 \end{algorithm}
-We visualize the predictions made by the ensemble super learner as we have done in \Cref{fig:predictpar}. \Cref{fig:esl_preds_quad_prog} displays the predictions of the ensemble super learner fitted on 1000 and $ 10\,000 $ observations using the constrained regression meta algorithm. To do constrained regression we use the R package \textit{lsei} \parencite{lsei}, which is used to solve quadratic programming problems under constraints.  
+We visualize the predictions made by the ensemble super learner as we have done in \Cref{fig:predictpar}. \Cref{fig:esl_preds_quad_prog} displays the predictions of the ensemble super learner fitted on 1000 and $ 10\,000 $ observations using the constrained regression meta algorithm. To do constrained regression we use the R package \textit{lsei} \parencite{lsei}, which is used to solve the quadratic programming problem under constraints.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/esl_preds_par.png}
     \caption{The predictions by the ensemble super learner using the constrained regression meta learning algorithm fitted on 1000 and $ 10\,000 $ observations}
     \label{fig:esl_preds_quad_prog}
 \end{figure}
-The predictions of the ensemble super learner is a weighted combination of the predictions made by the learners in the library. The contribution from XGBoost is apparent in the patchy pattern that characterize tree-based algorithms which we touched on before. However, we see that there is a clear gradient in the predictions for $ n = 1000 $ when crossing from $ p < 0.5 $ to $ p > 0.5 $, this is likely due to the main effects logistic regression, which predicts $ p = 0.5 $ along a negatively sloped line through the plot. The weights of the constrained regression can be extracted, in this simulation with $ n = 1000 $ the fitted weights are
-\begin{align*}
-    a_{\text{intercept}} &=0.008560352, \\
-    a_{\text{main effects}} &= 0.598493218, \\
-    a_{\text{XGBoost}} &= 0.392946430.
-\end{align*}
-
-From the weights we see that the predictions of intercept only logistic regression is not important for the ensemble super learner, and that the predictions of main effects model has the heighest weight. The fact that XGBoost has less weight than the main effects logistic regression is not surprising in light of our investigations with the discrete super learner, where we saw that the main effects model was more likely to be selected for small samples. To compare, fitting the ensemble super learner on $ n = 10\,000 $ observations yields the following weights
-\begin{align*}
-    a_{\text{intercept}} &= 0.000109466, \\
-    a_{\text{main effects}} &= 0.136615961, \\
-    a_{\text{XGBoost}} &= 0.863274573.
-\end{align*}
-
-The intercept only model is weighted very little, and the main effects model is weighted a lot less than the XGBoost model. This is in line with our findings from the discrete super learner, where we saw that the main effects model was less likely to be selected for larger samples. Note, however, these weights depend on the data, so they are not necessarily the same when the data is generated each time. With more simulation runs it is possible determine the distribution of the weights and how they are centered. 
+The predictions of the ensemble super learner is a weighted combination of the predictions made by the learners in the library. The contribution from XGBoost is apparent in the patchy pattern that characterize tree-based algorithms which we touched on before. However, we see that there is a clear gradient in the predictions for $ n = 1000 $ when crossing from $ p < 0.5 $ to $ p > 0.5 $, this is likely due to the contribution from the main effects model, which predicts $ p = 0.5 $ along a negatively sloped line through the plot. The weights of the constrained regression can be extracted, in this simulation with $ n = 1000 $ and $ n = 10\,000 $ the fitted weights are
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\hline
+Learner & $ n = 1000 $ & $ n = 10\,000 $\\
+\hline
+Intercept & 0.008560352 & 0.000109466 \\
+Main effects & 0.598493218 & 0.136615961 \\
+XGBoost & 0.392946430 & 0.863274573 \\
+\hline
+\end{tabular}
+\caption{Combined Table}
+\end{table}
+From the weights we see that the predictions of intercept only logistic regression is not important at all for the ensemble super learner. For $ n = 1000 $ the predictions of main effects model has the heighest weight, which is not surprising in light of our investigations with the discrete super learner, where we saw that the main effects model was more likely to be selected for small samples. Whereas for $ n = 10\,000 $ the main effects is weighted a lot less than XGBoost. Note that these weights depend on the data, so they are not necessarily the same when the data is sampled each time. 
 
 \subsubsection{Ensemble super learner performance}
 \begin{figure}[H]
@@ -175,7 +176,7 @@ The intercept only model is weighted very little, and the main effects model is 
     \caption{The risk of the ensemble super learner compared to other algorithms where the number of training samples are $n = 100, 200, \dots , N = 3500 $.}
     \label{fig:losses_esl_s23}
 \end{figure}
-\Cref{fig:losses_esl_s23} shows that the ensemble super learner achieves a lower loss than any of the learners, including the discrete super learner. The result agrees with the conclusion in \Cref{simplex}, where we argued that because the ensemble super learner optimizes over the entire $ \ml $-simplex, its risk is lower compared to the discrete super learner. However we must keep in mind that when examining finite samples, the conclusion is that the ensemble super learner will achieve the lowest risk on the training data, it is, therefore, not necessarily the case that the validation risk is always lower for the ensemble super learner. Suppose that the library includes the correct regression. Limited samples might prevent the ensemble super learner from assigning it full weight. The discrete super learner which selects the learning algorithm with the lowest cross-validation risk, might choose the true regression, consequently achieving a lower validation risk than the ensemble super learner.
+\Cref{fig:losses_esl_s23} shows that the ensemble super learner achieves a lower loss than any of the learners, including the discrete super learner. The result agrees with the conclusion in \Cref{simplex}, where we argued that because the ensemble super learner optimizes over the entire $ \ml $-simplex, its risk is lower compared to the discrete super learner. However we must keep in mind that when examining finite samples, the conclusion is that the ensemble super learner will achieve the lowest risk on the training data, it is, therefore, not necessarily the case that the validation risk is always lower for the ensemble super learner. Suppose that the library contains the regression. Limited samples might prevent the ensemble super learner from assigning it full weight. The discrete super learner which selects the learning algorithm with the lowest cross-validation risk, might choose the true regression, consequently achieving a lower validation risk than the ensemble super learner.
 
 \begin{figure}[H]
     \centering
@@ -183,11 +184,11 @@ The intercept only model is weighted very little, and the main effects model is 
     \caption{The variance of the ensemble super learner compared to other learners, each algorithm is fitted $ K = 1000 $ times on $n$ samples and used to evaluate $ K $ times on a single observation.}
     \label{fig:learner_vars_w_esl_1000}
 \end{figure}
-\Cref{fig:learner_vars_w_esl_1000} compares the variances of the ensemble super learner to the other learners. The ensemble super learner does not exhibit the same behavior as the discrete super learner, which tends to predict many outliers; its distribution seems to be consistently centered, as evidenced in \Cref{fig:hist_esl_dist}. This is coherent with the fact that the ensemble super learner is a continuous combination of different learners. We also note that the ensemble super learner achieves a lower variance than both the XGBoost and the discrete super learner, but has a variance than the parametric logistic regression models. 
+\Cref{fig:learner_vars_w_esl_1000} compares the variances of the ensemble super learner to the other learners. The ensemble super learner does not exhibit the same behavior as the discrete super learner, which tends to predict many outliers; its distribution seems to be consistently centered, as evidenced in \Cref{fig:hist_esl_dist}. This aligns with the fact that the ensemble super learner is a continuous combination of different learners. We also note that the ensemble super learner achieves a lower variance than both the XGBoost and the discrete super learner, but has a variance than the parametric logistic regression models. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/hist_esl_dist.png}
-    \caption{Predictions for a single observation by the ensemble super learner varied over number of training samples. The histograms display the same data as ensemble super learner boxplots in \Cref{fig:learner_vars_w_esl_1000}.}
+    \caption{Predictions for a single observation by the ensemble super learner varied over number of training samples. The histograms display the same data as ensemble super learner box plots in \Cref{fig:learner_vars_w_esl_1000}.}
     \label{fig:hist_esl_dist}
 \end{figure}
 \Cref{fig:hist_esl_dist} shows the predictions of the ensemble super learner for a single observation varied over number of training samples. We see that the distribution of predictions is much more centered and that the variance seems to also decrease steadily with more samples. 
@@ -200,52 +201,52 @@ The intercept only model is weighted very little, and the main effects model is 
 The weighting of the different learners by the ensemble super learner is visualized in \Cref{fig:esl_weights}. We see that the weighting of the intercept only model is very low, and that the main effects model has more weight than XGBoost for small samples, however, this trend reverses as the number of training samples increases. An interesting observation is that XGBoost begins to outweigh the main effects logistic regression when the training size is between 1000 and 1500, which coincides with when XGBoost begins to achieve a lower loss compared to the main effects model as seen in \Cref{fig:loss_min_of_both,fig:loss_jumps}.
 
 \subsection{Locally weighted ensemble super learner} \label{locally_weighted_ensemble_super_learner}
-By using the ensemble super learner with the constrained regression meta learning algorithm we can combine different learners to achieve a lower risk than any of the learners in the library. However, the resulting ensemble is a global combination of the learners, meaning that the weights are the same for all observations. In this section I will consider a meta learning algorithm where $ k $-means clustering is used to cluster the observations into groups and a local weighted combination is fitted for each group.
+By using the ensemble super learner with the constrained regression meta learning algorithm we can combine different learners to achieve a lower risk than any of the learners in the library. However, the resulting ensemble is a global combination of the learners, meaning that the weights are the same when predicting on all covariatecovariateis. In this section I will consider a meta learning algorithm where $ k $-means clustering is used to cluster the covariates into groups and a local weighted combination is fitted for each group.
 
 \subsubsection{Motivation}
-By examining the level 1 data obtained during the process of fitting an ensemble super learner fit, it is possible to compare the predictions of each learner against each other as in \Cref{fig:esl_preds_xgboost_vs_main}
+By examining the level 1 data obtained from the $ K $-fold cross-validation, it is possible to compare the predictions of each learner against each other as in \Cref{fig:esl_preds_xgboost_vs_main}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/esl_preds_xgboost_vs_main.png}
     \caption{Predictions of XGBoost vs main effects model, colors indicate the true probability. The learners' prediction on a single observation represent a point in the unit square, the point is colored by the probability obtained by applying the true regression function on that observation.}
     \label{fig:esl_preds_xgboost_vs_main}
 \end{figure}
-We notice that the main effects model does not predict the same as the XGBoost. If they had predicted the same, then the predictions would lie on the identity line. There is significant disagreement between the two algorithms, as seen in the lower right corner where the main effects model predicts certain observations to have a probability of over 0.7, while XGBoost assigns these a probability of less than 0.1. A natural idea is to be able to group the observations based on the predicted probabilities such that for certain groups certain algorithms are weighed more than others. The naive approach implements $ k $-means clustering to group the observations into $ k = 4 $ groups as shown in \Cref{fig:esl_preds_xgboost_vs_main_kmeans} 
+We notice that the main effects model does not predict the same as the XGBoost. If they had predicted the same, then the predictions would lie on the identity line. There is significant disagreement between the two algorithms, as seen in the lower right corner where the main effects model predicts certain observations to have a probability of over 0.7, while XGBoost assigns these a probability of less than 0.1. An idea is to group the covariates based on the predicted probabilities such that for certain groups certain algorithms are weighed more than others. The naive approach implements $ k $-means clustering to group the covariates into $ k = 4 $ groups as shown in \Cref{fig:esl_preds_xgboost_vs_main_kmeans} 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/esl_preds_xgboost_vs_main_kmeans.png}
 \caption{Same as \Cref{fig:esl_preds_xgboost_vs_main}, except that the observations are clustered into 4 groups using $ k $-means clustering.}
     \label{fig:esl_preds_xgboost_vs_main_kmeans}
 \end{figure}
-The figures above plot the predictions of two learners against each other, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data of that group. To predict using the ensemble super learner we will apply the learners to the new data and determine which of the clusters the level 1 covariates belong to. Once that has been determined, the predictions will be combined according to the weighted combination in that group. 
+\Cref{fig:esl_preds_xgboost_vs_main,fig:esl_preds_xgboost_vs_main_kmeans} plot the predictions by two learners against each other, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data of that group. To predict using the ensemble super learner we will apply the learners to the new data and determine which of the clusters the level 1 covariates belong to. Once that has been determined, the predictions will be combined according to the weighted combination in that group. 
 
 \subsubsection{Simulation results}
-The locally weighted ensemble super learner examined in this section is implemented with $ k = 4 $ clusters and the same library as in the previous section. The number clusters was chosen arbitrarily, the results are shown in \Cref{fig:esl_preds_lw}
+The locally weighted ensemble super learner examined in this section is implemented with $ k = 4 $ clusters and the same library in the previous section. The number clusters was chosen arbitrarily, the results are shown in \Cref{fig:esl_preds_lw}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/esl_preds_lw.png}
     \caption{Predictions by the locally weighted ensemble super learner fitted on $ 1000 $ and $ 10\,000 $ observations.}
     \label{fig:esl_preds_lw}
 \end{figure}
-For each grid point in \Cref{fig:esl_preds_lw} the prediction on that grid point comes from some cluster with a particular weighting scheme. It is therefore possible to give a visual representation of which learner was weighted most in each prediction. \Cref{fig:esl_preds_lw_stratified} visualizes the predictions on each grid point but also shows which learner contributed most to the prediction. We observe that the predictions are segregated into two groups depending on whether the predicted probability is above or below $ p = 0.5 $. XGBoost appears to have the highest weight for predictions where the predicted probability is greater than $ 0.5 $, whereas the main effects model is favored when the predictions are below $ 0.5 $. 
+For each point in covariates grid as visualized in \Cref{fig:esl_preds_lw}, the prediction on that point comes stems some cluster with a particular weighting scheme. It is therefore possible to give a visual representation of which learner was weighted most in each prediction. \Cref{fig:esl_preds_lw_stratified} visualizes the predictions on each grid point but also shows which learner contributed most to the prediction. We observe that the predictions are segregated into two groups depending on whether the predicted probability is above or below $ p = 0.5 $. XGBoost appears to have the highest weight for predictions where the predicted probability is greater than $ 0.5 $, whereas the main effects model is favored when the predictions are below $ 0.5 $. 
 
 The segregation explains the behavior of the super learner when $ n = 1000 $ in \Cref{fig:esl_preds_lw} where it appears that the predictions are smoother when the predicted probabilities are less than $ 0.5 $. The explanation is that the super learner weighted the logistic regression the most when $ p < 0.5 $, and since it is a smooth parametric model, the predicted probabilities will assume a gradient. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/esl_preds_lw_stratified.png}
-    \caption{Predictions of the locally weighted ensemble super learner fitted on $ 1000 $ observations, grouped according to the learner with the highest weight. Each colored prediction is the weighted sum of the learner predictions.}
+    \caption{Predictions by the locally weighted ensemble super learner fitted on $ 1000 $ observations, grouped according to the learner with the highest weight. Each colored prediction is the weighted sum of the learner predictions.}
     \label{fig:esl_preds_lw_stratified}
 \end{figure}
 A plot of the non-stratified predictions displayed in \Cref{fig:esl_preds_lw_stratified} can be found in the appendix. We also include numerous other examples of predicted probabilities using the locally weighted ensemble super learner.
 
-Figure \Cref{fig:losses_esl_lw} shows that the locally weighted ensemble super learner has a slightly higher loss than the ensemble super learner, but a lower loss than the discrete super learner. 
+\Cref{fig:losses_esl_lw} shows that the locally weighted ensemble super learner has a slightly higher risk than the ensemble super learner, but a lower risk than the discrete super learner. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/losses_esl_lw.png}
     \caption{The risk of the locally weighted ensemble super learner compared to other algorithms where the number of training samples are $ n = 100, 200, \dots , N = 4000 $ and $ k = 4 $ local clusters.}
     \label{fig:losses_esl_lw}
 \end{figure}
-The risk of the locally weighted ensemble super learner can depend on the number of $ k $ clusters that are used to segregate the level 1 data. The connection between the number of clusters and the risk has not been inevestigated in this thesis. Nevertheless, the risk of a learner does not tell the full picture as we have witnessed with XGBoost, which, despite its design of minimizing loss, displays the highest variance. It might be relevant to consider other metrics that can evaluate the learners on the stability and variance of their predictions. 
+The risk of the locally weighted ensemble super learner can depend on the number of $ k $ clusters that are used to segregate the level 1 data. The connection between the number of clusters and the risk has not been investigated in this thesis. Nevertheless, the risk of a learner does not tell the full picture as we have witnessed with XGBoost, which, despite its design of minimizing loss, displays the highest variance. It might be relevant to consider other metrics that can evaluate the learners on the stability and variance of their predictions. 
 
 \end{document}
 

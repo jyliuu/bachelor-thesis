@@ -110,23 +110,23 @@
 
 \pagestyle{fancy}
 \section{Introduction}
-In the context of regression, $ O = (Y, X) $ is an observation for $ Y \in \mathbb{R} $ being the outcome and $ X \in \mathbb{R}^{d} $ the covariate. A natural goal is to estimate a function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ is minimized. It turns out that the conditional mean -- called the regression function or regression $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but consistent estimation of the regression requires a statistical model $ \mathcal{P} $ for the data-generating distribution $ P \in \mathcal{P} $ for which $ O \sim P $ to be specified. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a parametric family of distributions such as a curved exponential family \parencite{lauritzen2023fundamentals}. In doing so we are able to identify the parameters of the distribution $ P $ via maximum liklihood and compute the regression from the estimated parameters.
+In the context of regression, $ O = (Y, X) $ is an observation for $ Y \in \mathbb{R} $ being the outcome and $ X \in \mathbb{R}^{d} $ the covariate. A natural goal is to estimate a function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ is minimized. It turns out that the conditional mean -- called the regression function or regression $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but consistent estimation of the regression requires a statistical model $ \mathcal{P} $ for the data-generating distribution $ P \in \mathcal{P} $ for which $ O \sim P $ to be specified. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a parametric family of distributions such as a curved exponential family \parencite{lauritzen2023fundamentals}. In doing so we can identify the parameters of the distribution $ P $ via maximum liklihood and esimate the regression from the parameters.
 
-However, if we are dealing with complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be wrong. In these situations, it is tempting to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests. Machine learning methods seek to estimate regression function directly, in contrast to parametric statistics where the parameters of the underlying model are estimated first and then a regression function derived as some analytical expression of these parameters and the covariates. The assumptions of these machine learning methods regarding the data-generating distribution are not explicitly specified, but it does not pose a problem for us if we wish to estimate the regression. Indeed, it is not necessary for us to identify $ P $ completely if $ P $ can be factored into the conditional distribution $ P_{Y \mid X} $ and the distribution over our covariates $ P_X $, here our goal of estimating the regression function is to estimate $ P_{Y \mid X} $.   
+However, if we are dealing with complex data, there is a risk of misspecifying the model by identifying it as an exponential family. Our assumptions may be wrong. In these situations, it is tempting to utilize non-parametric and data-driven regression methods, such as tree-based algorithms like XGBoost or random forests. Machine learning methods seek to estimate the regression function directly, in contrast to parametric statistics where the parameters of the underlying model are estimated first and a regression function derived as some analytical expression of the parameters and covariates. The assumptions of these machine learning methods regarding the data-generating distribution are not explicitly specified, but it does not pose a problem for estimation of the regression. Indeed, it is not necessary for us to identify $ P $ completely if $ P $ can be factored into the conditional distribution $ P_{Y \mid X} $ and the distribution over our covariates $ P_X $, here our goal of estimating the regression function is to estimate $ P_{Y \mid X} $.   
 
-Given an abundance of different ways we can tackle the problem of estimating the regression, we would like to be able to compare the different methods select the best one. In a practical scenario we might have set of learning algorithms from which we can choose from. Cross-validation can help determine the risk of each algorithm by splitting the data into training and validation sets, each algorithm is then fitted on the training set and an empirical risk for the algorithms is calculated by evaluating the fitted models on the validation set. We would run cross-validation using a predefined splitting mechanism for each learning algorithm that we have. A popular choice in machine learning and statistics is $ K $-fold cross-validation. $ K $-fold cross-validation divides the data into $ K $ disjoint and exhaustive sets referred to as validation sets. For every $ k = 1, \dots , K $ the learning algoithm is trained using all data excluding the $ k $'th validation set. Subsequently, the risk of the algorithm is computed by applying the fitted model on the validation set that was held out from training. We obtain an estimate of the true risk of the model by repeating this procedure $ K $ times and averaging over the risks. The model with the lowest risk is then selected as our candidate estimate of the regression function. 
+Given an abundance of different ways we can tackle the problem of estimating the regression, we would like to be able to compare the different methods select the best one. In a practical scenario we might have set of learning algorithms that we can choose from. Cross-validation can help determine the risk of each algorithm by splitting the data into training and validation sets, each algorithm is then fitted on the training set and an empirical risk for the algorithms is calculated by evaluating the fitted models on the validation set. We would run cross-validation using a predefined splitting mechanism for each learning algorithm that we have. A popular choice in machine learning and statistics is $ K $-fold cross-validation. $ K $-fold cross-validation divides the data into $ K $ disjoint and exhaustive sets referred to as validation sets. For every $ k = 1, \dots , K $ the learning algoithm is trained using all data excluding the $ k $'th validation set. Subsequently, the risk of the algorithm is computed by applying the fitted model on the validation set that was held out from training. We obtain an estimate of the true risk of the model by repeating this procedure $ K $ times and averaging over the risks. The model with the lowest risk is then selected as our candidate estimate of the regression function. 
 
 This is the idea behind the cross-validation selector \parencite{laan03}. The discrete super learner \parencite{van2007super} is simply the learner (fitted model) that is obtained by applying the cross-validation selected algorithm to our data. The cross-validation selector, given a library of learning algorithms and our data, will cross-validate each algorithm in the library and select the one with the lowest risk. 
 
-Another method, called the ensemble super learner \parencite{van2007super} seeks to combine the learning algorithms into a single learner by applying a \textit{meta learning algorithm} on the library. One way to fit the ensemble super learner is to take a weighted average of the algorithms, where the weights are chosen to minimize the risk of the ensemble. The prediction of the ensemble super learner will then be a weighted sum of the predictions made by each learner.
+Another method, called the ensemble super learner \parencite{van2007super} seeks to combine the learning algorithms into a single learner by applying a \textit{meta learning algorithm} on the library. One meta algorithm of the ensemble super learner is to fit a weighted average of the learners, where the weights are chosen to minimize the risk of the ensemble. The prediction of the ensemble super learner will then be a weighted sum of the predictions made by each learner.
 
-As we will demonstrate, given a library of learning algorithms, the super learner is effectively the best estimate of the data-generating regression that we can obtain. It is the best in the sense that it can not perform worse than the best learner created from our library in terms of risk. 
+As we will demonstrate, given a library of learning algorithms, the super learner is effectively the best estimate of the data-generating regression that we can obtain. It is the best in the sense that it can not perform worse than the best learning algorithm in terms of risk. 
 
 To formalize the notion of the best learner in the library, we define the oracle selector. The oracle selector knows $ P $ -- hence it is called the oracle -- and selects the learner with the lowest risk given its knowledge of $ P $. In this thesis we show that the cross-validation selector is asymptotically equivalent to the oracle selector as the sample size goes to infinity. 
 
-We adopt the setup and notation similar to those in \cite{vaart06} and \cite{laan03}. Our objective is to illustrate the performance of super learning algorithms when applied to binary regression, where we are regressing a binary outcome $ Y \in {0,1} $ against covariates $ X $ that belong to $ \mathcal{X} \subseteq \mathbb{R}^{d} $. Here the conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y = 1 \mid X) $. The simulation results in \Cref{sec:simulations} show that the super learner is able to achieve the minimum risk with increasing training samples. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. We assess a library of learning algorithms consisting of logistic regression and XGBoost, from which we construct the super learner and evaluate its performance in relation to the individual algorithms.
+We adopt the setup and notation similar to those in \cite{vaart06} and \cite{laan03}. Our objective is to illustrate the performance of super learning algorithms when applied to binary regression, where we are regressing a binary outcome $ Y \in \{0,1\} $ against covariates $ X $ that belong to $ \mathcal{X} \subseteq \mathbb{R}^{d} $. Here the conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y \mid X) $. The simulation results in \Cref{sec:simulations} show that the super learner achieves the minimum risk with increasing training samples. The simulation is conducted by first defining the data-generating distribution explicitly, from which we can sample from using standard sampling methods that are available in R. We assess a library of learning algorithms consisting of logistic regression and XGBoost, from which we construct the super learner and evaluate its performance in relation to the algorithms in the library.
 
-he choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ x \mapsto P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
+The choice to focus on binary regression stems from its significance in various fields. For instance, in biomedicine, researchers might want to predict patient mortality upon administering a specific drug. The survival indicator for the patient is a binary outcome, and the regression $ x \mapsto P(Y = 1 \mid X = x) $ could represent the probability of the patient's survival. 
 
 \section{Background}
 
@@ -134,7 +134,7 @@ Our setup and notation is similar to \cite{vaart06} and \cite{laan03}:
 Let a statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
 We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable}\} $, which represents the set of \textit{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize.
 \begin{definition}[Quadratic loss]
-    The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
+    The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ (y, x) = o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
     L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
 \end{align*}
@@ -185,7 +185,7 @@ We will throughout assume that the learning algorithm is well defined for each $
 \begin{definition}[Learner or fitted learner]
     Given a learning algorithm $ \la $. A learner is a stochastic variable in $ \Theta $ representing the outcome of applying the learning algorithm to our data $ \btheta = \la(D_n) $.
 \end{definition}
-Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would observe $ O_1 = o_1, \dots, O_n = o_n $, following which we can employ our learning algorithm on the observed data. In machine learning, the process of applying an algorithm on the data is usually referred to as \textit{model training} or \textit{fitting}, the outcome of the training is a \textit{trained model} or simply a \textit{fit}. We will refer to the trained model as a learner which naturally depends on our data that we have observed. 
+Formally $ \la(D_n) $ is a stochastic variable since $ D_n $ is stochastic. In practice, we would observe $ O_1 = o_1, \dots, O_n = o_n $, following which we can employ a learning algorithm on the observed data. In machine learning, the process of applying an algorithm on the data is referred to as \textit{model training} or \textit{fitting}, the outcome of the training is a \textit{trained model} or simply a \textit{fit}. We will refer to the trained model as a learner which naturally depends on the observed data. 
 
 \begin{example}[Parametric and nonparametric learning algorithms]
     An example of a parametric learning algorithm is logistic regression. In logistic regression we assume that the conditional probability, $ P(Y = 1 \mid X = x) $, can be expressed as $ \btheta(x) = \expit( \beta x) $ for some $ \beta \in \mathbb{R}^{d} $ which is estimated via maximum likelihood.   
@@ -244,18 +244,18 @@ where $ \delta_{O_i} $ is the Dirac measure over $ O_i $. When the observations 
 %We will now turn our attention to statistical estimators. Statistical literature commonly write that an estimator is stochastic variable taking values in our parameter space $ \hat{\btheta} \in \Theta  $. An estimator is achieved by considering i.i.d. observations $ O_1 , \ldots, O_2 \in\mathcal{O} $ distributed according to some measure $ P $ from some statistical model $ \mathcal{P} $. We leave the model unspecified as it can be both parametric or nonparametric. Now let $ h : \mathcal{O}^{n} \to \btheta $ be a measurable map, an estimator created from $ h $ is the random variable $ T = h(O_1 , \ldots, O_n) $. For $ \btheta \subseteq \mathbb{R}^{k} $ the canonical $ \sigma $-algebra on $ \btheta $ is the Borel algebra, but when the parameter set is a set of functions, the $ \sigma $-algebra can only be chosen after careful consideration of constraints on $ \btheta $. 
 
 
-\section{The Discrete Super Learner}
 \subsection{Library of learners}
-We would now like to consider the scenario where we have a set of learning algorithms, $ \la_1, \ldots, \la_\ml $. From these algorithms, we can define the \textit{library of learning algorithms} 
+We would like to consider the scenario where we have a set of learning algorithms, $ \la_1, \ldots, \la_\ml $. From these algorithms, we can define the \textit{library of learning algorithms} 
 $$ \lib = \{\la_{\q} \mid 1 \leq \q \leq \ml \}, $$
-of size $ \ml $. Our natural goal is to find $ \tilde{\la} \in \lib $ such that $ \tilde{\la}(P_n) $ that achieves the lowest risk among our learners 
+of size $ \ml $. Our natural goal is to find $ \tilde{\la} \in \lib $ such that $ \tilde{\la}(P_n) $ that achieves the lowest possible risk 
 $$ \tilde{\la}  = \argmin_{\la \in \lib} R(\la(P_n) , P). $$
 However, we cannot compute the risk of a learner directly as it depends on $ P $. We seek to provide an estimate for $ \tilde{\la} $ which we will denote as $ \hat{\la} $. 
 
+\section{The Discrete Super Learner}
 \subsection{Cross-validation methodology}
 To provide the estimate $ \hat{\la} $ we will proceed via cross validation. Cross-validation randomly splits our data into a \textit{training set} and a \textit{test set} that our algorithms are trained and evaluated on. Let the random binary vector -- referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ D_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is a tuple in $ \{0,1\}^{n} $, here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
 \begin{align*}
-    P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i} \\
+    P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i}, \\
     P_{n,\Sn}^{1} &= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
 \end{align*}
 where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of observations in the test and training set respectively.
@@ -269,18 +269,18 @@ where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of obse
             n \\ n_1
     \end{pmatrix}^{-1} \qquad \text{for each } s^n \in \{0,1\}^{n} \text{ where } \sum_{i} s^n_i = n_1,
     \end{align*}
-    this procedure is also known as Monte Carlo cross-validation \parencite{laan03}. In practice one would have a hard time validating over all $ \begin{pmatrix} n \\ n_1\end{pmatrix} $ combinations as it can be very large, for $ n = 100 $ and $ n_1 = 10 $ corresponding to $ 10\% $ of the data being in the validation set, the number of combinations is around $ 1.7 \cdot 10^{13} $. One would instead approximate by randomly sampling possible combinations. However, by doing random sampling there is the possibility that some observations will not be in any of the sampled validation sets. The probability of this happening will become small as we sample more times.  
+    this procedure is also known as Monte Carlo cross-validation \parencite{laan03}. In practice one would have a hard time validating over all $ \begin{pmatrix} n \\ n_1\end{pmatrix} $ combinations as it can be very large, for $ n = 100 $ and $ n_1 = 10 $ corresponding to $ 10\% $ of the data being in the validation set, the number of combinations is around $ 1.7 \cdot 10^{13} $. One would instead approximate by randomly sampling possible combinations. However, by doing random sampling there is the possibility that some observations will not be in any of the sampled validation sets. The probability of this happening will become small as we sample multiple times.  
 \end{example}
 \subsection{K-fold cross validation}
 The idea behind $ K $-fold cross-validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. We will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set. 
 
 $ K $-fold cross-validation amounts to looking at a single split variable $ \Sn $ whose probability mass is equally distributed on the binary vectors indexed by $ s $. In practice one would select a $ K $ and use a random splitting procedure to generate $ K $ binary vectors such that the entire dataset is the disjoint union of the folds specified by each vector. It is also possible to run $ K $-fold cross-validation multiple times which amounts to multiple calls to the random splitting procedure.
 \subsection{Risks and selectors}
-In the context where we apply a learning algorithm on the training data, we would write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner should be then evaluated on the test data. Given that the risk \cref{l2risk} was the integral of the loss function with respect to data-generating distribution $P$, we can define the emprical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
+In the context where a learning algorithm is applied on the training data, we write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner is then evaluated on the test data. Given that the risk \cref{l2risk} was the integral of the loss function with respect to data-generating distribution $P$, we can define the emprical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
  \begin{align*}
      R(\la(P_{n, S^{n}}^{0}), P_{n, \Sn}^{1}) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P_{n,\Sn}^{1}(o),
  \end{align*}
-where $\Sn$ is some split for our data $D_n$. Our motivation for defining the empirical risk is that we can then compare it with the true risk of the learner where we integrate with respect to the data-generating distribution 
+where $\Sn$ is some split for our data $D_n$. Our motivation for defining the empirical risk is that we can compare it with the true risk of the learner where we integrate with respect to the data-generating distribution 
 \begin{align*}
      R(\la(P_{n, S^{n}}^{0}), P) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P(o).
 \end{align*}
@@ -293,7 +293,8 @@ The following definitions are analogous to what is stated in section 1 and 2 of 
     \end{align*}
     where $ P $ is the data-generating distribution.
 \end{definition}
-The expectation $ E_{\Sn} $ is a simple average since $ \Sn $ is discrete. Therefore, for a given $ \la $ we have 
+
+\noindent The expectation $ E_{\Sn} $ is a simple average since $ \Sn $ is discrete. Therefore, for a given $ \la $ we have 
 \begin{align*}
     E_{\Sn} R( \la(P_{n,\Sn}^{0}), P) &= \sum_{s \in \{0,1\}^{n}} R(\la(P_{n, s}^{0}), P) \cdot P(\Sn = s). 
 \end{align*}
@@ -303,7 +304,8 @@ Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the lea
         \tilde{\la}_n := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P).
     \end{align*}
 \end{definition}
-The cross-validation selector replaces $ P $ with $ P_{n, \Sn}^{1} $ in the second argument of $ R $.
+
+\noindent The cross-validation selector replaces $ P $ with $ P_{n, \Sn}^{1} $ in the second argument of $ R $.
 \begin{definition}[Cross-validation risk]
      Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The cross-validation risk for the learner, $\la(P_{n,s}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
     \begin{align*}
@@ -329,7 +331,7 @@ The cross-validation selector replaces $ P $ with $ P_{n, \Sn}^{1} $ in the seco
 %                                                       &= E_{S} \int L(o, \btheta_{ \hat{\q} }(P_{n, S}^{0})) - L(o, \btheta_0) dP(o) 
 %\end{align*}
 %
-The oracle selector and cross-validation selector are simply what chooses a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. 
+The oracle selector and cross-validation selector are what chooses a learning algorithm from the library. Alternatively, one can first define the oracle selector as the index, $ \tilde{\q} $, of the algorithm in the library with the lowest risk, then the oracle selected algorithm would naturally be $ \la_{ \tilde{\q} } $. 
 
 \subsection{Discrete super learner}
 \begin{definition}[Discrete super learner]
@@ -338,10 +340,10 @@ The oracle selector and cross-validation selector are simply what chooses a lear
         \mathcal{X} \ni x \mapsto \hat{\la}_n(P_n)(x). 
     \end{align*}
 \end{definition}
-Formally, the map above is a random map as $ P_n $ is stochastic. The discrete super learner is not a specific learner among the learners in the library, but the result of applying the cross-validation selector to the library. 
+Formally, the map above is a random map as $ P_n $ is stochastic. The discrete super learner is not a specific learner among the learners in the library, but the resulting algorithm from applying the cross-validation selector, fitted to the dataset. 
 
 \subsection{Oracle property}
-We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, \Sn}^{i} f = \sqrt{n}(P_{n, \Sn}^{i} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ i = 0 $ or $ i = 1 $.
+We introduce the notation $Pf$ for the integral $\int f dP$ of an integrable function $f$ with respect to $P$. Additionally, if $P_n$ represents the empirical measure of $O_1, \dots, O_n$, we denote the empirical process indexed over an appropriate class of functions $\mathcal{F}$ as $G_n f = \sqrt{n}(P_n f - P f)$. Furthermore, we extend this notation to $G_{n, \Sn}^{v} f = \sqrt{n}(P_{n, \Sn}^{v} - Pf)$ for the empirical processes that correspond to applying the empirical measure over either the training data or test data, $ v = 0 $ or $ v = 1 $.
 
 In the following results we assume that a proper loss function $ L: \mathcal{O} \times \Theta \to \mathbb{R} $ has been given.  
 \begin{lemma}[Lemma 2.1 in \parencite{vaart06}] \label{finitesampledecomp}
@@ -355,7 +357,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{proof}
     See appendix.
 \end{proof}
-To control the bounds for the risk we introduce Bernstein pairs 
+\noindent To control the bounds for the risk we introduce Bernstein pairs 
 \begin{definition}[Bernstein pair \parencite{vaart06}]
     Given a measurable function $ f: \mathcal{O} \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
     \begin{equation} \label{bernstein}
@@ -366,7 +368,7 @@ To control the bounds for the risk we introduce Bernstein pairs
     If $ f $ is uniformly bounded, then $ (\norm{f}_{\infty}, \frac{3}{2} Pf^2 ) $ is a Bernstein pair. 
 \end{proposition}
 \begin{proof}
-    Following proof is due to \parencite{vaart06}[ch. 8.1]. 
+    The following proof is due to \parencite{vaart06}[ch. 8.1]. 
     \begin{align*}
         \norm{f}_{\infty}^2 P\left( e^{|f|/\norm{f}_{\infty}} -1 - \frac{|f|}{\norm{f}_{\infty}}\right) &= \norm{f}_{\infty}^{2} \sum_{k \geq 2}^{\infty} P \frac{|f|^{k}}{\norm{f}^{k}_{\infty}k!} = Pf^2 \sum_{k \geq 2}^{\infty} P\frac{|f|^{k-2}}{\norm{f}^{k-2}_{\infty} k! } \\
                                                                                                         &\leq P f^2 \sum_{k \geq 2}^{\infty} \frac{\norm{f}_{\infty}^{k-2}}{\norm{f}^{k-2}_{\infty} k! } = P f^2 \sum_{k \geq 2}^{\infty} \frac{1}{k !}\\
@@ -388,7 +390,7 @@ To control the bounds for the risk we introduce Bernstein pairs
     \end{align*}
     The same upper bound is valid for $ E_{D_n} \max_{f \in \mathcal{F}}(G_n+\delta \sqrt{n} P)(-f) $. 
 \end{lemma}
-The expectation $ E_{D_n} $ is taken wrt. the joint probability measure over our observations, here we have that $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
+The expectation $ E_{D_n} $ is taken with respect to the joint probability measure over our observations, here we have that $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
 
 \begin{theorem}[Theorem 2.3 in \parencite{vaart06}] \label{finitesample}
    Let $ \lib $ be a library of learning algorithms of size $ \ml $. For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
@@ -398,22 +400,22 @@ The expectation $ E_{D_n} $ is taken wrt. the joint probability measure over our
    \end{align*}
    Where $ \hat{\la}_n $ and $ \tilde{\la}_n $ are the cross-validation- and the oracle selected algorithms from $ \lib $. 
 \end{theorem}
-In the expectations above, we are taking the expectation wrt. the random split-variable $ \Sn $ as well as the joint distribution of our observations. In a more verbose manner one would write 
+In the expectations above, we are taking the expectation with respect to the random split-variable $ \Sn $ as well as the joint distribution of our observations. In a more verbose manner one would write 
 \begin{align*}
     E_{D_n} E_{\Sn}  R(\hat{\la}_n(P_{n, \Sn}^{0}), P) = \int R(\hat{\la}_n(P_{n, \Sn}^{0}), P) d (P_{\Sn} \otimes  P^{n}_O ).
 \end{align*}
 
 \begin{proof}[Proof]
-    We will apply \Cref{finitesamplebound} to the second and third terms on the left hand side of the inequality in \Cref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to each algorithm in our library $ \lib$. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
+    We will apply \Cref{finitesamplebound} to the second and third terms on the left hand side of the inequality in \Cref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to the algorithms in our library $ \lib$ fitted on the training data. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
 
-First, we take the expectation wrt. $ D_n $ on both sides in \Cref{finitesampledecomp}. For the second term we have 
+First, we take the expectation with respect to $ D_n $ on both sides in \Cref{finitesampledecomp}. For the second term we have 
 \begin{align*}
 &E_{D_n} E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)\\
 &= 
 E_{D_n}E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o)\\
 &=E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } E_{D_n}\max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o).
 \end{align*}
-Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we can always consider $ n_1 $ as fixed given $ D_n $, now applying \Cref{finitesamplebound} to the expression above with $ n = n_1 $ yields 
+Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we can consider $ n_1 $ as fixed given $ D_n $, now applying \Cref{finitesamplebound} to the expression above with $ n = n_1 $ yields 
 \begin{align*}
 &E_\Sn\frac{1 + \delta}{\sqrt{n_1} } E_{D_n} \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
 &\leq E_{\Sn} \frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{\la \in \lib} \left[ \frac{M(\la(P_{n,\Sn}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\la(P_{n,\Sn}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\la(P_{n,S}^{0}), P)^{2-p}} \right)^{1/p} \right] \\
@@ -423,18 +425,18 @@ Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we 
 Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above as \Cref{finitesamplebound} is also valid for $ -L $. It is now immediate from \Cref{finitesampledecomp} that 
 \begin{align*}
     E_{D_n} E_{\Sn} &\int L(o, \hat{\la}_n(P_{n, \Sn}^{0})) d P(o) \leq (1 + 2 \delta) E_{D_n} E_{\Sn} \int L(o, \tilde{\la}_n(P_{n, \Sn}^{0})) d P(o) \\
-                    &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]\\
-                    &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right].
+                    &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]\\
+                    &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right].
 \end{align*}
 The second and third terms above are identical, meaning that they can be combined into one term where the numerator in the first fraction is $ 16 $ instead of $ 8 $. 
 \end{proof}
 
 \begin{remark}
-One might notice that $ \Sn $ still appears in the remainder of the bound above, but the only variable in the remainder that depends on $ \Sn $ is $ n_1 $. It is, therefore, completely possible to drop the expectation wrt. $ \Sn $ if $ n_1 $ is deterministic, for example, if it is a fraction of $ n $.  
+One might notice that $ \Sn $ still appears in the remainder of the bound above, but the only variable in the remainder that depends on $ \Sn $ is $ n_1 $. It is, therefore, completely possible to drop the expectation with respect to $ \Sn $ if $ n_1 $ is deterministic, for example, if it is a fraction of $ n $.  
 \end{remark}
 
 
-In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\btheta)) $ are bounded over $ \Theta $, thus taking the supremum over $ \Theta $ will not result in the remainder being infinite. The assumption is indeed valid for binary regression as we have commented in \Cref{ex:bernsteinexample}. 
+In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\btheta)) $ are bounded over $ \Theta $, thus taking the supremum over $ \Theta $ will not result in the remainder being infinite. The assumption is indeed valid for binary regression as we have remarked upon in \Cref{ex:bernsteinexample}. 
 \begin{corollary}[Asymptotic equivalence] \label{cor:dslasymptoticequivalence}
     If there exists an $ \varepsilon > 0 $ such that 
    \begin{align*}
@@ -454,15 +456,17 @@ For the sake of simplicity and the previous remark we will consider $ n_1 $ as a
                                                         &= (1 + 2 \delta_n) E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)\\
                                                         &+(1 + \delta_n) \frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta, P)} \cdot (\log(n) + 1) \right].
     \end{align*}
+
     In the above inequality the remainder term goes to $ 0 $ as $ n_1 $ increases. The $ \log(n) $ term in the supremum will be dominated by the $ 1/n_1 $ that is multiplied in the front. By dividing the oracle risk on both sides, we obtain
     \begin{align*}
         \frac{E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P)} 
         &\leq 1 + 2 \delta_n\\
         &+\frac{(1 + \delta_n)\frac{16}{n_1} \log (1 +k) \sup_{\btheta \in \Theta} \left[ M(\theta) + \frac{v(\theta)}{R(\theta , P)} \cdot (\log(n) + 1) \right]}{E_{D_n} E_{\Sn} R( \tilde{\la}_n(P_{n,\Sn}^{0}), P)}.
     \end{align*}
+
     The fraction on the right hand side will converge to $ 0 $ as $ n \to \infty $, since $ n_1 $ is polynomial in $ n $ and the oracle risk is bounded away from $ 0 $ by assumption. The entire right hand side will therefore converge to $ 1 $ as $ \delta_n \to 0 $. Note also that by the definition of the oracle, we have 
     \begin{align*}
-        E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P) \leq E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P),
+        E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n,\Sn}^{0}), P) \leq E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n,\Sn}^{0}), P),
     \end{align*}
     implying that 
         \begin{align*}
@@ -474,10 +478,11 @@ In the proof of the asymptotic result we have chosen $ \delta_n = 1/\log(n) $, i
 For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as $ n \to \infty $. This is a reasonable assumption for cross-validation schemes such as $ K $-fold cross-validation or if $ n_1 = np $ for $ p \in (0,1) $ where the test size increases with the amount of available data. Note that the condition is not satisfied for leave-one-out cross-validation since $ n_1$ is equal to $ 1 $ for every $ n $.  
 
 \begin{example}[Regression]
-   In a regression context with quadratic loss, the risk for a learner can never be zero unless the outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
+   In the context of a regression problem with quadratic loss, the risk for a learner can never be zero unless the outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
    \begin{align*}
        \int (Y - E(Y \mid X))^2 d P \geq 0. 
    \end{align*}
+
    Since the integrand is positive, the integral is zero if and only if $ Y = E(Y \mid X) $ almost surely. That is only the case when $ Y $ is deterministic given $ X $, i.e. $ Y $ is $ X $-measurable. Assuming, therefore, that $ Y $ is not deterministic given $ X $, then we note that by the fact that the quadratic loss is strictly proper due to \Cref{minrisk}, it holds for any $ \theta \in \Theta $ that
    \begin{align*}
        R(\theta, P) \geq R(\theta^*, P) > 0,
@@ -560,7 +565,7 @@ For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as 
 \section{The Ensemble Super Learner}
 The idea behind the \textit{ensemble super learner} is to combine the predictions made by each learner, $\la_1(P_{n}), \ldots, \la_k(P_{n}) $, into a single prediction. The idea of combining learners was examined in \cite{breiman1996stacked} which considered how a linear combination of the learners in the library could be formed. This approach, also known as \textit{stacked regression} or \textit{stacking} is a variant of the ensemble super learner. The ensemble super learner, however, does not limit itself to linear combinations but uses a \textit{meta learning algorithm} on the \textit{level 1 data} -- the predictions made by the learners. It is a broad approach of balancing the weaknesses of each learner by forming an ensemble. However, as we will see, $ K $-fold cross-validation is integral in forming the ensemble super learner. 
 
-We will now proceed to give the definitions and setup necessary to define the ensemble super learner.
+We will proceed to give the definitions and setup necessary to define the ensemble super learner.
 \subsection{Level 1 data}
 Let $ D_n $ be our data and let $ \lib $ be a library of learning algorithms. The \textit{level 1 covariates} of $ \lib $ applied to $ D_n $ as specified by a $ K $-fold cross validation procedure is  
 $$ \mathcal{Z} = \{Z_i = (\la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^0)(X_i) ) \}_{i = 1}^{n} \subseteq [0,1]^{k}, $$
@@ -596,15 +601,16 @@ Here the $ P_n $ indicates that each learner $ \la \in \lib $ is fitted on the e
 
 
 \subsection{Oracle property}
-The meta learning algorithm, $ \Meta $, fits the learner that most accurately predicts $ Y $ given $ Z $, a way of formalizing the notion of `fitting' is that $ \Meta $ seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a parameter set (for example Euclidean), for each $ a \in \mathcal{A} $ let $ \meta_{a} $ be a meta learner. In a practical setting, one might consider $ \meta_{a} $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
+The meta learning algorithm, $ \Meta $, fits the meta learner that best estimates $ E(Y \mid Z) $, a way of formalizing the notion of `fitting' is that $ \Meta $ seeks to select the meta learner with the lowest risk among a indexed set of meta learners. Let $ \mathcal{A} $ be a parameter set (for example Euclidean), for each $ a \in \mathcal{A} $ let $ \meta_{a} $ be a meta learner. In a practical setting, one might consider $ \meta_{a} $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
 \begin{align} \label{eq:meta_learning_algorithm}
     \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta_{a}) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
 \end{align}
-The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta_{ \hat{a} } $, which is the meta learner with the lowest empirical risk on the level 1 data. We will now consider $ \mathcal{A}_n \subseteq \mathcal{A} $ such that $ \ml(n) = |\mathcal{A}_{n}| $ depends on $ n $. Denote the ensemble super learner that uses the meta learner $ \meta_{ a } $ as 
+
+The meta learning algorithm applied to $ \lone_{n} $ returns $ \meta_{ \hat{a} } $, which is the meta learner with the lowest empirical risk on the level 1 data. We will now consider a subset $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of elements in the subset, $ \ml(n) = |\mathcal{A}_{n}| $, depends on $ n $. Denote the ensemble super learner that uses the meta learner $ \meta_{ a } $ as 
 \begin{align*}
     \esl_{a}(P_{n}) := \meta_{a}(\la_1(P_{n}), \ldots, \la_k(P_{n})).
 \end{align*}
-Denote the cross-validation- and oracle selector of $ a $ as 
+Let the cross-validation- and oracle selector of $ a $ be 
 \begin{align*}
     \hat{a}_n &:= \argmin_{a \in \mathcal{A}_{n}} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}), P_{n, s}^{1}), \\
     \tilde{a}_n &:= \argmin_{a \in \mathcal{A}_n} \frac{1}{K} \sum_{s = 1}^{K} R(\esl_{a}(P_{n, s}^{0}) , P),
@@ -624,7 +630,7 @@ The following finite sample oracle inequality is a direct consequence of the ora
     Let $ \lib $ be a library of learning algorithms of size $ k $. Let $ \esl_{ \hat{a}_{n} } $ be the ensemble super learner over $ \lib $ obtained by applying the cross-validation selector over a finite parameter space $ \mathcal{A}_n $ using the $ K $-fold cross-validation scheme. Let $ \esl_{ \tilde{a}_n } $ be the oracle ensemble learner obtained by applying the oracle selector over the same set of parameters. If the conditions of \Cref{finitesample} are satisfied, then the following oracle inequality holds
     \begin{align*}
         \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \hat{a}_n }(P_{n, s}^{0}) , P) &\leq (1 + 2 \delta) \frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \tilde{a}_n }(P_{n,s}^{0}), P) \\
-                                                                                     &+ (1 + \delta) \frac{16 K}{n} \log(1 + k(n)) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta) K}{n} + \frac{v(\btheta)}{R(\btheta)} \frac{1 + \delta}{\delta} \right].  
+                                                                                     &+ (1 + \delta) \frac{16 K}{n} \log(1 + k(n)) \sup_{\btheta \in \Theta} \left[ M(\btheta)+ \frac{v(\btheta)}{R(\btheta, P)} \frac{1 + \delta}{\delta} \right].  
     \end{align*}
 \end{theorem}
 \begin{proof}
@@ -638,7 +644,7 @@ The following finite sample oracle inequality is a direct consequence of the ora
     \end{align*}
 \end{corollary}
 \begin{proof}
-    The $ \log(1 + k(n)) $ term is less than $ 1 + \log(k(n)) = 1 + p \log(n) $, which is of lower order than $ \sqrt{n} $, thus the remainder term goes to zero as $ n \to \infty $.
+    The proof is analogous to \Cref{cor:dslasymptoticequivalence}. We will replace $ \delta $ with $ \delta_n = 1/ \log(n) $. Note that in the remainder, the $ \log(1 + k(n)) $ term is less than $ 1 + \log(k(n)) = 1 + p \log(n) $, which is of lower order than $ n $. The $(1 + \delta_n)/ \delta_n $ term simplifies to become $ 1 + \log(n) $, and when multiplied with the $ \log(1 + k(n)) $ term, becomes of order $ \log(n)^2 $ that is still of lower order than $ n $. Thus the remainder term goes to zero as $ n \to \infty $ and the asymptotic result is implied. 
 \end{proof}
 
 \subsection{Choice of meta learning algorithm} \label{simplex}
@@ -650,7 +656,7 @@ Here we examine a simple meta learning algorithm which is to do a constrained re
 \begin{align*}
     \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{\q = 1}^{\ml} a_\q = 1 , a_\q \geq 0 \text{ for } 1 \leq \q \leq k \right\}, 
 \end{align*}
-where $ k = | \lib | $ is the number of algorithms in our library. The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \mapsto z \cdot a $. By Cauchy-Schwarz we have $ z \cdot a \leq \norm{z} \norm{a} \leq 1 $ meaning that the range of $ \meta_a $ is $ [0,1] $. The ensemble super learner that applies $ \meta_a $ is, therefore, a valid learner in $ \Theta $. To apply the oracle results, we will cover $ \mathcal{A} $ with equidistant points on the simplex surface. For every $ n $, we specify $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of points in $ \mathcal{A}_n $ increases with $ n $ at a polynomial rate, and that for any $ a \in \mathcal{A} $ we have 
+where $ k = | \lib | $ is the number of algorithms in our library. The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \mapsto z \cdot a $. By Cauchy-Schwarz we have $ z \cdot a \leq \norm{z} \norm{a} \leq 1 $ meaning that the range of $ \meta_a $ is $ [0,1] $. The ensemble super learner that applies the meta learner $ \meta_a $ is, therefore, a valid learner in $ \Theta $. To apply the oracle results, we will cover $ \mathcal{A} $ with equidistant points on the simplex surface. For every $ n $, we specify $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of points in $ \mathcal{A}_n $ increases with $ n $ at a polynomial rate, and that for any $ a \in \mathcal{A} $ we have 
 \begin{align*}
     \min_{b_n \in \mathcal{A}_n } \norm{a - b_n} \leq \frac{1}{n}.
 \end{align*}
@@ -659,24 +665,21 @@ This is clearly possible by \Cref{fig:simplex}. It thus follows that we can find
 \begin{figure}[H]
     \centering
     \includestandalone[width=0.5\textwidth]{figures/simplex-3.tex}
-    \caption{The ensemble super learner parameter set $ \mathcal{A} $ of learner weights visualized as a $ 2 $-simplex for library of size $ \ml = 3 $. The $ k $ axes span the weight combinations for the library where the weight combinations that sum to 1 lie on the simplex. Here the discrete approximation $ \mathcal{A}_n $ is visualized as points on the surface of the simplex.}
+    \caption{The parameter set $ \mathcal{A} $ of learner weights visualized as a $ 2 $-simplex for library of size $ \ml = 3 $. The $ k $ axes span the weight combinations for the library where the weight combinations that sum to 1 lie on the simplex. Here the discrete approximation $ \mathcal{A}_n $ is visualized as points on the of the simplex.}
     \label{fig:simplex}
 \end{figure}
 
 The discrete super learner is essentially a special case of the ensemble super learner that utilizes constrained regression. If $ a_\q = 1 $ for any $ 1 \leq \q \leq k $ then the ensemble super learner predicts the same as the $ \q $'th learner. The discrete super learner can, therefore, be seen as constrained regression optimizing for $ a $ over the vertices of the $ (\ml -1) $-simplex. Given that the trainining data is representative of the data-generating distribution, the ensemble learner that uses constrained regression should outperform the discrete super learner at minimizing risk since it optimizes over the entire $ (\ml -1) $-simplex.  
-
-\begin{remark}
-\end{remark}
 
 \subfile{simulations}
 \section{Discussion}
 In this thesis super learners and their applicability to binary regression have been investigated. Theoretical results, namely \Cref{cor:dslasymptoticequivalence,cor:esl_asymptotic_equivalence}, prove that super learners are asymptotically equivalent with the oracle selectors that selects the best learning algorithm based on its knowledge of the data-generating distribution $ P $. We conclude that super learning is a valid method for creating a strong learner by combining a library of different learning algorithms. The two super learners that were examined -- the discrete and ensemble super learner -- have been benchmarked and compared to a library consisting of logistic regression and XGBoost. They are shown to outperform these algorithms in terms of validation risk. Furthermore, we see that while the variance in super learner predictions are higher than parametric logistic regression, they are still less than the variance of the machine learning method XGBoost. Finally, a new meta algorithm for combining learner predictions has been proposed which has shown to achieve acceptable results.  
 
 \subsection{Local weighting of learners}
-\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might to fit a locally weighted ensemble pertaining to each segrated region. The naive implementation applies $ k $-means clustering to the level 1 data, and demonstrated capable of segregating the predictions into regions as seen in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4}. 
+\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might to fit a locally weighted ensemble pertaining to each segrated region. The naive implementation applies $ k $-means clustering to the level 1 data, and seems to be capable of segregating the predictions into regions as seen in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4} in the appendix. 
 
-Another motivation for this procedure is to find a way to `smoothen' the patchwork pattern in the predictions of tree methods such as XGBoost as seen in \Cref{fig:predictpar}. The patchy pattern in the predictions is undesirable for two reasons. One, the predicted probabilities of neighbouring covariates can be very different, and likely do not model the actual data-generating distribution that well. One can imagine if one of the covariates was age and the outcome was whether one has a certain disease, then it does not make sense that the predicted probability of having the disease given age would be $ 0.5 $ when age is $ <7 $ or $ >9 $ but $ 0 $ when it is between $ 7 $ and $ 9 $. This behavior simply does not model the actual biological process. Second, the patchiness is an indication that the tree method has not been trained on enough observations, and thus the prediction variance will be very high, as seen in \Cref{fig:pred_probs_boxplot}. 
-The ensemble super learner should, preferably, be able to combine the predictions from a smooth parametric model with the loss-minimizing machine learning method to create a learner that minimizes loss, but also sanely models the data-generating distribution. The locally weighted ensemble super learner is an attempt at doing that, and the results show promise that this is attainable. By examining \Cref{fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5}, we see that the patchiness is reduced around the edges of strip where $ p = 0.5 $ due to the fact that the main effects model is weighted higher in those regions.
+Another motivation for this procedure is to find a way to `smoothen' the patchwork pattern in the predictions of tree methods such as XGBoost as seen in \Cref{fig:predictpar}. The patchy pattern in the predictions is undesirable for two reasons. One, the predicted probabilities of neighbouring covariates can be very different, and likely do not model the actual data-generating distribution that well. One can imagine if one of the covariates was age and the outcome was whether one has a certain disease, then it does not make sense that the predicted probability of having the disease given age would be $ 0.5 $ when age is $ <7 $ or $ >9 $ but $ 0 $ when it is between $ 7 $ and $ 9 $. This behavior simply does not model the actual biological process. Second, the patchiness is an indication that the tree method has not been trained on enough observations, and thus the prediction variance will be very high as seen in \Cref{fig:pred_probs_boxplot}. 
+The ensemble super learner should, preferably, combine the predictions from a smooth parametric model with the loss-minimizing machine learning method to create a learner that minimizes loss, but also sanely models the data-generating distribution. The locally weighted ensemble super learner is an attempt at doing that, and the results show promise that this is attainable. By examining \Cref{fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5} in the appendix, we see that the patchiness is reduced around the edges of strip where $ p = 0.5 $ due to the fact that the main effects model is weighted higher in those regions.
 
 Further work is, however, required to investigate the performance of the locally weighted ensemble super learner with other learning algorithms and with more covariates. Currently, the $ k $-means method has a hyperparameter $ k $ which can be tuned, the results presented in the appendix considers when $ k = 4 $, but it is possible that this number is not optimal. The $ k $-means method also has the downside that it is blind, namely it is an unsupervised method which does not take the outcome into consideration. We observe in \Cref{fig:esl_preds_xgboost_vs_main_kmeans} that in the lower left corner both the main effects and XGBoost model predicts close to the truth, but $ k $-means clustering groups those predictions together with the predictions in the lower middle where the main effects model predicts worse. 
 
@@ -684,6 +687,9 @@ Further work is, however, required to investigate the performance of the locally
 In \Cref{simplex} we investigated the constrained regression and how the optimal weighting could be found by optimizing over the $ (\ml -1) $-simplex where $ \ml $ was the size of our library. The oracle result for the ensemble super learner, \Cref{cor:esl_asymptotic_equivalence}, requires that we optimize over a parameter set $ \mathcal{A}_n $ where the number of elements in that set is at most polynomial in $ n $. This is, however, not how we would find the optimal parameter in practice. One can argue that the optimization procedure available on our hardware indeed only searches over some finite subset of $ \mathcal{A} $ which is perhaps fixed. The finite subset is determined by the floating-point precision of the processor, and perhaps also the internal parameters of the optimization procedure itself. For example, gradient descent algorithms usually have a hyperparameter such as `step size' or `learning rate' which controls how large of a step the algorithm takes in the direction of the minimum. In reality we are never able to search over the uncountable parameter space since the number of atoms in our processor is very much countable. 
 
 The dependency of parameter set $ \mathcal{A}_n $ on $ n $, does not reflect our actual optimization procedure. We do not choose some grid of points polynomial in the number of observations, evaluating the risk for each point and then choosing the minimum. Rather, the optimization is over all feasible points, for instance if the risk is convex, then the minimum can sometimes be solved explicitly or there will exist procedures that guarantee convergence to the minimum. 
+
+\subsection{Bias-variance tradeoff} 
+The variance plots 
 
 \section{Perspectives}
 The local weighting procedure investigated in \Cref{locally_weighted_ensemble_super_learner} can be optimized by considering other clustering algorithms which takes the outcome into account. Another approach could be to separate the level 1 into 3 groups, one that lie above the diagonal, one that lie below, and the one that where the predictions are close to the diagonal. Supervised clustering algorithms might be preferred in order to group the predictions into groups that can have qualitative interpretations such as: ``In group 5, XGBoost predicts has a lower residual than main effects''. The goal here is to create a method that can combine the flexibility of machine learning algorithms while maintaining a consistent model of the data-generating distribution. We see that XGBoost is capable of learning the distribution given that the training sample sizes are in the ten thousands (\Cref{fig:xgboost10k}). However, depending on the application, that number of observations is too many in comparison to parametric models that achieve a much lower variance despite the number training samples being 10 times less. An optimal super learning algorithm should balance the loss-minimizing property of machine learning methods with the stability seen in parametric models. 
