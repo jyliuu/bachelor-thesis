@@ -49,6 +49,18 @@
     frametitlefont=\bfseries,
     nobreak=true
 }
+\newenvironment{codeavailability}{%
+  \renewcommand{\abstractname}{Code availability}
+  \begin{abstract}
+}{%
+  \end{abstract}
+}
+\newenvironment{acknowledgements}{%
+  \renewcommand{\abstractname}{Acknowledgements}
+  \begin{abstract}
+}{%
+  \end{abstract}
+}
 \newtheorem{example}{Example}
 \surroundwithmdframed[style=examplestyle]{example}
 
@@ -272,6 +284,7 @@ where $\Sn$ is some split for our data $D_n$. Our motivation for defining the em
 \begin{align*}
      R(\la(P_{n, S^{n}}^{0}), P) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P(o).
 \end{align*}
+
 The following definitions are analogous to what is stated in section 1 and 2 of  \parencite{laan03}.
  \begin{definition}[Risk averaged over splits \parencite{vaart06}]
      Given the data $D_n$, a split-variable $\Sn$ and a library $ \lib $. Let $ \la \in \lib $ be a learning algorithm. The risk for the learner, $\la(P_{n,\Sn}^0)$, created from applying $ \la $ on the training data, averaged over $ \Sn $ is  
@@ -284,10 +297,8 @@ The expectation $ E_{\Sn} $ is a simple average since $ \Sn $ is discrete. There
 \begin{align*}
     E_{\Sn} R( \la(P_{n,\Sn}^{0}), P) &= \sum_{s \in \{0,1\}^{n}} R(\la(P_{n, s}^{0}), P) \cdot P(\Sn = s). 
 \end{align*}
-
-
 \begin{definition}[Oracle selector \parencite{laan03}]
-    Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest averaged risk is the \textit{oracle selected algorithm} for $ n $ observations
+Given the data $ D_n $, a split variable $ \Sn $ and a library $ \lib $, the learning algorithm $ \la \in \lib $ with the lowest averaged risk is the \textit{oracle selected algorithm} for $ n $ observations
     \begin{align*}
         \tilde{\la}_n := \argmin_{\la \in \lib} E_{\Sn} R(\la(P_{n,\Sn}^0 ) , P).
     \end{align*}
@@ -637,9 +648,9 @@ Given the level 1 data, $ \lone_n $, the meta learning algorithm seeks to optimi
 \subsubsection{Constrained regression and the $ (\ml-1) $-simplex} 
 Here we examine a simple meta learning algorithm which is to do a constrained regression on the level 1 data. The reason for examining this particular meta learning algorithm is because the discrete super learner is a special case of the ensemble super learner that utilizes this algorithm. The goal is to fit a weighted combination of the learners, such that the weights sum to $ 1 $. We can achieve this by parametrizing $ \mathcal{A} $ as the $ (\ml -1) $-simplex given by
 \begin{align*}
-    \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{\q = 1}^{\ml} a_\q = 1 , a_\q \geq 0 \text{ for } 1 \leq \q \leq k \right\}. 
+    \mathcal{A} = \left\{ a \in \mathbb{R}^{\ml} \mid \sum_{\q = 1}^{\ml} a_\q = 1 , a_\q \geq 0 \text{ for } 1 \leq \q \leq k \right\}, 
 \end{align*}
-The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \mapsto z \cdot a $. By Cauchy-Schwarz we have $ z \cdot a \leq \norm{z} \norm{a} \leq 1 $ meaning that the range of $ \meta_a $ is $ [0,1] $. The ensemble super learner that applies $ \meta_a $ is, therefore, a valid learner in $ \Theta $. To apply the oracle results, we will cover $ \mathcal{A} $ with equidistant points on the simplex surface. For every $ n $, we specify $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of points in $ \mathcal{A}_n $ increases with $ n $ at a polynomial rate, and that for any $ a \in \mathcal{A} $ we have 
+where $ k = | \lib | $ is the number of algorithms in our library. The meta learner $ \meta_{a} $ for $ a \in \mathcal{A} $ is then the map $ z \mapsto z \cdot a $. By Cauchy-Schwarz we have $ z \cdot a \leq \norm{z} \norm{a} \leq 1 $ meaning that the range of $ \meta_a $ is $ [0,1] $. The ensemble super learner that applies $ \meta_a $ is, therefore, a valid learner in $ \Theta $. To apply the oracle results, we will cover $ \mathcal{A} $ with equidistant points on the simplex surface. For every $ n $, we specify $ \mathcal{A}_n \subseteq \mathcal{A} $ such that the number of points in $ \mathcal{A}_n $ increases with $ n $ at a polynomial rate, and that for any $ a \in \mathcal{A} $ we have 
 \begin{align*}
     \min_{b_n \in \mathcal{A}_n } \norm{a - b_n} \leq \frac{1}{n}.
 \end{align*}
@@ -648,7 +659,7 @@ This is clearly possible by \Cref{fig:simplex}. It thus follows that we can find
 \begin{figure}[H]
     \centering
     \includestandalone[width=0.5\textwidth]{figures/simplex-3.tex}
-    \caption{The parameter set $ \mathcal{A} $ as a $ 2 $-simplex for $ \ml = 3 $. Here $ \mathcal{A}_n $ is visualized as points on the surface.}
+    \caption{The ensemble super learner parameter set $ \mathcal{A} $ of learner weights visualized as a $ 2 $-simplex for library of size $ \ml = 3 $. The $ k $ axes span the weight combinations for the library where the weight combinations that sum to 1 lie on the simplex. Here the discrete approximation $ \mathcal{A}_n $ is visualized as points on the surface of the simplex.}
     \label{fig:simplex}
 \end{figure}
 
@@ -727,7 +738,7 @@ By the minimizing property the difference between the second and first term must
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled.png}}
-    \caption{Raw predictions vs stratified according to the weighted most learner as seen in \Cref{fig:esl_preds_lw_stratified}}
+    \caption{Raw predictions vs stratified according to the learner with highest weight as seen in \Cref{fig:esl_preds_lw_stratified}}
     \label{fig:esl_preds_lw_stratified_tiled}
 \end{figure}
  
