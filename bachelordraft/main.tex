@@ -19,14 +19,14 @@
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
-
 \usepackage{subfiles} % Best loaded last in the preamble
-\Crefname{figure}{Figure}{Figures}
-\setlength\parindent{0pt}
-\DeclareMathOperator*{\argmax}{arg\,max} 
-\DeclareMathOperator*{\argmin}{arg\,min}
-\newcommand{\indep}{\perp \!\!\! \perp}
-\newcommand\norm[1]{\lVert#1\rVert}
+\usepackage{fancyhdr}
+
+\setlength{\headheight}{13.6pt} % Set the head height to a larger value
+\addtolength{\topmargin}{-1.6pt} % Adjust the top margin to compensate for the increased head height
+\fancyhf{} % Clear header and footer
+\fancyhead[L,RO]{\thepage} % Page number on the right side of even pages, left side of odd pages
+\fancyhead[LO]{\leftmark} % Chapter title on the left side of odd pages
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{claim}[theorem]{Claim}
@@ -57,6 +57,11 @@
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{2}
 
+\Crefname{figure}{Figure}{Figures}
+\DeclareMathOperator*{\argmax}{arg\,max} 
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\newcommand\norm[1]{\lVert#1\rVert}
 \newcommand{\q}{q}
 \newcommand{\ml}{k}
 \newcommand{\btheta}{\theta}
@@ -78,17 +83,20 @@
 \subtitle{and their oracle properties}
 \date{Submitted: \today}
 \advisor{Supervised by Prof. Thomas Gerds\\ Co-supervised by Prof. Niels Richard Hansen \\Department of Mathematical Sciences \\University of Copenhagen, Denmark}
-% \frontpageimage{example.png}
 
 \begin{document}
 \begingroup
-    \fontencoding{T1}\fontfamily{lmr}\selectfont
+    \fontencoding{T1}\fontfamily{lmr}\selectfont % Set the font
     \maketitle
+    \thispagestyle{empty} 
+    \subfile{abstract}
+    \newpage
+    \thispagestyle{empty} 
     \tableofcontents
     \newpage
 \endgroup
 
-
+\pagestyle{fancy}
 \section{Introduction}
 In the context of regression, $ O = (Y, X) $ is an observation for $ Y \in \mathbb{R} $ being the outcome and $ X \in \mathbb{R}^{d} $ the covariate. A natural goal is to estimate a function $ \theta $ such that the $ L^2 $-risk or mean squared error $ E(Y - \theta(X))^2 $ is minimized. It turns out that the conditional mean -- called the regression function or regression $ x \mapsto E(Y \mid X = x) $ minimizes the squared error, but consistent estimation of the regression requires a statistical model $ \mathcal{P} $ for the data-generating distribution $ P \in \mathcal{P} $ for which $ O \sim P $ to be specified. We typically make certain assumptions about the statistical model, $\mathcal{P}$, in which we believe $P$ resides. For instance, we might assume that $\mathcal{P}$ is a parametric family of distributions such as a curved exponential family \parencite{lauritzen2023fundamentals}. In doing so we are able to identify the parameters of the distribution $ P $ via maximum liklihood and compute the regression from the estimated parameters.
 
@@ -123,7 +131,7 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
 \begin{equation} \label{l2risk}
     R(\btheta, P) := \int L(o, \btheta)  dP(o).
 \end{equation}
-Theorem \Cref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
+\Cref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
 \begin{theorem} \label{minrisk}
     Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
@@ -136,7 +144,6 @@ Theorem \Cref{minrisk} shows that the minimum risk is achieved by the conditiona
 \end{theorem}
 \begin{proof}
     Proof emulated from \parencite{gyorfi2002distribution}[ch. 1]. 
-
     Let $ \btheta \in \Theta $ be arbitrary and $ m(x) = E(Y \mid X = x) $, we have 
     \begin{align*}
         E| \theta(X) - Y |^2 &= E| \theta(X) - m(X) + m(X) - Y |^2 \\
@@ -652,13 +659,13 @@ The discrete super learner is essentially a special case of the ensemble super l
 
 \subfile{simulations}
 \section{Discussion}
-In this thesis super learners and their applicability to binary regression have been investigated. Theoretical results, namely \Cref{cor:dslasymptoticequivalence,cor:esl_asymptotic_equivalence}, prove that super learners are asymptotically equivalent with the oracle selector that selects the best learning algorithm based on its knowledge of the data-generating distribution $ P $. We conclude that super learning is a valid method for creating a strong learner by combining a library of different learning algorithms. The two super learners that were investigated,  the discrete and ensemble super learner, have been benchmarked and compared to a library consisting of logistic regression and XGBoost. They are shown to outperform these algorithms in terms of validation risk. Furthermore, we see that while the variances in super learner predictions are higher than parametric logistic regression, they are still less than the variances of the machine learning method XGBoost. Finally, a new meta algorithm for combining learner predictions has been investigated which has shown to achieve acceptable results.  
+In this thesis super learners and their applicability to binary regression have been investigated. Theoretical results, namely \Cref{cor:dslasymptoticequivalence,cor:esl_asymptotic_equivalence}, prove that super learners are asymptotically equivalent with the oracle selectors that selects the best learning algorithm based on its knowledge of the data-generating distribution $ P $. We conclude that super learning is a valid method for creating a strong learner by combining a library of different learning algorithms. The two super learners that were examined -- the discrete and ensemble super learner -- have been benchmarked and compared to a library consisting of logistic regression and XGBoost. They are shown to outperform these algorithms in terms of validation risk. Furthermore, we see that while the variance in super learner predictions are higher than parametric logistic regression, they are still less than the variance of the machine learning method XGBoost. Finally, a new meta algorithm for combining learner predictions has been proposed which has shown to achieve acceptable results.  
 
 \subsection{Local weighting of learners}
-\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might to fit a locally weighted ensemble pertaining to each segrated region. The naive implementation applies $ k $-means clustering to the level 1 data, and has shown the possibility of segregating the predictions into regions as seen in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4}. 
+\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might to fit a locally weighted ensemble pertaining to each segrated region. The naive implementation applies $ k $-means clustering to the level 1 data, and demonstrated capable of segregating the predictions into regions as seen in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4}. 
 
 Another motivation for this procedure is to find a way to `smoothen' the patchwork pattern in the predictions of tree methods such as XGBoost as seen in \Cref{fig:predictpar}. The patchy pattern in the predictions is undesirable for two reasons. One, the predicted probabilities of neighbouring covariates can be very different, and likely do not model the actual data-generating distribution that well. One can imagine if one of the covariates was age and the outcome was whether one has a certain disease, then it does not make sense that the predicted probability of having the disease given age would be $ 0.5 $ when age is $ <7 $ or $ >9 $ but $ 0 $ when it is between $ 7 $ and $ 9 $. This behavior simply does not model the actual biological process. Second, the patchiness is an indication that the tree method has not been trained on enough observations, and thus the prediction variance will be very high, as seen in \Cref{fig:pred_probs_boxplot}. 
-The ensemble super learner should, preferably, be able to combine the predictions from a smooth parametric model with the loss-minimizing machine learning method to create a learner that minimizes loss, but also sanely models the data-generating distribution. The locally weighted ensemble super learner is an attempt at doing that, and some of the results do show promise that this goal is attainable. By examining \Cref{fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5}, we see that the patchiness is reduced around the edges of strip where $ p = 0.5 $ due to the fact that the main effects model is weighted higher in those regions.
+The ensemble super learner should, preferably, be able to combine the predictions from a smooth parametric model with the loss-minimizing machine learning method to create a learner that minimizes loss, but also sanely models the data-generating distribution. The locally weighted ensemble super learner is an attempt at doing that, and the results show promise that this is attainable. By examining \Cref{fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5}, we see that the patchiness is reduced around the edges of strip where $ p = 0.5 $ due to the fact that the main effects model is weighted higher in those regions.
 
 Further work is, however, required to investigate the performance of the locally weighted ensemble super learner with other learning algorithms and with more covariates. Currently, the $ k $-means method has a hyperparameter $ k $ which can be tuned, the results presented in the appendix considers when $ k = 4 $, but it is possible that this number is not optimal. The $ k $-means method also has the downside that it is blind, namely it is an unsupervised method which does not take the outcome into consideration. We observe in \Cref{fig:esl_preds_xgboost_vs_main_kmeans} that in the lower left corner both the main effects and XGBoost model predicts close to the truth, but $ k $-means clustering groups those predictions together with the predictions in the lower middle where the main effects model predicts worse. 
 

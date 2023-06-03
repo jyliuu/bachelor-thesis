@@ -61,7 +61,9 @@ The discrete super learner in our simulations uses 10-fold cross-validation and 
     \State $\ell[s,\la] \gets R(\la(P_{n, s}^{0}), P_{n,s}^{1}) = \frac{V}{n} \sum_{O_i \in P_{n,s}^{1}} L(O_i, \la(P_{n, s}^{0})) $
     \EndFor
 \EndFor
-\State $ \ell_{\text{avg}}(\la) \gets \frac{1}{V} \sum_{s = 1}^{V} \ell[s,\la] $ 
+\For{$\la \in \lib$}
+    \State $ \ell_{\text{avg}}(\la) \gets \frac{1}{V} \sum_{s = 1}^{V} \ell[s,\la] $ 
+\EndFor
 \State $ \hat{\la}_n \gets \argmin_{\la \in \lib} \ell_{\text{avg}}(\la) $
 \State $ \hat{\la}_n(P_n) \gets \text{fit}(\hat{\la}_n, P_n) $  
 \State \textbf{return} $ \hat{\la}_n(P_n) $
@@ -116,6 +118,7 @@ We will compare the performance of the ensemble super learner with the discrete 
     \item The ensemble super learner achieves lower risk than the discrete super learner
     \item The ensemble super learner has a lower prediction variance on a single new observations than the discrete super learner
 \end{enumerate}
+
 The ensemble super learner uses the same library of algorithms as the discrete super learner, they are the intercept only logistic regression (baseline), the main effects logistic regression and the gradient boosting algorithm XGBoost. The ensemble super learner does internal $ K $-fold cross-validation the same way as the discrete super learner, except that the out-of-fold predictions are saved in order to create the level 1 dataset. The following snippet is the psuedocode for the ensemble super learner algorithm:
 \begin{algorithm}[H]
 \caption{Ensemble super learner}
@@ -157,12 +160,14 @@ The predictions of the ensemble super learner is a weighted combination of the p
     a_{\text{main effects}} &= 0.598493218, \\
     a_{\text{XGBoost}} &= 0.392946430.
 \end{align*}
+
 From the weights we see that the predictions of intercept only logistic regression is not important for the ensemble super learner, and that the predictions of main effects model has the heighest weight. The fact that XGBoost has less weight than the main effects logistic regression is not surprising in light of our investigations with the discrete super learner, where we saw that the main effects model was more likely to be selected for small samples. To compare, fitting the ensemble super learner on $ n = 10\,000 $ observations yields the following weights
 \begin{align*}
     a_{\text{intercept}} &= 0.000109466, \\
     a_{\text{main effects}} &= 0.136615961, \\
     a_{\text{XGBoost}} &= 0.863274573.
 \end{align*}
+
 The intercept only model is weighted very little, and the main effects model is weighted a lot less than the XGBoost model. This is in line with our findings from the discrete super learner, where we saw that the main effects model was less likely to be selected for larger samples. Note, however, these weights depend on the data, so they are not necessarily the same when the data is generated each time. With more simulation runs it is possible determine the distribution of the weights and how they are centered. 
 
 \subsubsection{Ensemble super learner performance}
