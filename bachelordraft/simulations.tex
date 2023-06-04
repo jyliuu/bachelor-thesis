@@ -99,9 +99,11 @@ The second run shows that the discrete super learner might be unable to determin
 \end{figure}
 \Cref{fig:pred_probs_boxplot} illustrates the variance in the predictions by each learner for a single observation, whose true probability is indicated by the red dashed line at $ p = 0.5 $. Each learner has been trained $ K = 1000 $ times on $ n = 150, 500, \dots 3000 $ samples taken from the distribution and is used to predict $ K $ times after each training. The box plots are created from the $ K $ predictions. 
 
-We observe that the machine learning model, XGBoost, has the highest prediction variance across all training sample sizes. Recall that we only had two covariates, here having 1500 observations limits the range of predictions of our main effects model to be between $ 0.27 $ and $ 0.46 $, whereas for XGBoost it can vary from below $ 0.1 $ to above $ 0.9 $. While XGBoost is extremely efficient at minimizing loss, its predictions have a high variance unless one has a lot of training data. 
+We observe that the machine learning model, XGBoost, has the highest prediction variance across all training sample sizes. Recall that we only had two covariates, here having 1500 observations limits the range of predictions of our main effects model to be between $ 0.27 $ and $ 0.46 $, whereas for XGBoost it can vary from below $ 0.1 $ to above $ 0.9 $. While XGBoost is extremely efficient at minimizing loss, its predictions have a high variance unless one has a lot of training data.
 
-The discrete super learner achieves a lower variance than XGBoost for all training sample sizes, which can be attributed to its preference of the main effects logistic regression when the training sample size is small, that has a lower variance than XGBoost. However, the variance of the discrete super learner increases when $ n \geq 1000 $ and the box plots become wider. This is due to the discrete super learner predicting the same as XGBoost since around these numbers of training samples since XGBoost begins to achieve a lower risk in comparison to the main effects logistic regression. 
+Another interesting observation is the bias-variance tradeoff. The parametric learners display low variance, but are highly biased as we see that their predictions are not centered around the true probability at all. On the other hand, XGBoost is much less biased but suffers from a high variance.
+
+The discrete super learner achieves a lower variance than XGBoost for all training sample sizes, which can be attributed to its preference of the low variance main effects logistic regression when the training sample size is small. However, the variance of the discrete super learner increases when $ n \geq 1000 $ and the box plots become wider. This is due to the discrete super learner's preference of XGBoost as it begins to achieve minimal risk around these number of training samples. 
 
 \begin{figure}[H]
     \centering
@@ -184,7 +186,9 @@ From the weights we see that the predictions of intercept only logistic regressi
     \caption{The variance of the ensemble super learner compared to other learners, each algorithm is fitted $ K = 1000 $ times on $n$ samples and used to evaluate $ K $ times on a single observation.}
     \label{fig:learner_vars_w_esl_1000}
 \end{figure}
-\Cref{fig:learner_vars_w_esl_1000} compares the variances of the ensemble super learner to the other learners. The ensemble super learner does not exhibit the same behavior as the discrete super learner, which tends to predict many outliers; its distribution seems to be consistently centered, as evidenced in \Cref{fig:hist_esl_dist}. This aligns with the fact that the ensemble super learner is a continuous combination of different learners. We also note that the ensemble super learner achieves a lower variance than both the XGBoost and the discrete super learner, but has a variance than the parametric logistic regression models. 
+\Cref{fig:learner_vars_w_esl_1000} compares the variances of the ensemble super learner to the other learners. The ensemble super learner does not exhibit the same behavior as the discrete super learner, which tends to predict many outliers; its distribution is centered as evidenced in \Cref{fig:hist_esl_dist}. This aligns with the fact that the ensemble super learner is a continuous combination of different learners. 
+
+The ensemble super learner also appears to exhibit slight bias, though not as much as the parametric learners. In addition, it manages to achieve a lower variance compared to both XGBoost and the discrete super learner, while exhibiting a slightly higher variance compared to the parametric learners. Thus, it could be argued that the ensemble super learner attempts to strike a balance in the bias-variance tradeoff.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/hist_esl_dist.png}
