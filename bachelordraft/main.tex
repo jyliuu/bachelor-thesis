@@ -275,7 +275,7 @@ where $ n_1 = \sum_{i = 1}^{n} \Sn_i, n_0 = 1-n_1$ identifies the number of obse
     \end{align*}
     this procedure is also known as Monte Carlo cross-validation \parencite{laan03}. In practice one would have a hard time validating over all $ \begin{pmatrix} n \\ n_1\end{pmatrix} $ combinations as it can be very large, for $ n = 100 $ and $ n_1 = 10 $ corresponding to $ 10\% $ of the data being in the validation set, the number of combinations is around $ 1.7 \cdot 10^{13} $. One would instead approximate by randomly sampling possible combinations. However, by doing random sampling there is the possibility that some observations will not be in any of the sampled validation sets. The probability of this happening will become small as we sample multiple times.  
 \end{example}
-\subsection{K-fold cross validation}
+\subsubsection{K-fold cross validation}
 The idea behind $ K $-fold cross-validation is to split the data into $ K $ equally sized folds, where the candidate learners are fitted on $ K - 1 $ folds and their performance is evaluated on the remaining fold. We index the folds by $ s \in \{1, \dots , K\} $ and let $ s(i) $ indicate the fold that observation $ i $ belongs to. We will let $ P_{n, s}^{0} $ denote the empirical measure over the observations that are not in fold $ s $ -- the training set, and let $ P_{n, s}^{1} $ denote the empirical measure over the observations that are in the fold $ s $ -- the validation set. 
 
 $ K $-fold cross-validation amounts to looking at a single split variable $ \Sn $ whose probability mass is equally distributed on the binary vectors indexed by $ s $. In practice one would select a $ K $ and use a random splitting procedure to generate $ K $ binary vectors such that the entire dataset is the disjoint union of the folds specified by each vector. It is also possible to run $ K $-fold cross-validation multiple times which amounts to multiple calls to the random splitting procedure.
@@ -670,7 +670,7 @@ This is clearly possible by \Cref{fig:simplex}. It thus follows that we can find
 \begin{figure}[H]
     \centering
     \includestandalone[width=0.5\textwidth]{figures/simplex-3.tex}
-    \caption{The parameter set $ \mathcal{A} $ of learner weights visualized as a $ 2 $-simplex for library of size $ \ml = 3 $. The $ k $ axes span the weight combinations for the library where the weight combinations that sum to 1 lie on the simplex. Here the discrete approximation $ \mathcal{A}_n $ is visualized as points on the of the simplex.}
+    \caption{The parameter set $ \mathcal{A} $ of learner weights visualized as a $ 2 $-simplex for a library of size $ \ml = 3 $. The $ k $ axes span the weight combinations for the library where the weight combinations that sum to 1 lie on the simplex. Here the discrete approximation $ \mathcal{A}_n $ is visualized as points on the of the simplex.}
     \label{fig:simplex}
 \end{figure}
 

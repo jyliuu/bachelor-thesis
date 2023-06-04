@@ -167,7 +167,7 @@ Main effects & 0.598493218 & 0.136615961 \\
 XGBoost & 0.392946430 & 0.863274573 \\
 \hline
 \end{tabular}
-\caption{Combined Table}
+\caption{Table of ensemble super learner weights of the different learners}
 \end{table}
 From the weights we see that the predictions of intercept only logistic regression is not important at all for the ensemble super learner. For $ n = 1000 $ the predictions of main effects model has the heighest weight, which is not surprising in light of our investigations with the discrete super learner, where we saw that the main effects model was more likely to be selected for small samples. Whereas for $ n = 10\,000 $ it is weighted a lot less than XGBoost. Note that these weights depend on the data, so they are not necessarily the same when the data is sampled each time. 
 
@@ -178,7 +178,7 @@ From the weights we see that the predictions of intercept only logistic regressi
     \caption{The risk of the ensemble super learner compared to other algorithms where the number of training samples are $n = 100, 200, \dots , N = 3500 $.}
     \label{fig:losses_esl_s23}
 \end{figure}
-\Cref{fig:losses_esl_s23} shows that the ensemble super learner achieves a lower loss than any of the learners, including the discrete super learner. The result agrees with the conclusion in \Cref{simplex}, where we argued that because the ensemble super learner optimizes over the entire $ \ml $-simplex, its risk is lower compared to the discrete super learner. However we must keep in mind that when examining finite samples, the conclusion is that the ensemble super learner will achieve the lowest risk on the training data, it is, therefore, not necessarily the case that the validation risk is always lower for the ensemble super learner. 
+\Cref{fig:losses_esl_s23} shows that the ensemble super learner achieves a lower risk than any of the learners, including the discrete super learner. The result agrees with the conclusion in \Cref{simplex}, where we argued that because the ensemble super learner optimizes over the entire $ \ml $-simplex, its risk is lower compared to the discrete super learner. However we must keep in mind that when examining finite samples, the conclusion is that the ensemble super learner will achieve the lowest risk on the training data, it is, therefore, not necessarily the case that the validation risk is always lower for the ensemble super learner. 
 
 As an example, suppose that the library contains the regression. Limited samples might prevent the ensemble super learner from assigning it full weight. The discrete super learner which selects the learning algorithm with the lowest cross-validation risk, might choose the true regression, consequently achieving a lower validation risk than the ensemble super learner.
 
@@ -204,7 +204,7 @@ The ensemble super learner also appears to exhibit slight bias, though not as mu
     \caption{Weighting of the 3 different learners selected by the ensemble super learner varied over number of training samples. The ensemble super learner uses the constrained regression meta algorithm as described in \Cref{simplex}, the weights sum to 1.}
     \label{fig:esl_weights}
 \end{figure}
-The weighting of the different learners by the ensemble super learner is visualized in \Cref{fig:esl_weights}. We see that the weighting of the intercept only model is very low, and that the main effects model has more weight than XGBoost for small samples, however, this trend reverses as the number of training samples increases. An interesting observation is that XGBoost begins to outweigh the main effects logistic regression when the training size is between 1000 and 1500, which coincides with when XGBoost begins to achieve a lower loss compared to the main effects model as seen in \Cref{fig:loss_min_of_both,fig:loss_jumps}.
+The weighting of the different learners by the ensemble super learner is visualized in \Cref{fig:esl_weights}. We see that the weighting of the intercept only model is very low, and that the main effects model has more weight than XGBoost for small samples, however, this trend reverses as the number of training samples increases. An interesting observation is that XGBoost begins to outweigh the main effects logistic regression when the training size is between 1000 and 1500, which coincides with when XGBoost begins to achieve a lower risk compared to the main effects model as seen in \Cref{fig:loss_min_of_both,fig:loss_jumps}.
 
 \subsection{Locally weighted ensemble super learner} \label{locally_weighted_ensemble_super_learner}
 By using the ensemble super learner with the constrained regression meta learning algorithm we can combine different learners to achieve a lower risk than any of the learners in the library. However, the resulting ensemble is a global combination of the learners, meaning that the weights are the same when predicting on all covariatecovariateis. In this section I will consider a meta learning algorithm where $ k $-means clustering is used to cluster the covariates into groups and a local weighted combination is fitted for each group.
