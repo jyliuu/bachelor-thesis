@@ -138,20 +138,20 @@ Our setup and notation is similar to \citet{vaart06} and \citet{laan03}:
 Let a statistical model $ \mathcal{P} $ be given on the measurable space $ (\mathcal{O}, \mathcal{A}) $ where $ \mathcal{O} = \{0,1\} \times \mathcal{X} $ is our sample space for some $ \mathcal{X} \subseteq \mathbb{R}^{d} $. 
 We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable}\} $, which represents the set of \textit{regression functions} that map from our covariates to the probability interval. We define the quadratic loss and the corresponding risk that we wish to minimize.
 \begin{definition}[Quadratic loss]
-    The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ (y, x) = o \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
+    The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ (Y, X) = O \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
-    L(o, \btheta) = L((y,x), \btheta) = (y - \btheta(x))^2.
+    L(O, \btheta) = L((Y,X), \btheta) = (Y - \btheta(X))^2.
 \end{align*}
 \end{definition}
 A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected quadratic loss, or risk $R: \btheta \to \mathbb{R}$ given by 
 \begin{equation} \label{l2risk}
-    R(\btheta, P) := \int L(o, \btheta)  dP(o).
+    R(\btheta, P) := \int L(O, \btheta)  dP(O).
 \end{equation}
 \Cref{minrisk} shows that the minimum risk is achieved by the conditional probability $ x \mapsto P(Y = 1\mid X = x) $; we also say that the quadratic loss is \textit{strictly proper} \parencite{gneiting2007strictly}. 
 \begin{theorem} \label{minrisk}
-    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions. Let the loss function be the $ L^2 $-loss $ L(o, \btheta) = (y - \btheta(x))^2 $, then for the optimum $ \btheta^* $ defined as 
+    Let $ (\mathcal{O} , \mathcal{A}, P) $ be a probability space for some probability measure $ P \in \mathcal{P} $. Let $ \Theta $ be the set of regression functions. Let the loss function be the $ L^2 $-loss $ L(O, \btheta) = (Y - \btheta(X))^2 $, then for the optimum $ \btheta^* $ defined as 
     \begin{align*}
-        \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta, P)= \argmin_{\btheta \in \Theta} \int L(o, \btheta)  dP(o),
+        \btheta^* := \argmin_{\btheta \in \Theta} R(\btheta, P)= \argmin_{\btheta \in \Theta} \int L(O, \btheta)  dP(O),
     \end{align*}
     it holds for an observation $ O = (Y, X) \sim P $ that
     \begin{align*}
@@ -175,7 +175,7 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
     \end{align*}
     We conclude that
     \begin{align*}
-        \int L(o, \theta) d P(o) &= E| \theta(X) - m(X) |^2 + E | m(X) - Y |^2.
+        \int L(O, \theta) d P(O) &= E| \theta(X) - m(X) |^2 + E | m(X) - Y |^2.
     \end{align*}
     The first term after the equality is always positive and is $ 0 $ only when $ \theta = m $, this proves that $ m $ minimizes the expression above. 
 \end{proof}
@@ -282,11 +282,11 @@ $ K $-fold cross-validation amounts to looking at a single split variable $ \Sn 
 \subsection{Risks and selectors}
 In the context where a learning algorithm is applied on the training data, we write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner is then evaluated on the test data. Given that the risk \cref{l2risk} was the integral of the loss function with respect to data-generating distribution $P$, we can define the emprical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
  \begin{align*}
-     R(\la(P_{n, S^{n}}^{0}), P_{n, \Sn}^{1}) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P_{n,\Sn}^{1}(o),
+     R(\la(P_{n, S^{n}}^{0}), P_{n, \Sn}^{1}) =  \int L(O, \la(P_{n, S^{n}}^{0})) d P_{n,\Sn}^{1}(O),
  \end{align*}
 where $\Sn$ is some split for our data $D_n$. Our motivation for defining the empirical risk is that we can compare it with the true risk of the learner where we integrate with respect to the data-generating distribution 
 \begin{align*}
-     R(\la(P_{n, S^{n}}^{0}), P) =  \int L(o, \la(P_{n, S^{n}}^{0})) d P(o).
+     R(\la(P_{n, S^{n}}^{0}), P) =  \int L(O, \la(P_{n, S^{n}}^{0})) d P(O).
 \end{align*}
 
 The following definitions are analogous to what is stated in section 1 and 2 of  \parencite{laan03}.
@@ -354,8 +354,8 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
     Let $ G_{n} $ be the empirical process of an i.i.d. sample of size $ n $ from the distribution P and $ \lib$ a library of learning algorithms. Furthermore, let $ \hat{\la}_n  $ and $ \tilde{\la}_n $ denote the cross-validation- and oracle selected algorithms from $ \lib $ respectively. For $ \delta > 0 $ it holds that
    \begin{align*}
        E_{\Sn} &R( \hat{\la}_n(P_{n, \Sn}^{0}), P) \leq (1 + 2 \delta) E_{\Sn} R( \tilde{\la}_n(P_{n, \Sn}^{0}) , P ) \\ 
-                                                                &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)  \\
-                                                                &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int-L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)(o).
+                                                                &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(O, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(O)  \\
+                                                                &+E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int-L(O, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} + \delta \sqrt{n_1} P)(O).
    \end{align*}
 \end{lemma}
 \begin{proof}
@@ -382,7 +382,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{proof}
 
 \begin{example}[Binary regression] \label{ex:bernsteinexample}
-    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f_{\btheta}(o) = L(o, \btheta) = (Y - \theta(X))^2$ can be found by applying \Cref{unifbernstein}. By requiring that $ \theta(x) \in [0,1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ o \in \mathcal{O} $ since $ Y \in \{0,1\} $. We also note that the Bernstein pair for $ f_{\btheta} $ satisfies $ 0 \leq \norm{f_\theta}_{\infty} \leq 1 $ and $ 0 \leq \frac{3}{2}Pf_{\btheta}^2 \leq 1 $, so they are bounded. 
+    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f_{\btheta}(O) = L(O, \btheta) = (Y - \theta(X))^2$ can be found by applying \Cref{unifbernstein}. By requiring that $ \theta(x) \in [0,1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ O \in \mathcal{O} $ since $ Y \in \{0,1\} $. We also note that the Bernstein pair for $ f_{\btheta} $ satisfies $ 0 \leq \norm{f_\theta}_{\infty} \leq 1 $ and $ 0 \leq \frac{3}{2}Pf_{\btheta}^2 \leq 1 $, so they are bounded. 
 
 \end{example}
 
@@ -397,7 +397,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 The expectation $ E_{D_n} $ is taken with respect to the joint probability measure over our observations, here we have that $ D_n \sim P_{O}^{n} = P_{O_1} \otimes P_{O_2} \otimes \dots \otimes P_{O_n} $. 
 
 \begin{theorem}[Theorem 2.3 in \parencite{vaart06}] \label{finitesample}
-   Let $ \lib $ be a library of learning algorithms of size $ \ml $. For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ o \mapsto L(o, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
+   Let $ \lib $ be a library of learning algorithms of size $ \ml $. For $ \btheta \in \Theta $ let the numbers $ (M(\btheta) , v(\btheta)) $ be a Bernstein pair for the function $ O \mapsto L(O, \btheta) $ and assume that $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $. Then for $ \delta > 0 $ and $ 1 \leq p \leq 2 $ it holds that 
    \begin{align*}
        E_{D_n} E_{\Sn} &R(\hat{\la}_n(P_{n, \Sn}^{0}), P) \leq(1 + 2 \delta) E_{D_n} E_{\Sn} R( \tilde{\la}_n(P_{n,\Sn}^{0}), P) +\\
                        &(1 + \delta) E_{\Sn} \left(  \frac{16}{n_1^{1/p}} \log (1 +k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} +  \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p} \left( \frac{1 + \delta}{\delta} \right)^{2/p-1} \right]\right).
@@ -410,25 +410,25 @@ In the expectations above, we are taking the expectation with respect to the ran
 \end{align*}
 
 \begin{proof}[Proof]
-    We will apply \Cref{finitesamplebound} to the second and third terms on the left hand side of the inequality in \Cref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(o, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to the algorithms in our library $ \lib$ fitted on the training data. Note that $ \mathcal{F} \subseteq \{o \mapsto L(o, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
+    We will apply \Cref{finitesamplebound} to the second and third terms on the left hand side of the inequality in \Cref{finitesampledecomp}. Let $ \mathcal{F} = \{o \mapsto L(O, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to the algorithms in our library $ \lib$ fitted on the training data. Note that $ \mathcal{F} \subseteq \{o \mapsto L(O, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
 
 First, we take the expectation with respect to $ D_n $ on both sides in \Cref{finitesampledecomp}. For the second term we have 
 \begin{align*}
-&E_{D_n} E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(o)\\
+&E_{D_n} E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(O, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(O)\\
 &= 
-E_{D_n}E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o)\\
-&=E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } E_{D_n}\max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o).
+E_{D_n}E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } \max_{\la \in \lib} \int L(O, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(O)\\
+&=E_{\Sn} \frac{1 + \delta}{\sqrt{n_1} } E_{D_n}\max_{\la \in \lib} \int L(O, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(O).
 \end{align*}
 Where we use Fubini in the last equality. Recall that $ \Sn \indep D_n $, so we can consider $ n_1 $ as fixed given $ D_n $, now applying \Cref{finitesamplebound} to the expression above with $ n = n_1 $ yields 
 \begin{align*}
-&E_\Sn\frac{1 + \delta}{\sqrt{n_1} } E_{D_n} \max_{\la \in \lib} \int L(o, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(o) \\
+&E_\Sn\frac{1 + \delta}{\sqrt{n_1} } E_{D_n} \max_{\la \in \lib} \int L(O, \la(P_{n, \Sn}^{0})) d (G_{n,\Sn}^{1} - \frac{\delta }{1 + \delta} \sqrt{n_1} P)(O) \\
 &\leq E_{\Sn} \frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \max_{\la \in \lib} \left[ \frac{M(\la(P_{n,\Sn}^{0}))}{n_1^{1-1/p}} + \left( \frac{v(\la(P_{n,\Sn}^0) )}{( \frac{\delta}{1 + \delta} )^{2-p} R(\la(P_{n,S}^{0}), P)^{2-p}} \right)^{1/p} \right] \\
 &\leq E_{\Sn}\frac{1 + \delta}{\sqrt{n_1}} \frac{8}{n_1^{1/p-1/2}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{( \frac{\delta}{1 + \delta} )^{2-p} R(\btheta,P)^{2-p}} \right)^{1/p} \right] \\
 &= (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta,P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right].  
 \end{align*}
 Where for the third inequality we take the $ \sup $ over $ \Theta $. We can also bound the third term with the same expression above as \Cref{finitesamplebound} is also valid for $ -L $. It is now immediate from \Cref{finitesampledecomp} that 
 \begin{align*}
-    E_{D_n} E_{\Sn} &\int L(o, \hat{\la}_n(P_{n, \Sn}^{0})) d P(o) \leq (1 + 2 \delta) E_{D_n} E_{\Sn} \int L(o, \tilde{\la}_n(P_{n, \Sn}^{0})) d P(o) \\
+    E_{D_n} E_{\Sn} &\int L(O, \hat{\la}_n(P_{n, \Sn}^{0})) d P(O) \leq (1 + 2 \delta) E_{D_n} E_{\Sn} \int L(O, \tilde{\la}_n(P_{n, \Sn}^{0})) d P(O) \\
                     &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right]\\
                     &+ (1 + \delta) E_{\Sn}\frac{8}{n_1^{1/p}} \log(1 + k) \sup_{\btheta \in \Theta} \left[ \frac{M(\btheta)}{n_1^{1-1/p}} + \left( \frac{v(\btheta)}{R(\btheta, P)^{2-p}} \right)^{1/p}\left( \frac{1 + \delta}{\delta}  \right)^{2/p-1} \right].
 \end{align*}
