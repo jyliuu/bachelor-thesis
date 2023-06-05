@@ -374,7 +374,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{proof}
     The following proof is due to \parencite{vaart06}[ch. 8.1]. 
     \begin{align*}
-        \norm{f}_{\infty}^2 P\left( e^{|f|/\norm{f}_{\infty}} -1 - \frac{|f|}{\norm{f}_{\infty}}\right) &= \norm{f}_{\infty}^{2} \sum_{k \geq 2}^{\infty} P \frac{|f|^{k}}{\norm{f}^{k}_{\infty}k!} = Pf^2 \sum_{k \geq 2}^{\infty} P\frac{|f|^{k-2}}{\norm{f}^{k-2}_{\infty} k! } \\
+        \norm{f}_{\infty}^2 P\left( e^{|f|/\norm{f}_{\infty}} -1 - \frac{|f|}{\norm{f}_{\infty}}\right) &= \norm{f}_{\infty}^{2} \sum_{k \geq 2}^{\infty} P \frac{|f|^{k}}{\norm{f}^{k}_{\infty}k!} = Pf^2 \sum_{k \geq 2}^{\infty} \frac{|f|^{k-2}}{\norm{f}^{k-2}_{\infty} k! } \\
                                                                                                         &\leq P f^2 \sum_{k \geq 2}^{\infty} \frac{\norm{f}_{\infty}^{k-2}}{\norm{f}^{k-2}_{\infty} k! } = P f^2 \sum_{k \geq 2}^{\infty} \frac{1}{k !}\\
                                                                                                         &= P f^2 (e-2)\leq \frac{3}{4} P f^2 = \frac{1}{2} \left(\frac{3}{2} Pf^2\right). 
     \end{align*}
@@ -603,6 +603,13 @@ A meta learning algorithm seeks to estimate $ E (Y \mid Z) $. It can for example
     is called the \textit{ensemble super learner} and we will denote it by $ \esl(P_{n}) $. 
 \end{definition}
 Here the $ P_n $ indicates that each learner $ \la \in \lib $ is fitted on the entire data set. A meta learner, $ \meta $, is used to combine the predictions made by each learner. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/esldiagram.pdf}
+    \caption{The steps involved in creating the ensemble super learner, taken from \citet{van2007super}.}
+    \label{fig:esldiagram}
+\end{figure}
+\Cref{fig:esldiagram} from \citet{van2007super} illustrates how the ensemble super learner is fitted in practice. Step 3 in the diagram is the fitting of the meta learning algorithm, $ \Meta $, to the level 1 data. The result is a meta learner $ m $, which we have denoted in our setup as $ \phi $.  
 
 
 \subsection{Oracle property}
