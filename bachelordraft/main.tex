@@ -361,7 +361,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \begin{proof}
     See appendix.
 \end{proof}
-\noindent To control the bounds for the risk we introduce Bernstein pairs 
+\noindent To provide the bounds for the risk we will introduce Bernstein pairs. They are used in the Bernstein inequality to control for the variables $ G_nf $ for $ f \in \mathcal{F} $, which is a critical ingredient in \Cref{finitesamplebound}. The exact details in the proof of \Cref{finitesamplebound} requires an introductory course to empirical processes, which is omitted for the purposes of this thesis.  
 \begin{definition}[Bernstein pair \parencite{vaart06}]
     Given a measurable function $ f: \mathcal{O} \to \mathbb{R} $, the tuple $ (M(f) , v(f)) $ is a Bernstein pair if 
     \begin{equation} \label{bernstein}
@@ -704,7 +704,16 @@ In \Cref{simplex} we investigated the constrained regression and how the optimal
 The reason for the discrete approximation in the oracle results is because we would like to express it as a corollary of the theorem for the discrete super learner, \Cref{finitesample}, which requires that the cardinality $ k $ of the library $ \lib $ enters into the remainder in the form of a $ \log(1 + k) $ term. This is not well-defined when $ k $ is the cardinality of a continuous set. However, it is mentioned immediately after theorem 2 in \citet{van2007super} that the discrete approximation is asymptotically negligible, meaning that optimizing over the entire set $ \mathcal{A} $ will result in asymptotically equivalent procedures. 
 
 \subsection{Bias-variance tradeoff} 
-The variances in learner predictions displayed in \Cref{fig:pred_probs_boxplot,fig:learner_vars_w_esl_1000} highlight the bias-variance tradeoff between using parametric models such as logistic regression vs data adaptive methods like XGBoost. Parametric models tend to be very biased, in comparison to machine learning methods that are less biased, but have a high variance. The super learner can be thought of as a way of attempting to balance this tradeoff. By combining parametric learners together with non-parametric machine learning methods, the ensemble super learner can decide on the optimal blend between the methods. 
+The variances in learner predictions displayed in \Cref{fig:pred_probs_boxplot,fig:learner_vars_w_esl_1000} highlight the bias-variance tradeoff between using parametric models such as logistic regression vs data adaptive methods like XGBoost. Parametric models tend to be very biased, in comparison to machine learning methods that are less biased, but have a high variance. Recall that the quadratic risk factored into the following terms 
+\begin{align*}
+    R(\btheta, P) = E | \btheta(X) - m(X) |^2 + E | m(X) - Y |^2 \qquad \btheta \in \Theta,
+\end{align*}
+where $ m(X) = E(Y \mid X) $. The first term is what we essentially minimize by selecting an optimal $ \btheta $. Note that we can rewrite the first term as follows 
+\begin{align*}
+    E | \btheta(X) - m(X) |^2 &= E |\btheta(X) - E(\btheta(X)) |^2 + |E(\btheta(X)) - m(x) |^2\\
+                              &= \operatorname{Var}(\btheta(X)) + \operatorname{Bias}(\btheta(X))^2.
+\end{align*}
+This is also known as the bias-variance decomposition of the quadratic risk \parencite{gyorfi2002distribution}. By using quadratic loss, the discrete super learner essentially chooses the learner which minimizes bias-variance tradeoff. The choice is made from a comprehensive set that includes both parametric learning algorithms together with non-parametric machine learning methods. However, by using the ensemble super learner it is possible to determine the optimal blend between the different methods. 
 
 \section{Perspectives}
 The local weighting procedure investigated in \Cref{locally_weighted_ensemble_super_learner} can be optimized by considering other clustering algorithms that factor the outcome into account. Another approach could be to separate the level 1 into three groups, one above the diagonal, one below, and the one where the predictions are close to the diagonal. Supervised clustering algorithms might be preferred in order to group the predictions into groups that can have qualitative interpretations such as: ``In group $ k $, XGBoost has smaller residuals than main effects''. The goal here is to create a method that can combine the flexibility of machine learning algorithms while maintaining a consistent model of the data-generating distribution. We see that XGBoost is capable of learning the distribution when the training sample sizes are in the ten thousands (\Cref{fig:xgboost10k}). However, depending on the application, that number of observations is too many in comparison to parametric models that achieve a much lower variance despite the number training samples being 10 times less. An optimal super learning algorithm should balance the loss-minimizing property of machine learning methods with the stability seen in parametric models. 
@@ -759,34 +768,34 @@ By the minimizing property the difference between the second and first term must
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled.png}}
-    \caption{Raw predictions vs stratified according to the learner with highest weight as seen in \Cref{fig:esl_preds_lw_stratified}}
+    \caption{Raw predictions vs stratified according to the learner with highest weight as seen in \Cref{fig:esl_preds_lw_stratified}. The predictions of the locally weighted ensemble super is on the left, the right plot shows which learner was weighted the most in the $ k = 4 $ clusters.}
     \label{fig:esl_preds_lw_stratified_tiled}
 \end{figure}
  
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled2.png}}
-    \caption{Example where XGBoost seems to be more preferred when the predicted probability is around $ 0.5 $}
+    \caption{An example where XGBoost seems to be more preferred when the predicted probability is around $ 0.5 $.}
     \label{fig:esl_preds_lw_stratified_tiled2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled5.png}}
-    \caption{Another example similar to the previous}
+    \caption{Another example similar to \Cref{fig:esl_preds_lw_stratified_tiled2}}
     \label{fig:esl_preds_lw_stratified_tiled5}
 \end{figure}
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled3.png}}
-    \caption{Example where XGBoost is the highest weighted learner globally}
+    \caption{An example where XGBoost is globally the highest weighted learner.}
     \label{fig:esl_preds_lw_stratified_tiled3}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled4.png}}
-    \caption{Example where XGBoost is weighted the highest when the predicted probabilities are around $ p = 0.5 $ and above $ 0.7$}
+    \caption{An example where XGBoost is weighted the highest when the predicted probabilities are around $ p = 0.5 $ and above $ 0.7$.}
     \label{fig:esl_preds_lw_stratified_tiled4}
 \end{figure}
 
