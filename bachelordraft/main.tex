@@ -162,8 +162,8 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
     Proof emulated from \parencite{gyorfi2002distribution}[ch. 1]. 
     Let $ \btheta \in \Theta $ be arbitrary and $ m(x) = E(Y \mid X = x) $, we have 
     \begin{align*}
-        E| \theta(X) - Y |^2 &= E| \theta(X) - m(X) + m(X) - Y |^2 \\
-                             &= E| \theta(X) - m(X) |^2 + E| m(X) - Y |^2 + 2 E[ (\theta(X) - m(X))(m(X) - Y) ].
+        E(\theta(X) - Y)^2 &= E( \theta(X) - m(X) + m(X) - Y )^2 \\
+                             &= E( \theta(X) - m(X) )^2 + E( m(X) - Y )^2 + 2 E[ (\theta(X) - m(X))(m(X) - Y) ].
     \end{align*}
     The last term of the right hand side is zero. By using the tower rule we obtain
     \begin{align*}
@@ -175,7 +175,7 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
     \end{align*}
     We conclude that
     \begin{align*}
-        \int L(O, \theta) d P(O) &= E| \theta(X) - m(X) |^2 + E | m(X) - Y |^2.
+        \int L(O, \theta) d P(O) &= E( \theta(X) - m(X) )^2 + E ( m(X) - Y )^2.
     \end{align*}
     The first term on the right hand side is always positive and is $ 0 $ only when $ \theta = m $, this proves that $ m $ minimizes the expression above. 
 \end{proof}
@@ -412,7 +412,7 @@ In the expectations above, we are taking the expectation with respect to the ran
 \begin{proof}[Proof]
     We will apply \Cref{finitesamplebound} to the second and third terms on the left hand side of the inequality in \Cref{finitesampledecomp}. Let $ \mathcal{F} = \{O \mapsto L(O, \la(P_{n,\Sn}^{0})) \mid \la \in \lib\}$, be the collection of functions obtained by applying the loss $ L $ to the algorithms in our library $ \lib$ fitted on the training data. Note that $ \mathcal{F} \subseteq \{O \mapsto L(O, \btheta) \mid \btheta \in \Theta\} $, and since $ R(\btheta, P) \geq 0 $ for every $ \btheta \in \Theta $ it follows that $ Pf \geq 0 $ for every $ f \in \mathcal{F} $.
 
-First, we take the expectation with respect to $ D_n $ on both sides in \Cref{finitesampledecomp}. For the second term we have 
+First, we take the expectation with respect to $ D_n $ on both sides in \Cref{finitesampledecomp}. For the second term on the right hand side we have 
 \begin{align*}
 &E_{D_n} E_{\Sn} \frac{1}{\sqrt{n_1} } \max_{\la \in \lib} \int L(O, \la(P_{n, \Sn}^{0})) d ((1 + \delta) G_{n,\Sn}^{1} - \delta \sqrt{n_1} P)(O)\\
 &= 
@@ -690,7 +690,7 @@ The discrete super learner is essentially a special case of the ensemble super l
 In this thesis super learners and their applicability to binary regression have been investigated. Theoretical results, namely \Cref{cor:dslasymptoticequivalence,cor:esl_asymptotic_equivalence}, prove that super learners are asymptotically equivalent with the oracle selectors that selects the best learning algorithm based on its knowledge of the data-generating distribution $ P $. We conclude that super learning is a valid method for creating a strong learner by combining a library of different learning algorithms. The two super learners that were examined -- the discrete and ensemble super learner -- have been benchmarked and compared to a library consisting of logistic regression and XGBoost. They are shown to outperform these algorithms in terms of validation risk. Furthermore, we see that while the super learner has higher variance than parametric logistic regression, it is still less than the variance of the machine learning method XGBoost. Finally, a new meta algorithm for combining learner predictions has been proposed which has shown to achieve interesting results.  
 
 \subsection{Local weighting of learners}
-\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might fit a locally weighted ensemble pertaining to each segregated region. The naive implementation applies $ k $-means clustering to the level 1 data and appears capable of grouping the predictions into clusters as evidenced in \Cref{fig:esl_preds_lw_stratified_tiled,fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4} in the appendix. 
+\Cref{locally_weighted_ensemble_super_learner} introduces a new meta algorithm for combining learner predictions. The locally weighted ensemble super learner is a minor extension of the constrained regression ensemble super learner, which fits a constrained least squares on the level 1 data such that the fitted coefficients are positive and sum to 1. The locally weighted ensemble groups the level 1 data into clusters, and for each cluster the constrained regression problem is solved. The idea is that in certain regions of the level 1 data, certain algorithms are likely to perform better than others. Therefore by segregating the level 1 data one might fit a locally weighted ensemble pertaining to each segregated region. The naive implementation applies $ k $-means clustering to the level 1 data and appears capable of grouping the predictions into clusters as evidenced in \Cref{fig:esl_preds_lw_stratified_tiled2,fig:esl_preds_lw_stratified_tiled5,fig:esl_preds_lw_stratified_tiled3,fig:esl_preds_lw_stratified_tiled4} in the appendix. 
 
 Another motivation for this procedure is to find a way to `smoothen' the patchwork pattern in the predictions of tree methods such as XGBoost seen in \Cref{fig:predictpar}. The patchy pattern in the predictions is undesirable for two reasons. One, the predicted probabilities of neighbouring covariates can be very different, and likely do not model the actual data-generating distribution that well. One can imagine if one of the covariates was age and the outcome was whether one has a certain disease, then it does not make sense that the predicted probability of having the disease given age would be $ 0.5 $ when age is $ <7 $ or $ >9 $ but $ 0 $ when it is between $ 7 $ and $ 9 $. This behavior simply does not model the actual biological process. Second, the patchiness is an indication that the tree method has not been trained on enough observations, and thus the prediction variance will be very high (\Cref{fig:pred_probs_boxplot}). 
 
@@ -706,11 +706,11 @@ The reason for the discrete approximation in the oracle results is because we wo
 \subsection{Bias-variance tradeoff} 
 The variances in learner predictions displayed in \Cref{fig:pred_probs_boxplot,fig:learner_vars_w_esl_1000} highlight the bias-variance tradeoff between using parametric models such as logistic regression vs data adaptive methods like XGBoost. Parametric models tend to be very biased, in comparison to machine learning methods that are less biased, but have a high variance. Recall that the quadratic risk factored into the following terms 
 \begin{align*}
-    R(\btheta, P) = E | \btheta(X) - m(X) |^2 + E | m(X) - Y |^2 \qquad \btheta \in \Theta,
+    R(\btheta, P) = E ( \btheta(X) - m(X) )^2 + E ( m(X) - Y )^2 \qquad \btheta \in \Theta,
 \end{align*}
 where $ m(X) = E(Y \mid X) $. The first term is what we essentially minimize by selecting an optimal $ \btheta $. Note that we can rewrite the first term as follows 
 \begin{align*}
-    E | \btheta(X) - m(X) |^2 &= E |\btheta(X) - E(\btheta(X)) |^2 + |E(\btheta(X)) - m(x) |^2\\
+    E ( \btheta(X) - m(X) )^2 &= E (\btheta(X) - E(\btheta(X)) )^2 + (E(\btheta(X)) - m(x) )^2\\
                               &= \operatorname{Var}(\btheta(X)) + \operatorname{Bias}(\btheta(X))^2.
 \end{align*}
 This is also known as the bias-variance decomposition of the quadratic risk \parencite{gyorfi2002distribution}. By using quadratic loss, the discrete super learner essentially chooses the learner which minimizes bias-variance tradeoff. The choice is made from a comprehensive set that includes both parametric learning algorithms together with non-parametric machine learning methods. However, by using the ensemble super learner it is possible to determine the optimal blend between the different methods. 
@@ -765,37 +765,31 @@ By the minimizing property the difference between the second and first term must
   
 \end{proof}
 \subsection{Locally weighted ensemble super learner plots}
+The following plots show the predictions of the locally weighted ensemble, where the raw predictions are shown on the left panel, and the predictions grouped by the most-weighted learner is on the right. 
 \begin{figure}[H]
     \centering
-    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled.png}}
-    \caption{Raw predictions vs stratified according to the learner with highest weight as seen in \Cref{fig:esl_preds_lw_stratified}. The predictions of the locally weighted ensemble super is on the left, the right plot shows which learner was weighted the most in the $ k = 4 $ clusters.}
-    \label{fig:esl_preds_lw_stratified_tiled}
-\end{figure}
- 
-\begin{figure}[H]
-    \centering
-    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled2.png}}
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled2.pdf}}
     \caption{An example where XGBoost seems to be more preferred when the predicted probability is around $ 0.5 $.}
     \label{fig:esl_preds_lw_stratified_tiled2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled5.png}}
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled5.pdf}}
     \caption{Another example similar to \Cref{fig:esl_preds_lw_stratified_tiled2}}
     \label{fig:esl_preds_lw_stratified_tiled5}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled3.png}}
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled3.pdf}}
     \caption{An example where XGBoost is globally the highest weighted learner.}
     \label{fig:esl_preds_lw_stratified_tiled3}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled4.png}}
-    \caption{An example where XGBoost is weighted the highest when the predicted probabilities are around $ p = 0.5 $ and above $ 0.7$.}
+    \centerline{\includegraphics[width=1.2\textwidth]{figures/esl_preds_lw_stratified_tiled4.pdf}}
+    \caption{An example where XGBoost is weighted the highest when the predicted probabilities are around $ 0.5 $ and above $ 0.75$.}
     \label{fig:esl_preds_lw_stratified_tiled4}
 \end{figure}
 

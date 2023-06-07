@@ -25,7 +25,7 @@ trueplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = ps)) +
   labs(fill = "Probabilities")
 
 trueplot
-ggsave("trueplot.png",
+ggsave("figures/trueplot.pdf",
     plot = trueplot,
     width = 6,
     height = 5,
@@ -85,8 +85,8 @@ xgboostmodplot <-  ggplot(grid, aes(x = Age, y = Parasites, fill = xgboostps)) +
 
 xgboostmodplot
 p <- misspecifiedplot + theme(legend.position = "none") |xgboostmodplot 
-ggsave('predictpar.png', plot = p, width = 10, height = 5, dpi = 360, units = 'in')
-ggsave('figures/xgboost_preds.png', plot = xgboostmodplot, width = 6, height = 5, dpi = 360, units = 'in')
+ggsave('figures/predictpar.pdf', plot = p, width = 10, height = 5, units = 'in')
+ggsave('figures/xgboost_preds.pdf', plot = xgboostmodplot, width = 6, height = 5, units = 'in')
 
 # Fit random forests using ranger
 forest <- ranger(y ~ Age + Parasites, data = simDat, probability = TRUE)

@@ -29,7 +29,7 @@ plot_xgboost_vs_main_effects_kmeans <- function() {
     labs(x = "Main effects", y = "XGBoost", color = "Probabilities") +
     scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red"))
   predictions
-  ggsave("figures/esl_preds_xgboost_vs_main.png", plot = predictions, width = 6, height = 4, dpi = 360, units = "in")
+  ggsave("figures/esl_preds_xgboost_vs_main.pdf", plot = predictions, width = 6, height = 4, units = "in")
 
   predictions_kmeans <- ggplot(aes(x = logReg, y = xgboost, color = truth, shape = as.factor(clusterRes$cluster)), data = lvl1) +
     geom_point(size = 1) + 
@@ -39,43 +39,58 @@ plot_xgboost_vs_main_effects_kmeans <- function() {
     labs(x = "Main effects", y = "XGBoost", color = "Probabilities", shape = "k-means cluster") +
     scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red"))
   predictions_kmeans
-  ggsave("figures/esl_preds_xgboost_vs_main_kmeans.png", plot = predictions_kmeans, width = 6, height = 4, dpi = 360, units = "in")
+  ggsave("figures/esl_preds_xgboost_vs_main_kmeans.pdf", plot = predictions_kmeans, width = 6, height = 4, units = "in")
 }
 # Plot predicted values
+fit_esl_and_plot <- function(simDat, title, esl_fitter) {
+
+  # create a grid of values for Age and Parasites
+  grid <- expand.grid(Age = seq(0.5, 15, length.out = 50),
+                      Parasites = seq(0, 7, length.out = 50))
+
+  eSL <- esl_fitter(simDat)
+  grid$eSL <- predict_eSL(eSL, grid)                
+
+  eslplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = eSL)) + 
+    theme_bw() +
+    geom_tile() + 
+    scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+    xlab("X1") + 
+    ylab("X2") + 
+    ggtitle(title) +
+    labs(fill = "Predictions")
+  eslplot
+}
 plot_predicted_values_kmeans <- function() {
-  fit_esl_and_plot <- function(simDat, title, esl_fitter) {
-
-    # create a grid of values for Age and Parasites
-    grid <- expand.grid(Age = seq(0.5, 15, length.out = 50),
-                        Parasites = seq(0, 7, length.out = 50))
-
-    eSL <- esl_fitter(simDat)
-    grid$eSL <- predict_eSL(eSL, grid)                
-
-    eslplot <- ggplot(grid, aes(x = Age, y = Parasites, fill = eSL)) + 
-      theme_bw() +
-      geom_tile() + 
-      scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
-      xlab("X1") + 
-      ylab("X2") + 
-      ggtitle(title) +
-      labs(fill = "Predictions")
-    eslplot
-  }
-
   N <- 1000
   simDat <- simulateMalariaData(N)
-  eslplotKmeans1k <- fit_esl_and_plot(simDat, "Locally weighted eSL predictions (n = 1000)", fit_eSL_kmeans)
+  eslplotKmeans1k <- fit_esl_and_plot(simDat, "Locally weighted eSL predictions (n = 1,000)", fit_eSL_kmeans)
 
 
   N <- 10000
   simDat <- simulateMalariaData(N)
-  eslplotKmeans10k <- fit_esl_and_plot(simDat, "Locally weighted eSL predictions (n = 10 000)", fit_eSL_kmeans)
+  eslplotKmeans10k <- fit_esl_and_plot(simDat, "Locally weighted eSL predictions (n = 10,000)", fit_eSL_kmeans)
 
   parplot <- eslplotKmeans1k + theme(legend.position = "none") | eslplotKmeans10k
   parplot
-  ggsave('figures/esl_preds_lw.png', plot = parplot, width = 10, height = 5, dpi = 360, units = 'in')
+  ggsave('figures/esl_preds_lw.pdf', plot = parplot, width = 10, height = 5, units = 'in')
 }
+
+plot_predicted_values_quad_prog <- function() {
+  N <- 1000
+  simDat <- simulateMalariaData(N)
+  eslplot1k <- fit_esl_and_plot(simDat, "eSL predictions (n = 1,000)", fit_eSL_quad_prog)
+
+
+  N <- 10000
+  simDat <- simulateMalariaData(N)
+  eslplot10k <- fit_esl_and_plot(simDat, "eSL predictions (n = 10,000)", fit_eSL_quad_prog)
+
+  parplot <- eslplot1k + theme(legend.position = "none") | eslplot10k
+  parplot
+  ggsave('figures/esl_preds_par.pdf', plot = parplot, width = 10, height = 5, units = 'in')
+}
+
 # Plot weights against n 
 plot_weights_over_n <- function() {
   get_weights_over_obs <- function(obs_counts, seed=19) {
@@ -91,7 +106,7 @@ plot_weights_over_n <- function() {
     fitted_metas
   }
 
-  obs_counts <- c(99, rep(100, 39))
+  obs_counts <- c(99, rep(100, 34))
   res <- get_weights_over_obs(obs_counts) |> as_tibble() 
     
   res$n <- cumsum(obs_counts) + 1
@@ -106,11 +121,11 @@ plot_weights_over_n <- function() {
     theme(
       legend.title = element_blank(),
       legend.position = 'bottom',
-      legend.text = element_text(size = 12), # Change this for smaller text
-      legend.key.size = unit(1.5, "lines"),  # Change this for smaller keys
+      legend.text = element_text(size = 8), # Change this for smaller text
+      legend.key.size = unit(1, "lines"),  # Change this for smaller keys
       legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
     )
-  ggsave("figures/esl_weights.png", plot = p, width = 10, height = 6, dpi = 360, units = "in")
+  ggsave("figures/esl_weights.pdf", plot = p, width = 6, height = 4, units = "in")
 }
 
 # Plot predicted stratified according to k-means
@@ -132,10 +147,10 @@ plot_predicted_values_kmeans_stratified <- function(N = 3000) {
       theme_bw() +
       geom_point(size = 2) + 
       scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
-      scale_shape_manual(values = c(16, 3, 17)) +
+      scale_shape_manual(values = c("Main effects" = 16, "XGBoost" = 3, "Intercept only" = 17)) +
       xlab("X1") + 
       ylab("X2") + 
-      ggtitle("Locally weighted eSL predictions grouped (n = 1000)") +
+      ggtitle("Locally weighted eSL predictions grouped (n = 3,000)") +
       labs(color = "Predictions", shape = "Most weighted") +
       guides(color = guide_colorbar(order = 0), shape = guide_legend(order = 1))
 
@@ -145,17 +160,18 @@ plot_predicted_values_kmeans_stratified <- function(N = 3000) {
       scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
       xlab("X1") + 
       ylab("X2") + 
-      ggtitle("Locally weighted eSL predictions (n = 1000)") +
+      ggtitle("Locally weighted eSL predictions (n = 3,000)") +
       labs(fill = "Predictions")
     list(eslplot_stratified, eslplot_tiled)
   }
 
   simDat <- simulateMalariaData(N)
   p <- fit_esl_and_plot(simDat)
-  ggsave('figures/esl_preds_lw_stratified.png', plot = p[[1]], width = 6, height = 5, dpi = 360, units = 'in')
-  ggsave('figures/esl_preds_lw_tiled.png', plot = p[[2]], width = 6, height = 5, dpi = 360, units = 'in')
+  p[[1]]
+  ggsave('figures/esl_preds_lw_stratified.pdf', plot = p[[1]]+ggtitle("Locally weighted eSL predictions grouped (n = 1,000)") , width = 6, height = 5, units = 'in')
+  ggsave('figures/esl_preds_lw_tiled.png', plot = p[[2]], width = 6, height = 5, units = 'in')
   tiled <- p[[2]] + theme(legend.position = "none") | p[[1]] 
-  ggsave('figures/esl_preds_lw_stratified_tiled.png', plot = tiled, width = 10, height = 5, dpi = 360, units = 'in')
+  ggsave('figures/esl_preds_lw_stratified_tiled.pdf', plot = tiled, width = 10, height = 5, units = 'in')
 }
 
 plot_predicted_values_kmeans_location <- function() {
@@ -194,8 +210,8 @@ plot_predicted_values_kmeans_location <- function() {
   N <- 1000
   simDat <- simulateMalariaData(N)
   p <- fit_esl_and_plot(simDat)
-  ggsave('figures/esl_preds_lw_stratified_location.png', plot = p[[1]], width = 6, height = 5, dpi = 360, units = 'in')
-  ggsave('figures/esl_preds_lw_stratified_location_tiled.png', plot = p[[2]], width = 6, height = 5, dpi = 360, units = 'in')
+  ggsave('figures/esl_preds_lw_stratified_location.png', plot = p[[1]], width = 6, height = 5, units = 'in')
+  ggsave('figures/esl_preds_lw_stratified_location_tiled.png', plot = p[[2]], width = 6, height = 5, units = 'in')
 }
 
 plot_predicted_values_kmeans_location()

@@ -30,12 +30,13 @@ dSL <- function (candidates, dataset, k=5, loss_fun=MSE) {
 fit_dSL_with_candidates <- function(candidates, k=10) function(dat) {
     cv_res <- dSL(candidates, dat, k=k)
     selected <- candidates[[ cv_res[[3]] ]] # return the candidate with lowest CV error
+    selected_name <- names(candidates)[[ cv_res[[3]] ]]
     selected_fitted <- selected[[1]](dat)
-    list(fitted_mod = selected_fitted, predict_fun = selected[[2]])
+    list(fitted_mod = selected_fitted, predict_fun = selected[[2]], selected_learner = selected_name)
 }
 
 
 # Candidates including dSL
 fit_dSL <- fit_dSL_with_candidates(candidates)
 predict_dSL <- function(sl, dat) sl$predict_fun(sl$fitted_mod, dat)
-
+predict_dSL_names <- function(sl, dat) list(result = sl$predict_fun(sl$fitted_mod, dat), selected_learner = sl$selected_learner)

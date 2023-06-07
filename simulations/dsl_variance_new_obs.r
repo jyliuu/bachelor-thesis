@@ -2,16 +2,21 @@ source('dsl.r')
 source('model.r')
 source('simulation_functions.r')
 library(reshape2)
+
 # Test
+obs <- data.frame(
+    Age = 4.5,
+    Parasites = 2
+)
+training_counts <- c(150, 500, 1000, 1500, 3000)
+variable_names <- c("Main effects", "Intercept only", "XGBoost", "Discrete super learner")
+candidates_with_dSL <- c(candidates, list(dSL = c(fit_dSL, predict_dSL)))
+
 
 fit_and_predict_1000_times <- function() {
     xgboost_fit_predict <- c(fit_xgboost, predict_xgboost)
     logistic_fit_predict <- c(fit_logreg, predict_logreg)
 
-    obs <- data.frame(
-    Age = 4.5,
-    Parasites = 2
-    )
     true_prob <- trueModel(obs$Age, obs$Parasites)
     res_xgboost <- fit_and_predict_on_new_obs(xgboost_fit_predict, obs, 1000)
     res_logistic <- fit_and_predict_on_new_obs(logistic_fit_predict, obs, 1000)
@@ -20,8 +25,7 @@ fit_and_predict_1000_times <- function() {
     c(true_prob, res_xgboost, res_logistic)
 }
 
-training_counts <- c(150, 500, 1000, 1500, 3000)
-variable_names <- c("Main effects", "Intercept only", "XGBoost", "Discrete super learner")
+
 fit_and_predict_1000_times_training_150_up_to_3000 <- function() {
     res_lib_diff_ns <- foreach(n = training_counts) %do% {
         print(n)
@@ -39,27 +43,27 @@ fit_and_predict_1000_times_training_150_up_to_3000 <- function() {
 
 plot_from_saved_data <- function(df_melted) {
     # Read old data
-    boxplots <- ggplot(df_melted, aes(x = id, y = value, fill = variable)) +
-    theme_bw() +
-    theme(
-        legend.title = element_blank(),
-        legend.position = 'bottom',
-        legend.text = element_text(size = 10), # Change this for smaller text
-        legend.key.size = unit(2.3, "lines"),  # Change this for smaller keys
-        legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
-    )+
-    geom_hline(aes(yintercept = true_prob), color = "red", linetype = "dashed") +
-    scale_x_discrete(labels = training_counts) +
-    scale_fill_discrete(labels = variable_names) +
-    scale_y_continuous(breaks = seq(0, 1, by = 0.1)) +
-    geom_boxplot() +
-    labs(x = "n", y = "Predicted probability", fill = "Model")
+    load('data/learner_vars_1k_upto_3k.RData')
+    boxplots <- ggplot(learner_vars_1k_upto_3k, aes(x = id, y = value, fill = variable)) +
+        theme_bw() +
+        theme(
+            legend.title = element_blank(),
+            legend.position = 'bottom',
+            legend.text = element_text(size = 8), # Change this for smaller text
+            legend.key.size = unit(1, "lines"),  # Change this for smaller keys
+            legend.background = element_rect(color = "black", linewidth = 0.15)  # Add a box with black border around the legend
+        )+
+        geom_hline(aes(yintercept = true_prob), color = "red", linetype = "dashed") +
+        scale_x_discrete(labels = training_counts) +
+        scale_fill_discrete(labels = variable_names) +
+        scale_y_continuous(breaks = seq(0, 1, by = 0.1)) +
+        geom_boxplot(outlier.size = 0.1, linewidth = 0.2) +
+        labs(x = "n", y = "Predicted probability", fill = "Model")
 
-    ggsave("figures/learner_vars_1000.png",
+    ggsave("figures/learner_vars_1000.pdf",
         plot = boxplots,
-        width = 10,
-        height = 6,
-        dpi = 360,
+        width = 6,
+        height = 4,
         units = "in")
 }
 
@@ -118,15 +122,55 @@ plot_shift_in_distribution <- function(df_melted) {
         guides(alpha = "none") +
         facet_wrap(~ id, nrow = 1)
 
-    ggsave("figures/preds_dsl_shift.png",
+    ggsave("figures/preds_dsl_shift.pdf",
         plot = hist_dsl_shift,
         width = 10,
         height = 4,
-        dpi = 360,
         units = "in")
     hist_dsl_shift
 }
 
-load('data/learner_vars_1k_upto_3k.RData')
-df_melted <- leaner_vars_1k_upto_3k
-plot_shift_in_distribution(df_melted)
+
+fit_and_predict_dsl_1000_times_training_150_up_to_3000 <- function(K = 1000) {
+    res_lib_diff_ns <- foreach(n = training_counts) %do% {
+        print(n)
+        preds <- foreach (k = 1:K, .combine = 'rbind') %do% {
+            print(paste('Predicting for k =', k))
+            train_set <- simulateMalariaData(n)
+            fit <- fit_dSL(train_set)
+            pred <- predict_dSL_names(fit, obs)
+
+            as.data.frame(pred)
+        }
+        preds        
+    }
+
+
+    # Bind all dataframes into one and add an id column
+    df_combined <- bind_rows(res_lib_diff_ns, .id = "id")
+    
+    hist_dsl_shift <- df_combined |> ggplot(aes(x = result, fill = selected_learner, alpha=0.5)) + 
+        geom_histogram(color = "black", bins = 20, position = "stack") +
+        theme_bw() +
+        theme(
+            legend.title = element_blank(),
+            legend.position = 'bottom',
+            legend.text = element_text(size = 10), # Change this for smaller text
+            legend.key.size = unit(1.3, "lines"),  # Change this for smaller keys
+            legend.background = element_rect(color = "black", linewidth = 0.15),  # Add a box with black border around the legend
+            strip.background = element_blank()  # Remove background from facet labels
+        ) +
+        scale_x_continuous(breaks = seq(0, 1, by = 0.5)) +
+        scale_fill_discrete(labels = c("Main effects", "XGBoost")) +
+        guides(alpha = "none") +
+        facet_wrap(~ id, nrow = 1, labeller = labeller(id = function(x) paste0("n = ", training_counts[as.numeric(x)]))) +
+        labs(x = "Predicted probability", y = "Count") 
+
+    ggsave("figures/preds_dsl_shift.pdf",
+        plot = hist_dsl_shift,
+        width = 10,
+        height = 4,
+        units = "in")
+}
+
+fit_and_predict_dsl_1000_times_training_150_up_to_3000()

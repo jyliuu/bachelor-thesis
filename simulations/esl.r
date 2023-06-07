@@ -21,7 +21,7 @@ fit_eSL_with_candidates <- function(candidates, meta_learning_algorithm, k=10) f
     )
     predict_esl <- function (meta_model, observation) {
         lvl_1_covariates <- sapply(candidates_fitted_predict, function(cand) cand$predict_fun(cand$fitted_model, observation))
-        if (isTRUE(meta_model$pass_observation))
+        if ("pass_observation" %in% names(attributes(meta_model)))
             meta_predict(meta_model, lvl_1_covariates, observation)
         else
             meta_predict(meta_model, lvl_1_covariates)
