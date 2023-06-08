@@ -1,16 +1,16 @@
 \vspace{\fill}
 \begin{abstract}
-In this thesis we examine super learners and their applicability to binary regression. The super learner is a method for combining predictions from a specified library of learning algorithms to create a more robust learner. We introduce and prove the oracle property for the discrete super learner, which is extended to the ensemble super learner. The oracle results show that given a library of learning algorithms, asymptotically, the super learner will not perform worse than the best algorithm in the library in terms of risk. We then compare the performance of the super learner with other regression algorithms including logistic regression and XGBoost on simulated data. The simulations demonstrate that the super learner achieves minimal risk as the number of observations grows. Our conclusion is that the super learner is indeed a valid method for constructing a strong learner from a library of learning algorithms. Finally, a new technique of combining learner predictions to be used by the ensemble super learner is proposed and has shown interesting results. 
+In this thesis we examine super learners and their applicability to binary regression. The super learner is a method for combining predictions from a specified library of learning algorithms to create a strong learner. We introduce and prove the oracle property for the discrete super learner, which is extended to the ensemble super learner. The oracle results show that given a library of learning algorithms, asymptotically, the super learner will not perform worse than the best algorithm in the library in terms of risk. We then compare the performance of the super learner with other regression algorithms including logistic regression and XGBoost on simulated data. The simulations demonstrate that the super learner achieves minimal risk as the number of observations grows. Finally, a new technique of combining learner predictions to be used by the ensemble super learner is proposed and has shown interesting results. 
 \end{abstract}
 \vspace{\fill}
 \begin{acknowledgements}
    I would like to thank my supervisor, Thomas Gerds, for suggesting the topic to me and lending me a desk at the section of Biostatistics while I wrote my thesis. I would also like to thank Anders Munch for the useful discussions we've had regarding oracle bounds for the super learner. I am furthermore grateful to my supervisor, Niels Richard Hansen, who inspired me to be mathematically rigorous, and whom I have continuously conversed with on my journey to becoming a statistician.
 
-   At last, special thanks to my friend, Marius Kjærsgaard, who explained the Ehrhart polynomial to me in conjuction with the selection of lattice points that grow polynomial in $ n $ on the $ (\ml-1) $-simplex, but which unfortunately there was not enough space to include in my thesis. 
+   At last, special thanks to my friend, Marius Kjærsgaard, who explained the Ehrhart polynomial to me in conjunction with the selection of lattice points that grow polynomial in $ n $ on the $ (\ml-1) $-simplex, but which unfortunately there was not enough space to include in my thesis. 
 \end{acknowledgements}
 \vspace{\fill}
 \begin{codeavailability}
-    The code for the simulations conducted in section \ref{sec:simulations} can be found on GitHub at \parencite{github}.
+    The code for the simulations conducted in section \ref{sec:simulations} can be found on GitHub at \citet{github}.
 \end{codeavailability}
 \vspace{\fill}
 
