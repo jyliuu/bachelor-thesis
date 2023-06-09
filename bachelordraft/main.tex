@@ -127,7 +127,7 @@ Another method, called the ensemble super learner \parencite{van2007super} seeks
 
 As we will demonstrate, given a library of learning algorithms, the super learner is effectively the best estimate of the data-generating regression that we can obtain. It is the best in the sense that it cannot perform worse than the best learning algorithm in terms of risk. 
 
-To formalize the notion of the best learner in the library, we define the oracle selector. The oracle selector knows $ P $ -- hence it is called the oracle -- and selects the learner with the lowest risk given its knowledge of $ P $. In this thesis we show that the cross-validation selector is asymptotically equivalent to the oracle selector as the sample size goes to infinity. 
+To formalize the notion of the best learner in the library, we define the oracle selector. The oracle selector knows $ P $ -- hence it is called the oracle -- and selects the learner with the lowest risk given its knowledge of $ P $. In this thesis we show that the cross-validation selector is asymptotically equivalent with the oracle selector as the sample size goes to infinity. 
 
 We adopt the setup and notation similar to those in \citet{vaart06} and \citet{laan03}. Our objective is to illustrate the performance of super learning algorithms when applied to binary regression, where we are regressing a binary outcome $ Y \in \{0,1\} $ against covariates $ X $ that belong to $ \mathcal{X} \subseteq \mathbb{R}^{d} $. Here the conditional expectation of $ Y $ given $ X $ exactly becomes the conditional probability $ P(Y \mid X) $. The simulation results in \Cref{sec:simulations} show that the super learner achieves the minimum risk with increasing training samples. The simulation is conducted by first defining the data-generating distribution explicitly, enabling us to use standard sampling methods that are available in R to draw samples from the distribution. We assess a library of learning algorithms consisting of logistic regression and XGBoost, from which we construct the super learner and evaluate its performance in relation to the algorithms in the library.
 
@@ -141,7 +141,7 @@ We will consider the parameter set $ \Theta = \{\btheta \mid \btheta : \mathcal{
 \begin{definition}[Quadratic loss]
     The quadratic loss or $ L^2 $-loss, $ L : \mathcal{O} \times \Theta \to [0, \infty) $, for an observation $ (Y, X) = O \in \mathcal{O} $ and a regression function $ \btheta \in \Theta $ is defined as 
 \begin{align*}
-    L(O, \btheta) = L((Y,X), \btheta) = (Y - \btheta(X))^2.
+    L(O, \btheta) = L((Y, X), \btheta) = (Y - \btheta(X))^2.
 \end{align*}
 \end{definition}
 A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta$ that minimizes the expected quadratic loss, or risk $R: \btheta \to \mathbb{R}$ given by 
@@ -180,7 +180,9 @@ A natural aim would be to find the optimal parameter value $\btheta^* \in \Theta
     \end{align*}
     The first term on the right hand side is always positive and is $ 0 $ only when $ \theta = m $, this proves that $ m $ minimizes the expression above. 
 \end{proof}
-It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. Our goal is to estimate $ \btheta^{*} $, which means to \textit{learn} the true regression function from our data. We will introduce the terminology \textit{learning algorithm} and \textit{learner} in the context of learning from our data.  
+\noindent It follows immediately that if $ Y $ is binary, then $ E(Y \mid X = x) = P(Y = 1 \mid X = x) $. 
+
+Our goal is to estimate $ \btheta^{*} $, which means to \textit{learn} the true regression function from our data. We will introduce the terminology \textit{learning algorithm} and \textit{learner} in the context of learning from our data.  
 \subsection{Learning algorithms and learners}
 We will denote $ O_1 , \dots , O_n \in \mathcal{O} $ and $ D_n = (O_1 , \dots , O_n) $ as our observations and data respectively. 
 \begin{definition}[Learning algorithm]
@@ -252,21 +254,21 @@ where $ \delta_{O_i} $ is the Dirac measure over $ O_i $. When the observations 
 \subsection{Library of learners}
 We would like to consider the scenario where we have a set of learning algorithms, $ \la_1, \ldots, \la_\ml $. From these algorithms, we can define the \textit{library of learning algorithms} 
 $$ \lib = \{\la_{\q} \mid 1 \leq \q \leq \ml \}, $$
-of size $ \ml $. Our natural goal is to find $ \tilde{\la} \in \lib $ such that $ \tilde{\la}(P_n) $ achieves the lowest possible risk 
+of size $ \ml $. Our natural goal is to find $ \tilde{\la} \in \lib $ such that $ \tilde{\la}(P_n) $ achieves the lowest risk 
 $$ \tilde{\la}  = \argmin_{\la \in \lib} R(\la(P_n) , P). $$
 However, we cannot compute the risk of a learner directly as it depends on $ P $. We seek to provide an estimate for $ \tilde{\la} $ which we will denote as $ \hat{\la} $. 
 
 \section{The Discrete Super Learner}
 \subsection{Cross-validation methodology}
-To provide the estimate $ \hat{\la} $ we will proceed via cross validation. Cross-validation randomly splits our data into a \textit{training set} and a \textit{test set} that our algorithms are trained and evaluated on. Let the random binary vector -- referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ D_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is a tuple in $ \{0,1\}^{n} $. Here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets, $ P_{n,\Sn}^0$ and $ P_{n,\Sn}^{1} $ as
+To provide the estimate $ \hat{\la} $ we will proceed via cross validation. Cross-validation randomly splits our data into a \textit{training set} and a \textit{test set} that our algorithms are trained and evaluated on. Let the random binary vector -- referred to as the \textit{split variable} or just \textit{split} -- $ \Sn = (\Sn_1,\ldots,\Sn_n) \in \{0,1\}^{n} $ be independent of $ D_n $ such that $ \Sn_i = 0 $ indicates that $ O_i $ should be in the training set and $ \Sn_i = 1 $ indicates that $ O_i $ belongs to the test set. The split $ \Sn $ depends on $ n $ as it is a tuple in $ \{0,1\}^{n} $. Here the superscript $ n $ is used to indicate that. We can define the empirical distributions over these two subsets as
 \begin{align*}
-    P_{n,\Sn}^{0} &= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i}, \\
-    P_{n,\Sn}^{1} &= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
+    P_{n,\Sn}^{0} &:= \frac{1}{n_0} \sum_{i: \Sn_i = 0} \delta_{O_i}, \\
+    P_{n,\Sn}^{1} &:= \frac{1}{n_1} \sum_{i: \Sn_i = 1} \delta_{O_i},
 \end{align*}
 where $ n_1 = \sum_{i = 1}^{n} \Sn_i$ and $n_0 = 1-n_1$ identifies the number of observations in the test and training set.
 
 \begin{example}[Random splits] \label{splits}
-   For $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the test set. It might not be desirable to define the discrete probabilities for $ \Sn $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/test data, since that would also include the combination where $ n_1 = 0 $. To ensure that there is always a certain amount of observations in our test set, let $ 0 < n_1 < n $ be given we see that there are $ \begin{pmatrix}
+   For $ n $ observations we have $ 2^{n} $ ways of choosing which observations should be in the training set and in the test set. It might not be desirable to define the discrete probabilities for $ \Sn $ over $ \{0,1\}^{n} $ simply as $ \frac{1}{2^{n}} $ for each possible combination of training/test data, since that would also include the combination where $ n_1 = 0 $. To ensure that there is always a certain amount of observations in our test set, let $ 0 < n_1 < n $ be given, we see that there are $ \begin{pmatrix}
         n \\ n_1
     \end{pmatrix}$ ways of choosing both the test and training set. We can therefore define the distribution of $ \Sn $ as 
     \begin{align*}
@@ -281,7 +283,7 @@ The idea behind $ K $-fold cross-validation is to split the data into $ K $ equa
 
 $ K $-fold cross-validation amounts to examining a single split variable $ \Sn $ whose probability mass is equally distributed on the binary vectors indexed by $ s $. In practice one would select a $ K $ and use a random splitting procedure to generate $ K $ binary vectors such that the entire dataset is the disjoint union of the sets specified by each vector. It is also possible to run $ K $-fold cross-validation multiple times, corresponding to multiple calls to the random splitting procedure.
 \subsection{Risks and selectors}
-In the context where a learning algorithm is applied to the training data, we write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner is then evaluated on the test data. Given that the risk \cref{l2risk} was the integral of the loss function with respect to the data-generating distribution $P$, we can define the empirical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
+In the context where a learning algorithm is applied to the training data, we write $ \la(P_{n, S^{n}}^{0}) $ for the fitted learner. The performance of the learner is then evaluated on the test data. Given that the risk \Cref{l2risk} was the integral of the loss function with respect to the data-generating distribution $P$, we can define the empirical risk of a learner as the integral of the loss with respect to the empirical measure of the test data, as follows
  \begin{align*}
      R(\la(P_{n, S^{n}}^{0}), P_{n, \Sn}^{1}) =  \int L(O, \la(P_{n, S^{n}}^{0})) d P_{n,\Sn}^{1}(O),
  \end{align*}
@@ -383,7 +385,7 @@ In the following results we assume that a proper loss function $ L: \mathcal{O} 
 \end{proof}
 
 \begin{example}[Binary regression] \label{ex:bernsteinexample}
-    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f_{\btheta}(O) = L(O, \btheta) = (Y - \theta(X))^2$ can be found by applying \Cref{unifbernstein}. By requiring that $ \theta(x) \in [0,1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ O \in \mathcal{O} $ since $ Y \in \{0,1\} $. We also note that the Bernstein pair for $ f_{\btheta} $ satisfies $ 0 \leq \norm{f_\theta}_{\infty} \leq 1 $ and $ 0 \leq \frac{3}{2}Pf_{\btheta}^2 \leq 1 $, so they are bounded. 
+    Consider binary regression with quadratic loss. Let $ \btheta \in \Theta $ be arbitrary, then a Bernstein pair for the function $ f_{\btheta}(O) = L(O, \btheta) = (Y - \theta(X))^2$ can be found by applying \Cref{unifbernstein}. By requiring that $ \theta(x) \in [0, 1] $, then it is clear that $ f $ is bounded between $ 0 $ and $ 1 $ for all $ O \in \mathcal{O} $ since $ Y \in \{0, 1\} $. We also note that the Bernstein pair for $ f_{\btheta} $ satisfies $ 0 \leq \norm{f_\theta}_{\infty} \leq 1 $ and $ 0 \leq \frac{3}{2}Pf_{\btheta}^2 \leq 1 $, so they are bounded. 
 
 \end{example}
 
@@ -447,7 +449,7 @@ In the following corollary we assume that the Bernstein pairs $ (M(\btheta), v(\
    \begin{align*}
        E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n, \Sn}^{0}), P) > \varepsilon \qquad \text{for all } n \in \mathbb{N},
    \end{align*}
-   and if $ n_1 = f(n) $ for some polynomial function $ f $, then the risk of the super learner is asymptotically equivalent to the risk of the oracle selected learner, that is
+   and if $ n_1 = f(n) $ for some polynomial function $ f $, then the risk of the super learner is asymptotically equivalent with the risk of the oracle selected learner, that is
    \begin{align*}
        \lim_{n \to \infty} \frac{E_{D_n} E_{\Sn} R(\hat{\la}_n(P_{n, \Sn}^{0}), P)}{E_{D_n} E_{\Sn} R(\tilde{\la}_n(P_{n, \Sn}^{0}), P)} = 1.
    \end{align*}
@@ -484,7 +486,7 @@ In the proof of the asymptotic result we have chosen $ \delta_n = 1/\log(n) $. C
 For the asymptotic equivalence to hold, we must have that $ n_1 \to \infty $ as $ n \to \infty $. This is a reasonable assumption for cross-validation schemes such as $ K $-fold cross-validation or if $ n_1 = np $ for $ p \in (0,1) $ where the test size increases with the amount of available data. Note that the condition is not satisfied for leave-one-out cross-validation since $ n_1$ is equal to $ 1 $ for every $ n $.  
 
 \begin{example}[Regression]
-   In the context of a regression problem with quadratic loss, the risk for a learner can never be zero unless the outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
+   In a regression scenario with quadratic loss, the risk for a learner can never be zero unless the outcome is deterministic given $ x $. We may begin by noting that the risk of $ \theta^*(x) = E(Y \mid X = x) $ is always positive,
    \begin{align*}
        \int (Y - E(Y \mid X))^2 d P \geq 0. 
    \end{align*}
@@ -615,7 +617,7 @@ Here the $ P_n $ indicates that each learner $ \la \in \lib $ is fitted on the e
 
 
 \subsection{Oracle property}
-The meta learning algorithm, $ \Meta $, fits the meta learner that best estimates $ E(Y \mid Z) $, a way of formalizing the notion of `fitting' is that $ \Meta $ seeks to select the meta learner with the lowest risk among an indexed set of meta learners. Let $ \mathcal{A} $ be a parameter set (for example Euclidean), for each $ a \in \mathcal{A} $ let $ \meta_{a} $ be a meta learner. In a practical setting, one might consider $ \meta_{a} $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
+The meta learning algorithm, $ \Meta $, fits the meta learner that best estimates $ E(Y \mid Z) $. A way of formalizing the notion of `fitting' is that $ \Meta $ seeks to select the meta learner with the lowest risk among an indexed set of meta learners. Let $ \mathcal{A} $ be a parameter set (for example Euclidean), for each $ a \in \mathcal{A} $ let $ \meta_{a} $ be a meta learner. In a practical setting, one might consider $ \meta_{a} $ as the learner obtained by instantiating it with the parameter $ a $. Given our level 1 data $ \lone_{n} $, define 
 \begin{align} \label{eq:meta_learning_algorithm}
     \hat{a} := \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} L((Y_i, Z_i), \meta_{a}) = \argmin_{a \in \mathcal{A}} \frac{1}{n} \sum_{i = 1}^{n} (Y_i - \meta_{a}(Z_i))^2.
 \end{align}
@@ -652,7 +654,7 @@ The following finite sample oracle inequality is a direct consequence of the ora
 \end{proof}
 
 \begin{corollary}[Asymptotic equivalence] \label{cor:esl_asymptotic_equivalence}
-    If the number of points in the parameter sets $ \mathcal{A}_n $ grows at most at a polynomial rate, that is $ k(n) \leq n^{p} $ for some $ p \in \mathbb{N} $, then the ensemble super learner $ \esl_{ \hat{a}_n } $ is asymptotically equivalent to the oracle ensemble learner $ \esl_{ \tilde{a}_n } $, i.e.
+    If the number of points in the parameter sets $ \mathcal{A}_n $ grows at most at a polynomial rate, that is $ k(n) \leq n^{p} $ for some $ p \in \mathbb{N} $, then the ensemble super learner $ \esl_{ \hat{a}_n } $ is asymptotically equivalent with the oracle ensemble learner $ \esl_{ \tilde{a}_n } $, i.e.
     \begin{align*}
         \lim_{n \to \infty} \frac{\frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \hat{a}_n }(P_{n, s}^{0}) , P)}{\frac{1}{K} \sum_{s = 1}^{K} E_{D_n} R(\esl_{ \tilde{a}_n }(P_{n,s}^{0}), P)} = 1.
     \end{align*}
@@ -705,7 +707,7 @@ In \Cref{simplex} we investigated the constrained regression and how the optimal
 The reason for the discrete approximation in the oracle results is because we would like to express it as a corollary of the theorem for the discrete super learner, \Cref{finitesample}, which requires that the cardinality $ k $ of the library $ \lib $ enters into the remainder in the form of a $ \log(1 + k) $ term. This is not well-defined when $ k $ is the cardinality of a continuous set. However, it is mentioned immediately after theorem 2 in \citet{van2007super} that the discrete approximation is asymptotically negligible, meaning that optimizing over the entire set $ \mathcal{A} $ will result in asymptotically equivalent procedures. 
 
 \subsection{Bias-variance tradeoff} 
-The variances in learner predictions displayed in \Cref{fig:pred_probs_boxplot,fig:learner_vars_w_esl_1000} highlight the bias-variance tradeoff between using parametric models such as logistic regression vs data adaptive methods like XGBoost. Parametric models tend to be very biased, in comparison to machine learning methods that are less biased, but have a high variance. Recall that the quadratic risk factored into the following terms 
+The prediction variances displayed in \Cref{fig:pred_probs_boxplot,fig:learner_vars_w_esl_1000} highlight the bias-variance tradeoff between using parametric models such as logistic regression vs data adaptive methods like XGBoost. Parametric models tend to be very biased, in comparison to machine learning methods that are less biased, but have a high variance. Recall that the quadratic risk factored into the following terms 
 \begin{align*}
     R(\btheta, P) = E ( \btheta(X) - m(X) )^2 + E ( m(X) - Y )^2 \qquad \btheta \in \Theta,
 \end{align*}

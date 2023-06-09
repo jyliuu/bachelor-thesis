@@ -72,11 +72,11 @@ The discrete super learner in our simulations uses 10-fold cross-validation and 
 \end{algorithm}
 
 \subsubsection{Discrete super learner performance}
-The true regression achieves a risk of $ 0.059 $ using the quadratic loss function on a validation set of size $ 10^{6} $. This risk represents the minimum achievable risk for any learning algorithm operating on this dataset. The intercept model -- which is equivalent to predicting an average of the outcomes -- achieves a risk of $ 0.11 $, which serves as a basic benchmark if no effort was made to learn from the data at all. If any learning algorithm performs worse than the benchmark, then it should naturally be discarded from the library.  
+The true regression achieves a risk of $ 0.059 $ using the quadratic loss function on a validation set of size $ 10^{6} $. This risk represents the minimum achievable risk for any learning algorithm operating on this dataset. The intercept model -- which is equivalent to predicting an average of the outcomes -- achieves a risk of $ 0.11 $, serves as a basic benchmark if no effort was made to learn from the data at all. If any learning algorithm performs worse than the benchmark, then it should naturally be discarded from the library.  
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/losses_s22.pdf}
-    \caption{The risk of the discrete super learner compared to other algorithms where the number of training samples are $n = 100, 200, \dots , N = 3,500 $. For each $ n $, each learning algorithm is fitted and their validation risks are calculated on a validation set of $ 10^{6} $ observations.} 
+    \caption{The risk of the discrete super learner compared to other algorithms where the number of training samples are $n = 100, 200, \dots , N = 3,500 $. For each $ n $, the algorithms are fitted on $ n $ training samples and their validation risks are calculated on a validation set of $ 10^{6} $ observations.} 
     \label{fig:loss_min_of_both}
 \end{figure}
 \begin{figure}[H]
@@ -104,7 +104,7 @@ The second run reveals that the discrete super learner might struggle to determi
 
 We observe that the machine learning model, XGBoost, has the highest prediction variance across all training sample sizes. Recall that we only had two covariates, here having $ 1,500 $ observations limits the range of predictions of our main effects model to be between $ 0.27 $ and $ 0.46 $, whereas for XGBoost it can vary from below $ 0.1 $ to above $ 0.9 $. While XGBoost is extremely efficient at minimizing loss, its predictions have a high variance unless one has a lot of training data.
 
-Another interesting observation is the bias-variance tradeoff. The parametric learners display low variance, but are highly biased as we see that their predictions are not centered around the true probability at all. On the other hand, XGBoost is much less biased but suffers from a high variance.
+Another interesting observation is the bias-variance tradeoff. The parametric learners display low variance, but are highly biased as we see that their predictions are not centered around the true probability at all. XGBoost is less biased on the other hand, but suffers from a high variance.
 
 The discrete super learner achieves a lower variance than XGBoost for all training sample sizes, which can be attributed to its preference of the low variance main effects logistic regression when the training sample size is small. However, the variance of the discrete super learner increases when $ n \geq 1,000 $ and the box plots become wider. This is due to the discrete super learner's preference of XGBoost as it begins to achieve minimal risk around these number of training samples. 
 
@@ -172,7 +172,7 @@ XGBoost & 0.3929 & 0.8633 \\
 \end{tabular}
 \caption{Table of ensemble super learner weights of the different learners}
 \end{table}
-From the weights we see that the predictions of intercept only logistic regression not important at all for the ensemble super learner. For $ n = 1,000 $ the predictions of the main effects model have the highest weight, which is not surprising in light of our investigations with the discrete super learner, where we saw that the main effects model was more likely to be selected for small samples. Whereas for $ n = 10,000 $ it is weighted a lot less than XGBoost. Note that these weights depend on the data, so they are not necessarily the same when the data is sampled each time. 
+From the weights we see that the predictions of intercept only logistic regression not important at all for the ensemble super learner. For $ n = 1,000 $ the predictions of the main effects model have the highest weight, which is not surprising in light of our investigations with the discrete super learner, where we saw that the main effects model was more likely to be selected for small samples. However, for $ n = 10,000 $ it weighs a lot less than XGBoost. Note that these weights depend on the data, so they are not necessarily the same when the data is sampled each time. 
 
 \subsubsection{Ensemble super learner performance}
 \begin{figure}[H]
@@ -227,7 +227,7 @@ We notice that the main effects model does not predict the same as the XGBoost. 
 \caption{Same as \Cref{fig:esl_preds_xgboost_vs_main}, except that the observations are clustered into 4 groups using $ k $-means clustering.}
     \label{fig:esl_preds_xgboost_vs_main_kmeans}
 \end{figure}
-\Cref{fig:esl_preds_xgboost_vs_main,fig:esl_preds_xgboost_vs_main_kmeans} plot the predictions by two learners against each other, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data of that group. To predict using the ensemble super learner we will apply the learners to the new data and determine which of the clusters the level 1 covariates belong to. Once that has been determined, the predictions will be combined according to the weighted combination in that group. 
+\Cref{fig:esl_preds_xgboost_vs_main,fig:esl_preds_xgboost_vs_main_kmeans} plot the predictions by two learners against each other, but the procedure is valid also when there are more learners, resulting in clustering within a high dimensional space. For each group, a weighted combination of the learners would be found by fitting on the level 1 data of that group. To predict using the ensemble super learner, we first apply the learners to the new data and determine which of the clusters the level 1 covariates belong to. Once that has been determined, the predictions will be combined according to the weighted combination in that cluster. 
 
 \subsubsection{Simulation results}
 The locally weighted ensemble super learner examined in this section is implemented with $ k = 4 $ clusters and the same library as in the previous section. The number of clusters was chosen arbitrarily and the results are shown in \Cref{fig:esl_preds_lw}
@@ -253,7 +253,7 @@ The partitioning explains the behavior of the super learner when $ n = 1,000 $ i
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/losses_esl_lw_s22.pdf}
-    \caption{The risk of the locally weighted ensemble super learner compared to other algorithms where the number of training samples are $ n = 100, 200, \dots , N = 4,000 $ and $ k = 4 $ local clusters.}
+    \caption{The risk of the locally weighted ensemble super learner compared to other algorithms where the number of training samples are $ n = 100, 200, \dots , N = 3,500 $ and $ k = 4 $ local clusters.}
     \label{fig:losses_esl_lw}
 \end{figure}
 The risk of the locally weighted ensemble super learner can depend on the number of $ k $ clusters that are used to segregate the level 1 data. The connection between the number of clusters and the risk has not been investigated in this thesis. Nevertheless, the risk of a learner does not tell the full picture as we have witnessed with XGBoost, which, despite its design of minimizing loss, displays the highest variance. It might be relevant to consider other metrics that can evaluate the learners on the stability and variance of their predictions. 

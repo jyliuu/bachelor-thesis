@@ -36,7 +36,7 @@ plot_xgboost_vs_main_effects_kmeans <- function() {
     theme_bw() +
     scale_x_continuous(limits = c(0, 1)) +
     scale_y_continuous(limits = c(0, 1)) +
-    labs(x = "Main effects", y = "XGBoost", color = "Probabilities", shape = "k-means cluster") +
+    labs(x = "Main effects", y = "XGBoost", color = "Probabilities", shape = "Cluster") +
     scale_color_gradientn(limits = c(0, 1), colors = c("blue", "green", "red"))
   predictions_kmeans
   ggsave("figures/esl_preds_xgboost_vs_main_kmeans.pdf", plot = predictions_kmeans, width = 6, height = 4, units = "in")
