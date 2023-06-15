@@ -1,1 +1,8 @@
-\beamer@slide {cor:dslasymptoticequivalence}{9}
+\beamer@slide {cor:dslasymptoticequivalence}{11}
+\beamer@slide {fig:trueplot}{18}
+\beamer@slide {fig:predictpar}{20}
+\beamer@slide {fig:xgboost10k}{21}
+\beamer@slide {fig:losses_esl_s22}{22}
+\beamer@slide {fig:learner_vars_w_esl_1000}{23}
+\beamer@slide {fig:esl_preds_xgboost_vs_main}{24}
+\beamer@slide {fig:esl_preds_xgboost_vs_main_kmeans}{25}
