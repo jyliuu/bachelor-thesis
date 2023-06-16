@@ -16,56 +16,5 @@
   {}
 \endgroup
 
-
-\refsection{0}
-  \datalist[entry]{ynt/global//global/global}
-    \entry{gyorfi2002distribution}{book}{}
-      \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=061a8bd3ce48199196d6a7141f513d18}{%
-           family={Györfi},
-           familyi={G\bibinitperiod},
-           given={László},
-           giveni={L\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=ad0655c93b1e15f5fa920e7ed7172f31}{%
-           family={Köhler},
-           familyi={K\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=eff13ca6cc3b59df347b35b7ccbb2518}{%
-           family={Krzyżak},
-           familyi={K\bibinitperiod},
-           given={Adam},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=1672b836b63ac12b7c35dcdeb30cc577}{%
-           family={Walk},
-           familyi={W\bibinitperiod},
-           given={Harro},
-           giveni={H\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Springer}%
-      }
-      \strng{namehash}{81cff394754d5e884dc3ca1b810fdb9d}
-      \strng{fullhash}{b8129fee60f6f0f3cb8bacccdd28bec3}
-      \strng{bibnamehash}{81cff394754d5e884dc3ca1b810fdb9d}
-      \strng{authorbibnamehash}{81cff394754d5e884dc3ca1b810fdb9d}
-      \strng{authornamehash}{81cff394754d5e884dc3ca1b810fdb9d}
-      \strng{authorfullhash}{b8129fee60f6f0f3cb8bacccdd28bec3}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{A distribution-free theory of nonparametric regression}
-      \field{volume}{1}
-      \field{year}{2002}
-    \endentry
-  \enddatalist
-\endrefsection
 \endinput
 

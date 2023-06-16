@@ -1,4 +1,5 @@
 \documentclass{beamer}
+\usepackage{icomma}
 \usepackage{tikz}
 \usepackage{caption}
 \usepackage[
@@ -99,23 +100,23 @@
         % is minimized. It turns out that the conditional expectation $$ x \mapsto E(Y \mid X = x) = P(Y \mid X = x) $$ is what minimizes the MSE. We refer to it as the \textbf{regression}.  
 % \end{frame}
 
-\begin{frame}
-    \frametitle{Example of a regression function}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.85\textwidth]{figures/trueregression}
-        \caption{Example of a pathological regression that can be difficult to learn using parametric techniques. Here a continuous outcome $ Y $ is plotted against a single continuous covariate $ X $ \citep{gyorfi2002distribution}.}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Linear approximation}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.85\textwidth]{figures/linearestimate}
-        \caption{Approximating the regression using linear regression, which is very biased \citep{gyorfi2002distribution}.}
-    \end{figure}
-\end{frame}
+%\begin{frame}
+%    \frametitle{Example of a regression function}
+%    \begin{figure}[H]
+%        \centering
+%        \includegraphics[width=0.85\textwidth]{figures/trueregression}
+%        \caption{Example of a pathological regression that can be difficult to learn using parametric techniques. Here a continuous outcome $ Y $ is plotted against a single continuous covariate $ X $ \citep{gyorfi2002distribution}.}
+%    \end{figure}
+%\end{frame}
+%
+%\begin{frame}
+%    \frametitle{Linear approximation}
+%    \begin{figure}[H]
+%        \centering
+%        \includegraphics[width=0.85\textwidth]{figures/linearestimate}
+%        \caption{Approximating the regression using linear regression, which is very biased \citep{gyorfi2002distribution}.}
+%    \end{figure}
+%\end{frame}
 
 \subsection{Terminology}
 \begin{frame}
@@ -254,8 +255,7 @@ Each learning algorithm is fitted on the entire dataset, and a meta learner is u
     \end{align*}
     such that 
     \begin{equation*}
- \meta_{a}(\la_{1}(P_n)(x) , \dots , \la_{\ml}(P_n)(x))
-                     &= \sum_{\q = 1}^{\ml} a_{\q} \la_\q(P_n)(x) \in [0,1].
+ \meta_{a}(\la_{1}(P_n)(x) , \dots , \la_{\ml}(P_n)(x)) = \sum_{\q = 1}^{\ml} a_{\q} \la_\q(P_n)(x) \in [0,1].
     \end{equation*}
     The optimal weighs, $ a $, can be found by solving a \textbf{constrained least squares} on the level 1 data using quadratic programming techniques. 
 \end{frame}
@@ -312,13 +312,33 @@ The intercept model is included as a \textbf{benchmark}, no learning algorithm s
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \begin{figure}[H]
+        \centering
+        \centerline{\includegraphics[width=1.1\textwidth]{figures/esl_preds_par.pdf}}
+        \caption{The predictions by the ensemble super learner using the constrained regression meta learning algorithm fitted on $ 1,000 $ and $ 10,000 $ observations.}
+        \label{fig:esl_preds_quad_prog}
+    \end{figure}
+\end{frame}
+
+
 \subsection{Validation risk and variance}
 \begin{frame}
     \frametitle{Simulations: Risk and Variance over Training Samples} 
     \begin{figure}[H]
         \centering
+        \includegraphics[width=0.87\textwidth]{figures/losses_candidates.pdf}
+        \caption{The validation risk of the learning algorithms where training samples are $n = 100, 200, \dots , N = 3,500 $.}
+        \label{fig:losses_esl_s22}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Simulations: Risk and Variance over Training Samples} 
+    \begin{figure}[H]
+        \centering
         \includegraphics[width=0.87\textwidth]{figures/losses_esl_s22.pdf}
-        \caption{The validation risk of the super learners compared to other algorithms where the number of training samples are $n = 100, 200, \dots , N = 3,500 $.}
+        \caption{The validation risk of the super learners compared to the library of algorithms where the number of training samples are $n = 100, 200, \dots , N = 3,500 $.}
         \label{fig:losses_esl_s22}
     \end{figure}
 \end{frame}
@@ -356,5 +376,23 @@ The intercept model is included as a \textbf{benchmark}, no learning algorithm s
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Locally Weighted Ensemble Super Learner} 
+    \begin{figure}[H]
+        \centering
+        \centerline{\includegraphics[width=1.1\textwidth]{figures/esl_preds_lw_stratified_tiled5.pdf}}
+        \caption{Predictions of locally weighted ensemble super learner, where the predictions of XGBoost have highest weight when $ p \approx 0.5 $}
+        \label{fig:esl_preds_lw_stratified_tiled5}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Concluding Remarks} 
+    \begin{enumerate}
+        \item Similar asymptotic results hold for the ensemble super learner
+        \item The super learner seeks to optimize the bias-variance tradeoff 
+    \end{enumerate}
+\end{frame}
+ 
 
 \end{document}

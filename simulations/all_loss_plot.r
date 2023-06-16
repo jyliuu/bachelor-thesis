@@ -38,9 +38,15 @@ get_losses_and_plot <- function(
     p <- plot_losses(df_melted, labels = labels, alpha = alpha, linetypes = linetypes)
     p
     # Save the plot
-    ggsave("figures/losses_esl_lw_s22.pdf", plot = p, width = 6, height = 4, units = "in")
+    ggsave("figures/losses_candidates.pdf", plot = p, width = 6, height = 4, units = "in")
     df_melted
 }
+
+res <- get_losses_and_plot(candidates, 
+    labels = c('Main effects', 'Intercept only', 'XGBoost'),
+    alpha = c(1, 1, 1), 
+    linetypes = c('dashed', 'dashed', 'dashed')
+)
 
 res <- get_losses_and_plot(candidates_eSL_kmeans, 
     labels = c('Main effects', 'Intercept only', 'XGBoost', 'eSL', 'dSL', 'Locally weighted eSL'),

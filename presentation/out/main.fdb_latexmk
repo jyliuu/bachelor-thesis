@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber out/main"] 1686818984 "out/main.bcf" "out/main.bbl" "out/main" 1686840759 0
+["biber out/main"] 1686903921 "out/main.bcf" "out/main.bbl" "out/main" 1686906448 0
   "./references.bib" 1686747552 3044 c19e50de242671ddea6d8385725bb3cb ""
-  "out/main.bcf" 1686840759 107565 19c27a555f3c20dc6af91789aa2f1a79 "pdflatex"
+  "out/main.bcf" 1686906447 107257 5fe0327c55b0581d82cee2951972dabb "pdflatex"
   (generated)
   "out/main.bbl"
   "out/main.blg"
   (rewritten before read)
-["pdflatex"] 1686840756 "main.tex" "out/main.pdf" "main" 1686840759 0
+["pdflatex"] 1686906446 "main.tex" "out/main.pdf" "main" 1686906448 0
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1680514707 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1680514707 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -260,26 +260,28 @@
   "/usr/share/texmf-dist/tex/latex/translator/translator-theorem-dictionary-English.dict" 1680514707 3523 1f9d9b91f7d78b73e74c7e97bca30fb0 ""
   "/usr/share/texmf-dist/tex/latex/translator/translator.sty" 1680514707 8765 56d370785f0143111ff9898b5adfe08e ""
   "/usr/share/texmf-dist/tex/latex/url/url.sty" 1680514707 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
+  "/usr/share/texmf-dist/tex/latex/was/icomma.sty" 1678900920 1018 df058db1896806f044e2233bb506d425 ""
   "/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty" 1680514707 56148 51a9a8571c07b9921892ae11063ae853 ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1680514707 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1681656637 4491781 539e3b5e308794ddb50e5f94f0e971f4 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1681656533 8204108 01e5e5f6eea5d709dc5cb9980b73620a ""
+  "figures/esl_preds_lw_stratified_tiled5.pdf" 1686904601 124306 74183c2768264ad988176d3e5a3a49f9 ""
+  "figures/esl_preds_par.pdf" 1686904286 35849 9bab23f6504c8e0618228a11ea26e38d ""
   "figures/esl_preds_xgboost_vs_main.pdf" 1686840376 189289 deec9004073e6a9cc6128b19bddfa673 ""
   "figures/esl_preds_xgboost_vs_main_kmeans.pdf" 1686840649 85334 12cabd6e1e8620bb3279f560f722ddbf ""
   "figures/learner_vars_w_esl_1000.pdf" 1686839871 23759 ebbb503bab941eeed35db7c86cb8b82b ""
-  "figures/linearestimate.pdf" 1686743554 42614 cb16f60e5e00573d8837c5713dc8534f ""
+  "figures/losses_candidates.pdf" 1686906359 5378 f2210f14f9c28b12a4cda5c7c1d7c010 ""
   "figures/losses_esl_s22.pdf" 1686839765 5923 f769dd0b4d2fdc95e33443522491c4b4 ""
   "figures/predictpar.pdf" 1686839523 34097 5680e14ebff80dbdf6a559d7969b4242 ""
   "figures/trueplot.pdf" 1686820230 20087 48926f1d8a8a65d1e0a8b6f8ec88c927 ""
-  "figures/trueregression.pdf" 1686743894 30630 c067dac19bdaa49e0d03347649bf5014 ""
   "figures/xgboost10k.pdf" 1686839567 18976 7e54acd57bc93370c716cdbc0feb29d7 ""
-  "main.tex" 1686840755 14747 14fb5c24fe583b45ee3acef7e7021a62 ""
-  "out/main.aux" 1686840759 9385 b298e769469972335a58dd3ba3daaa53 "pdflatex"
-  "out/main.bbl" 1686818985 2338 1fdf5840a6abe83ed94970e7db32b93c "biber out/main"
-  "out/main.nav" 1686840759 4060 6c35f7536c6b7fc16ade64f24b59691f "pdflatex"
-  "out/main.out" 1686840759 1447 8dab1a67f80855bbbb18e2fc5f195965 "pdflatex"
-  "out/main.run.xml" 1686840759 2342 ba0d023bf72f83589a6172307ff4d042 "pdflatex"
-  "out/main.toc" 1686840759 581 bd54254720dac193164118f32de3c09f "pdflatex"
+  "main.tex" 1686906443 17124 838f33067402d7245682fb10afe6ae53 ""
+  "out/main.aux" 1686906447 10514 817759e148ff111ce56d6f699967d8da "pdflatex"
+  "out/main.bbl" 1686903921 466 ee04f40f768daeed26442158e95aba61 "biber out/main"
+  "out/main.nav" 1686906447 4414 5f669302d72e9b63266bb90ecd250070 "pdflatex"
+  "out/main.out" 1686906447 1447 b2c6dfc12ff2d3457d0932ea601390ab "pdflatex"
+  "out/main.run.xml" 1686906447 2342 ba0d023bf72f83589a6172307ff4d042 "pdflatex"
+  "out/main.toc" 1686906447 581 a4be901707f555ca12849bc62e8dfa9f "pdflatex"
   (generated)
   "out/main.aux"
   "out/main.bcf"

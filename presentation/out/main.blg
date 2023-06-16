@@ -1,15 +1,9 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is 'out/main.blg'
-[43] biber:340> INFO - === Thu Jun 15, 2023, 10:49:45
-[51] Biber.pm:419> INFO - Reading 'out/main.bcf'
-[86] Biber.pm:979> INFO - Found 1 citekeys in bib section 0
-[93] Biber.pm:4419> INFO - Processing section 0
-[98] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
-[99] bibtex.pm:1713> INFO - LaTeX decoding ...
-[104] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[126] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[126] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[126] Biber.pm:4239> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
-[126] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[127] bbl.pm:660> INFO - Writing 'out/main.bbl' with encoding 'UTF-8'
-[128] bbl.pm:763> INFO - Output to out/main.bbl
+[48] biber:340> INFO - === Fri Jun 16, 2023, 10:25:21
+[58] Biber.pm:419> INFO - Reading 'out/main.bcf'
+[95] Biber.pm:979> INFO - Found 0 citekeys in bib section 0
+[102] bbl.pm:660> INFO - Writing 'out/main.bbl' with encoding 'UTF-8'
+[102] bbl.pm:763> INFO - Output to out/main.bbl
+[103] Biber.pm:131> WARN - The file 'out/main.bcf' does not contain any citations!
+[103] Biber.pm:133> INFO - WARNINGS: 1
