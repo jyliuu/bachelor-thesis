@@ -75,16 +75,29 @@
 %---------------------------------------------------------
 \section{Introduction}
 \begin{frame}
-    \frametitle{Introduction}
-    \begin{block}{Binary regression}
-        Let $ O = (Y, X) $ be an observation for $ Y \in \{0,1\} $ and $ X \in \mathcal{X}$ for $ \mathcal{X} \subseteq \mathbb{R}^{d} $. We assume that $ O \sim P $ for some $ P \in \mathcal{P} $.
-    \end{block}
-    Let $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable}\} $ be the set of \textbf{regression functions}. We would like to \textbf{estimate} a function $ \btheta \in \Theta $ such that the mean squared error (MSE) or risk
+    \frametitle{Binary regression}
+    Let $ O = (Y, X) \sim P\in\mathcal P $ be an observation where $ Y \in \{0,1\} $ and $ X \in\mathcal X
+    \subset\mathbb{R}^{d} $.
+    \vfill
+    The set of \textbf{regression functions}: $$ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable}\}.$$
+    \vfill
+    The conditional expectation $$ x \mapsto E(Y \mid X = x) = P(Y \mid X = x) $$ minimizes the  mean squared error (MSE) or risk over \(\Theta\)
         $$
-            R(\btheta , P) = \int L(O, \btheta) dP = \int (Y - \theta(X))^2 d P  
+            R(\btheta , P) = \int (Y - \theta(X))^2 d P.
         $$
-        is minimized. It turns out that the conditional expectation $$ x \mapsto E(Y \mid X = x) = P(Y \mid X = x) $$ is what minimizes the MSE. We refer to it as the \textbf{regression}.  
-\end{frame}
+        % is minimized. It turns out that  is what minimizes the MSE. We refer to it as the \textbf{regression}.  
+      \end{frame}
+% \begin{frame}
+    % \frametitle{Introduction}
+    % \begin{block}{Binary regression}
+        % Let $ O = (Y, X) $ be an observation for $ Y \in \{0,1\} $ and $ X \in \mathcal{X}$ for $ \mathcal{X} \subseteq \mathbb{R}^{d} $. We assume that $ O \sim P $ for some $ P \in \mathcal{P} $.
+    % \end{block}
+    % Let $ \Theta = \{\btheta \mid \btheta : \mathcal{X} \to [0,1] \text{ measurable}\} $ be the set of \textbf{regression functions}. We would like to \textbf{estimate} a function $ \btheta \in \Theta $ such that the mean squared error (MSE) or risk
+        % $$
+            % R(\btheta , P) = \int L(O, \btheta) dP = \int (Y - \theta(X))^2 d P  
+        % $$
+        % is minimized. It turns out that the conditional expectation $$ x \mapsto E(Y \mid X = x) = P(Y \mid X = x) $$ is what minimizes the MSE. We refer to it as the \textbf{regression}.  
+% \end{frame}
 
 \begin{frame}
     \frametitle{Example of a regression function}
@@ -107,25 +120,37 @@
 \subsection{Terminology}
 \begin{frame}
     \frametitle{Terminology}
-    We observe $ D_n = (O_1 , \dots , O_n) $, upon which we apply our \textbf{learning algorithms}  
-    \begin{definition}[Learning algorithm]
+    We observe $ D_n = (O_1 , \dots , O_n) \in \mathcal{O}^{n}$. %upon which we apply our \textbf{learning algorithms}  
+    \begin{block}{Learning algorithm}
         A learning algorithm is a measurable map $ \la : \mathcal{O}^{n} \to \Theta $ for $ n \in \mathbb{N} $. 
-    \end{definition}
-    We assume that the $ \la $ is well-defined for all $ n \in \mathbb{N} $ and that the ordering of the observations does not matter.  
-    \begin{definition}[Learner or fitted learner]
-        Let $ \la $ be a learning algorithm, a learner is the outcome of applying $ \la $ to our data $ D_n $ denoted as $ \la(D_n) $, which is a map in $ \Theta $.
-    \end{definition}
+      \end{block}
+      \vfill
+      % We assume that the $ \la $ is well-defined for all $ n \in \mathbb{N} $ and that the ordering of the observations does not matter.
+    \begin{block}{Learner or fitted learner}
+        A learner  $ \la(D_n)\in \Theta$ is the outcome of applying $ \la $ to the data $ D_n $.
+      \end{block}
+      \vfill
     We usually have a \textbf{library of learning algorithms}, 
     \begin{align*}
         \lib = \{\la_{\q} \mid 1 \leq \q \leq\ml \},
     \end{align*}
-    for which we can use to estimate the regression.  
+    which we can use to estimate \(E(Y|X=x)\).
+\end{frame}
+
+\begin{frame}
+    \frametitle{Two learners: Logistic Regression and XGBoost} 
+    \begin{figure}
+        \centering
+        \centerline{\includegraphics[width=1.1\textwidth]{figures/predictpar.pdf}}
+        \caption{The predictions of the main effects logistic regression and XGBoost fitted on $ 1,000 $ observations.}
+        \label{fig:predictpar}
+    \end{figure}
 \end{frame}
 
 \subsection{Cross-validation}
 \begin{frame}
 \frametitle{$ K $-fold Cross-validation}
-There is a one-to-one correspondance between our data $ D_n $ and the empirical measures over $ n $ observations
+There is a one-to-one correspondence between our data $ D_n $ and the empirical measures over $ n $ observations
 \begin{align*}
     P_n = \sum_{i = 1}^{n} \delta_{O_i},
 \end{align*}
@@ -137,13 +162,14 @@ Here $ s(i) $ denotes whether $ O_i$ is in the validation set $ s $, and $ n_1, 
 \end{frame}
 
 \begin{frame}
-\begin{exampleblock}{$ K $-fold cross-validation procedure}
-Cross-validation is used to evaluate each algorithm, and is the central idea of the \textbf{super learner}:
-    \begin{enumerate}
+\begin{exampleblock}{The \textbf{super learner} $ K $-fold cross-validation procedure}
+  % The \textbf{super learner} uses cross-validation:
+  \begin{enumerate}
         \item Randomly split $ D_n $ into $ K $ disjoint and exhaustive validation sets
         \item For each $ s \in \{1, \dots , K\} $ fit each $ \la \in \lib $ on the training data $ P_{n, s}^{0} $ and obtain $ \la(P_{n, s}^{0}) $ 
-        \item For each $ \la $, use $ \la(P_{n, s}^{0}) $ to predict on the validation set to obtain \textbf{level-1 covariates}: $$ Z_i = \left(\la_1(P_{n, s(i)}^{0})(X_i), \dots ,\la_\ml(P_{n, s(i)}^{0})(X_i)\right)  $$
-        \item Calculate the MSE of $ \la $ on the validation set for $ s \in \{1, \dots, K \}$ 
+        \item For each \(s\) and $ \la $, use $ \la(P_{n, s}^{0}) $ to predict on the validation set to obtain \textbf{level-1 covariates}:
+          $$ Z_i = \left(\la_1(P_{n, s(i)}^{0})(X_i), \dots ,\la_\ml(P_{n, s(i)}^{0})(X_i)\right)  $$
+        \item Calculate the MSE of $ \la $ on the validation sets for $ s \in \{1, \dots, K \}$ 
             $$ R(\la(P_{n, s}^{0}) , P_{n, s}^{1}) = \frac{1}{n_1} \sum_{i : s(i) = s} \left(Y_i - \la(P_{n, s}^{0})(X_i)\right)^2 $$ 
     \end{enumerate}
 \end{exampleblock}
@@ -157,7 +183,7 @@ Cross-validation allows us to select the algorithm with the lowest \textbf{empir
 \begin{align*}
     \hat{\la}_n := \argmin_{\la \in \lib} \frac{1}{K} \sum_{s = 1}^{K} R(\la(P_{n, s}^{0}) , P_{n, s}^{1}),  
 \end{align*}
-also known as the \textbf{cross-validation selected algorihm}. The \textbf{discrete super learner} is simply the cross-validation selected algorithm fitted on the entire dataset 
+also known as the \textbf{cross-validation selected algorithm}. The \textbf{discrete super learner} is simply the cross-validation selected algorithm fitted on the entire dataset 
 \begin{align*}
     X \mapsto \hat{\la}_n(P_n)(X).
 \end{align*}
@@ -169,8 +195,8 @@ It is compared to the \textbf{oracle selected learning algorithm} that has the t
 
 \subsection{Oracle Property}
 \begin{frame}
-    \frametitle{Discrete Super Learner: Asymptotic Equivalence}
-    We let $ E_{D_n} $ denote the expectation wrt. the product measure of $ O_1 , \dots , O_n $.   
+    \frametitle{Discrete Super Learner}
+    % We let $ E_{D_n} $ denote the expectation wrt. to the product measure.
 \begin{theorem}[Asymptotic equivalence] \label{cor:dslasymptoticequivalence}
     If there exists an $ \varepsilon > 0 $ such that 
    \begin{align*}
@@ -186,50 +212,52 @@ It is compared to the \textbf{oracle selected learning algorithm} that has the t
 
 \section{Ensemble Super Learner}
 \begin{frame}
-    \frametitle{Ensemble Super Learner} 
-    Let $ \mathcal{Z} \subseteq [0,1]^{\ml} $ be the learners' out-of-fold predictions from doing $ K $-fold cross-validation (level 1 covariates).
+  \frametitle{Ensemble Super Learner}
+  % Instead of choosing the best learner, we can combine them.
     \begin{definition}[Level 1 data]
-    The \textit{level 1 data}, $ \lone_{n} \subseteq \{0,1\} \times \mathcal{Z} $, is the observed $ Y_i $'s concatenated with the level 1 covariates:
-    \begin{align*}
-        \lone_{n} &= \{(Y_i ; Z_i)\}_{i = 1}^{n} \\
-            &= \{(Y_i; \la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^{0})(X_i)) \}_{i = 1}^n. 
-    \end{align*}
-    \end{definition}
-    Let $ \mathcal{M} $ be the set of measurable functions, $ \meta: \mathcal{Z} \to [0,1] $, known as the set of \textbf{meta learners} 
-    \begin{definition}[Meta learner]
-        The \textit{meta learner} is a function $ \meta: \mathcal{Z} \to [0,1] $ in $ \mathcal{M} $ that maps the output of the candidate learners to a prediction. 
+      The \textit{level 1 data},
+      % $ \lone_{n} \subseteq \{0,1\} \times \mathcal{Z} $, is
+      combines the observed outcomes $ Y_i $ with the level 1 covariates:
+    \begin{equation*}
+        \lone_{n}= \{(Y_i; \la_1(P_{n, s(i)}^{0})(X_i), \ldots, \la_\ml(P_{n, s(i)}^{0})(X_i)) \}_{i = 1}^n. 
+    \end{equation*}
+  \end{definition}
+  \vfill
+    % Let $ \mathcal{M} $ be the set of measurable functions, $ \meta: \mathcal{Z} \to [0,1] $, known as the set of \textbf{meta learners} 
+    % \begin{definition}[Meta learner]
+      % The \textit{meta learner} is a function $ \meta $ that maps the output of the candidate learners to a prediction:
+      % $$\meta()$$
+    % \end{definition}
+    % We estimate $ E(Y \mid Z) $ by applying a \textbf{meta learning algorithm} to the level 1 data. 
+    \begin{definition}[Meta learning algorithm]
+        A \textit{meta learning algorithm} $ \Meta $ is a learning algorithm that uses the level 1 data to create a learner: $ \lone_{n} \mapsto \Meta(\lone_{n})$. 
     \end{definition}
 \end{frame}
-
-\begin{frame}
-    We estimate $ E(Y \mid Z) $ by applying a \textbf{meta learning algorithm} to the level 1 data. 
-    \begin{definition}[Meta learning algorithm]
-        A \textit{meta learning algorithm} $ \Meta $ is a measurable map that creates a meta learner from our level 1 data $ \lone_{n} \mapsto \Meta(\lone_{n}) \in \mathcal{M} $. 
-    \end{definition}
-
-\begin{definition}[Ensemble super learner]
+\begin{frame}\frametitle{Ensemble super learner}
+\begin{definition}
     Let $ \meta = \Meta(\lone_{n}) $ be the outcome of applying a meta learning algorithm $ \Meta $ to the level 1 data, then the map 
     \begin{align*}
        x \mapsto \meta(\la_1(P_{n})(x), \ldots, \la_k(P_{n})(x) ),
     \end{align*}
-    is called the \textit{ensemble super learner} and we will denote it by $ \esl(P_{n}) $. 
-\end{definition}
+    is called the \textit{ensemble super learner}.%and we will denote it by $ \esl(P_{n}) $. 
+  \end{definition}
+  \vfill
 Each learning algorithm is fitted on the entire dataset, and a meta learner is used to combine the predictions.
 \end{frame}
 
 \subsection{Constrained Regression}
 \begin{frame}
     \frametitle{Ensemble Super Learner: Constrained Regression} 
-    There are many choices of the meta learning algorithm, one can fit a weighted linear combination of the learning algorithms where 
+    There are many possible meta learning algorithms. E.g., one can fit a weighted linear combination of the learning algorithms where 
     \begin{align*}
         \meta_{a}(z) = a \cdot z, \qquad \sum_{\q = 1}^{\ml} a_{\q} = 1, a_{\q} \geq 0 \text{ for all } \q,
     \end{align*}
     such that 
-    \begin{align*}
-        \esl(P_n)(x) &=  \meta_{a}(\la_{1}(P_n)(x) , \dots , \la_{\ml}(P_n)(x))\\
+    \begin{equation*}
+ \meta_{a}(\la_{1}(P_n)(x) , \dots , \la_{\ml}(P_n)(x))
                      &= \sum_{\q = 1}^{\ml} a_{\q} \la_\q(P_n)(x) \in [0,1].
-    \end{align*}
-    The optimal weighting, $ a $, can be found by solving a \textbf{constrained least squares} on the level 1 data using quadratic programming techniques. 
+    \end{equation*}
+    The optimal weighs, $ a $, can be found by solving a \textbf{constrained least squares} on the level 1 data using quadratic programming techniques. 
 \end{frame}
 
 \section{Simulations}
@@ -262,7 +290,7 @@ The regression is captured by using logistic regression with interaction terms. 
     \item Logistic regression with main effects: $E[Y \mid X_1, X_2] = \expit(\beta_0 + \beta_1 X_1 + \beta_2 X_2)$
     \item XGBoost with hyperparameters: \texttt{max\_depth=3, eta=0.3,\\ n\_rounds=100, objective='binary:logistic', booster='dart', nthread=5}
 \end{enumerate}
-The intercept model is included as a \textbf{baseline}, no learning algorithm should perform worse than the baseline. 
+The intercept model is included as a \textbf{benchmark}, no learning algorithm should perform worse than the benchmark. 
 \end{frame}
 
 \begin{frame}
