@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.16)  16 JUN 2023 11:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.6.16)  22 JUN 2023 09:55
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -614,246 +614,12 @@ File: caption-beamer.sto 2022/01/06 v2.0c Adaption of the caption package to the
 Package caption Info: hyperref package is loaded.
 Package caption Info: Hyperref support is turned off
 (caption)             because hyperref has stopped early.
-) (/usr/share/texmf-dist/tex/latex/biblatex/biblatex.sty
-Package: biblatex 2023/03/05 v3.19 programmable bibliographies (PK/MW)
- (/usr/share/texmf-dist/tex/latex/logreq/logreq.sty
-Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count345
- (/usr/share/texmf-dist/tex/latex/logreq/logreq.def
-File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
-)) (/usr/share/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
-)
-\c@tabx@nest=\count346
-\c@listtotal=\count347
-\c@listcount=\count348
-\c@liststart=\count349
-\c@liststop=\count350
-\c@citecount=\count351
-\c@citetotal=\count352
-\c@multicitecount=\count353
-\c@multicitetotal=\count354
-\c@instcount=\count355
-\c@maxnames=\count356
-\c@minnames=\count357
-\c@maxitems=\count358
-\c@minitems=\count359
-\c@citecounter=\count360
-\c@maxcitecounter=\count361
-\c@savedcitecounter=\count362
-\c@uniquelist=\count363
-\c@uniquename=\count364
-\c@refsection=\count365
-\c@refsegment=\count366
-\c@maxextratitle=\count367
-\c@maxextratitleyear=\count368
-\c@maxextraname=\count369
-\c@maxextradate=\count370
-\c@maxextraalpha=\count371
-\c@abbrvpenalty=\count372
-\c@highnamepenalty=\count373
-\c@lownamepenalty=\count374
-\c@maxparens=\count375
-\c@parenlevel=\count376
-\blx@tempcnta=\count377
-\blx@tempcntb=\count378
-\blx@tempcntc=\count379
-\c@blx@maxsection=\count380
-\blx@maxsegment@0=\count381
-\blx@notetype=\count382
-\blx@parenlevel@text=\count383
-\blx@parenlevel@foot=\count384
-\blx@sectionciteorder@0=\count385
-\blx@sectionciteorderinternal@0=\count386
-\blx@entrysetcounter=\count387
-\blx@biblioinstance=\count388
-\labelnumberwidth=\skip65
-\labelalphawidth=\skip66
-\biblabelsep=\skip67
-\bibitemsep=\skip68
-\bibnamesep=\skip69
-\bibinitsep=\skip70
-\bibparsep=\skip71
-\bibhang=\skip72
-\blx@bcfin=\read3
-\blx@bcfout=\write5
-\blx@langwohyphens=\language87
-\c@mincomprange=\count389
-\c@maxcomprange=\count390
-\c@mincompwidth=\count391
-Package biblatex Info: Trying to load biblatex default data model...
-Package biblatex Info: ... file 'blx-dm.def' found.
-
-(/usr/share/texmf-dist/tex/latex/biblatex/blx-dm.def
-File: blx-dm.def 2023/03/05 v3.19 biblatex localization (PK/MW)
-)
-Package biblatex Info: Trying to load biblatex citestyle data model...
-Package biblatex Info: ... file 'authoryear.dbx' not found.
-Package biblatex Info: Trying to load biblatex bibstyle data model...
-Package biblatex Info: ... file 'numeric.dbx' not found.
-Package biblatex Info: Trying to load biblatex custom data model...
-Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count392
-\c@savedafterword=\count393
-\c@annotator=\count394
-\c@savedannotator=\count395
-\c@author=\count396
-\c@savedauthor=\count397
-\c@bookauthor=\count398
-\c@savedbookauthor=\count399
-\c@commentator=\count400
-\c@savedcommentator=\count401
-\c@editor=\count402
-\c@savededitor=\count403
-\c@editora=\count404
-\c@savededitora=\count405
-\c@editorb=\count406
-\c@savededitorb=\count407
-\c@editorc=\count408
-\c@savededitorc=\count409
-\c@foreword=\count410
-\c@savedforeword=\count411
-\c@holder=\count412
-\c@savedholder=\count413
-\c@introduction=\count414
-\c@savedintroduction=\count415
-\c@namea=\count416
-\c@savednamea=\count417
-\c@nameb=\count418
-\c@savednameb=\count419
-\c@namec=\count420
-\c@savednamec=\count421
-\c@translator=\count422
-\c@savedtranslator=\count423
-\c@shortauthor=\count424
-\c@savedshortauthor=\count425
-\c@shorteditor=\count426
-\c@savedshorteditor=\count427
-\c@labelname=\count428
-\c@savedlabelname=\count429
-\c@institution=\count430
-\c@savedinstitution=\count431
-\c@lista=\count432
-\c@savedlista=\count433
-\c@listb=\count434
-\c@savedlistb=\count435
-\c@listc=\count436
-\c@savedlistc=\count437
-\c@listd=\count438
-\c@savedlistd=\count439
-\c@liste=\count440
-\c@savedliste=\count441
-\c@listf=\count442
-\c@savedlistf=\count443
-\c@location=\count444
-\c@savedlocation=\count445
-\c@organization=\count446
-\c@savedorganization=\count447
-\c@origlocation=\count448
-\c@savedoriglocation=\count449
-\c@origpublisher=\count450
-\c@savedorigpublisher=\count451
-\c@publisher=\count452
-\c@savedpublisher=\count453
-\c@language=\count454
-\c@savedlanguage=\count455
-\c@origlanguage=\count456
-\c@savedoriglanguage=\count457
-\c@pageref=\count458
-\c@savedpageref=\count459
-\shorthandwidth=\skip73
-\shortjournalwidth=\skip74
-\shortserieswidth=\skip75
-\shorttitlewidth=\skip76
-\shortauthorwidth=\skip77
-\shorteditorwidth=\skip78
-\locallabelnumberwidth=\skip79
-\locallabelalphawidth=\skip80
-\localshorthandwidth=\skip81
-\localshortjournalwidth=\skip82
-\localshortserieswidth=\skip83
-\localshorttitlewidth=\skip84
-\localshortauthorwidth=\skip85
-\localshorteditorwidth=\skip86
-Package biblatex Info: Trying to load compatibility code...
-Package biblatex Info: ... file 'blx-compat.def' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/blx-compat.def
-File: blx-compat.def 2023/03/05 v3.19 biblatex compatibility (PK/MW)
-)
-Package biblatex Info: Trying to load generic definitions...
-Package biblatex Info: ... file 'biblatex.def' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/biblatex.def
-File: biblatex.def 2023/03/05 v3.19 biblatex compatibility (PK/MW)
-\c@textcitecount=\count460
-\c@textcitetotal=\count461
-\c@textcitemaxnames=\count462
-\c@biburlbigbreakpenalty=\count463
-\c@biburlbreakpenalty=\count464
-\c@biburlnumpenalty=\count465
-\c@biburlucpenalty=\count466
-\c@biburllcpenalty=\count467
-\biburlbigskip=\muskip18
-\biburlnumskip=\muskip19
-\biburlucskip=\muskip20
-\biburllcskip=\muskip21
-\c@smartand=\count468
-)
-Package biblatex Info: Trying to load natbib compatibility...
-Package biblatex Info: ... file 'blx-natbib.def' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/blx-natbib.def
-File: blx-natbib.def 2023/03/05 v3.19 biblatex compatibility (PK/MW)
-Package biblatex Info: Delimiter 'nameyeardelim' in context '' already defined, overwriting.
-)
-Package biblatex Info: Trying to load bibliography style 'numeric'...
-Package biblatex Info: ... file 'numeric.bbx' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
-File: numeric.bbx 2023/03/05 v3.19 biblatex bibliography style (PK/MW)
-Package biblatex Info: Trying to load bibliography style 'standard'...
-Package biblatex Info: ... file 'standard.bbx' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
-File: standard.bbx 2023/03/05 v3.19 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count469
-\c@bbx:relatedtotal=\count470
-))
-Package biblatex Info: Trying to load citation style 'authoryear'...
-Package biblatex Info: ... file 'authoryear.cbx' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/cbx/authoryear.cbx
-File: authoryear.cbx 2023/03/05 v3.19 biblatex citation style (PK/MW)
-Package biblatex Info: Redefining '\cite'.
-Package biblatex Info: Redefining '\parencite'.
-Package biblatex Info: Redefining '\footcite'.
-Package biblatex Info: Redefining '\footcitetext'.
-Package biblatex Info: Redefining '\smartcite'.
-Package biblatex Info: Redefining '\textcite'.
-Package biblatex Info: Redefining '\textcites'.
-)
-Package biblatex Info: Trying to load configuration file...
-Package biblatex Info: ... file 'biblatex.cfg' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/biblatex.cfg
-File: biblatex.cfg 
-)
-Package biblatex Info: Input encoding 'utf8' detected.
-Package biblatex Info: Document encoding is UTF8 ....
- (/usr/share/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2023-02-22 L3 programming layer (loader) 
- (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count471
-\l__pdf_internal_box=\box81
-))
-Package biblatex Info: ... and expl3
-(biblatex)             2023-02-22 L3 programming layer (loader) 
-(biblatex)             is new enough (at least 2020/04/06),
-(biblatex)             setting 'casechanger=expl3'.
- (/usr/share/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty (/usr/share/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-Package: xparse 2023-02-02 L3 Experimental document command parser
-)
-Package: blx-case-expl3 2023/03/05 v3.19 expl3 case changing code for biblatex
-)) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
+) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2023-01-15 v3.1.10 (3.1.10)
 ) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
 File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex
+)
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex
 File: tikzlibraryshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
  (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex
 File: tikzlibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
@@ -871,31 +637,30 @@ File: pgflibraryshapes.symbols.code.tex 2023-01-15 v3.1.10 (3.1.10)
 File: tikzlibraryshapes.arrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
  (/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.arrows.code.tex
 File: pgflibraryshapes.arrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.callouts.code.tex (/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.callouts.code.tex))
-(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.multipart.code.tex
+)) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.callouts.code.tex (/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.callouts.code.tex)) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.multipart.code.tex
 File: tikzlibraryshapes.multipart.code.tex 2023-01-15 v3.1.10 (3.1.10)
  (/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multipart.code.tex
 File: pgflibraryshapes.multipart.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfnodepartlowerbox=\box82
-\pgfnodeparttwobox=\box83
-\pgfnodepartthreebox=\box84
-\pgfnodepartfourbox=\box85
-\pgfnodeparttwentybox=\box86
-\pgfnodepartnineteenbox=\box87
-\pgfnodeparteighteenbox=\box88
-\pgfnodepartseventeenbox=\box89
-\pgfnodepartsixteenbox=\box90
-\pgfnodepartfifteenbox=\box91
-\pgfnodepartfourteenbox=\box92
-\pgfnodepartthirteenbox=\box93
-\pgfnodeparttwelvebox=\box94
-\pgfnodepartelevenbox=\box95
-\pgfnodeparttenbox=\box96
-\pgfnodepartninebox=\box97
-\pgfnodeparteightbox=\box98
-\pgfnodepartsevenbox=\box99
-\pgfnodepartsixbox=\box100
-\pgfnodepartfivebox=\box101
+\pgfnodepartlowerbox=\box81
+\pgfnodeparttwobox=\box82
+\pgfnodepartthreebox=\box83
+\pgfnodepartfourbox=\box84
+\pgfnodeparttwentybox=\box85
+\pgfnodepartnineteenbox=\box86
+\pgfnodeparteighteenbox=\box87
+\pgfnodepartseventeenbox=\box88
+\pgfnodepartsixteenbox=\box89
+\pgfnodepartfifteenbox=\box90
+\pgfnodepartfourteenbox=\box91
+\pgfnodepartthirteenbox=\box92
+\pgfnodeparttwelvebox=\box93
+\pgfnodepartelevenbox=\box94
+\pgfnodeparttenbox=\box95
+\pgfnodepartninebox=\box96
+\pgfnodeparteightbox=\box97
+\pgfnodepartsevenbox=\box98
+\pgfnodepartsixbox=\box99
+\pgfnodepartfivebox=\box100
 ))) (/usr/share/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.code.tex
 File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfarrowinset=\dimen315
@@ -904,37 +669,58 @@ File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfarrowlinewidth=\dimen318
 ) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfit.code.tex
 File: tikzlibraryfit.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (/usr/share/texmf-dist/tex/latex/beamer/beamerthemeCopenhagen.sty (/usr/share/texmf-dist/tex/latex/beamer/beamerouterthemesplit.sty) (/usr/share/texmf-dist/tex/latex/beamer/beamerinnerthemerounded.sty) (/usr/share/texmf-dist/tex/latex/beamer/beamercolorthemewhale.sty) (/usr/share/texmf-dist/tex/latex/beamer/beamercolorthemeorchid.sty))
-\@quotelevel=\count472
-\@quotereset=\count473
- (out/main.aux
-
-LaTeX Warning: Label `fig:predictpar' multiply defined.
-
-
-LaTeX Warning: Label `fig:losses_esl_s22' multiply defined.
-
+) (/usr/share/texmf-dist/tex/latex/beamer/beamerthemeCopenhagen.sty (/usr/share/texmf-dist/tex/latex/beamer/beamerouterthemesplit.sty) (/usr/share/texmf-dist/tex/latex/beamer/beamerinnerthemerounded.sty) (/usr/share/texmf-dist/tex/latex/beamer/beamercolorthemewhale.sty) (/usr/share/texmf-dist/tex/latex/beamer/beamercolorthemeorchid.sty)) (/usr/share/texmf-dist/tex/latex/pgf/utilities/pgfpages.sty
+Package: pgfpages 2011/01/05 ver 0.02
+ (/usr/share/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count345
+\calc@Bcount=\count346
+\calc@Adimen=\dimen319
+\calc@Bdimen=\dimen320
+\calc@Askip=\skip65
+\calc@Bskip=\skip66
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count347
+\calc@Cskip=\skip67
 )
+\pgf@logicalpages=\count348
+\pgf@firstshipout=\count349
+\pgf@lastshipout=\count350
+\pgf@currentshipout=\count351
+\pgf@cpn=\count352
+\pgf@shipoutnextto=\count353
+\pgfphysicalheight=\dimen321
+\pgfphysicalwidth=\dimen322
+\pgfpages@shipoutbox=\box101
+)
+\pgfpages@box@1=\box102
+\pgfpages@box@2=\box103
+ (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count354
+\l__pdf_internal_box=\box104
+) (out/main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -972,16 +758,16 @@ LaTeX Font Info:    ... okay on input line 72.
 
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count474
-\scratchdimen=\dimen319
-\scratchbox=\box102
-\nofMPsegments=\count475
-\nofMParguments=\count476
+\scratchcounter=\count355
+\scratchdimen=\dimen323
+\scratchbox=\box105
+\nofMPsegments=\count356
+\nofMParguments=\count357
 \everyMPshowfont=\toks47
-\MPscratchCnt=\count477
-\MPscratchDim=\dimen320
-\MPnumerator=\count478
-\makeMPintoPDFobject=\count479
+\MPscratchCnt=\count358
+\MPscratchDim=\dimen324
+\MPnumerator=\count359
+\makeMPintoPDFobject=\count360
 \everyMPtoPDFconversion=\toks48
 ) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -989,60 +775,60 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 72.
+Package hyperref Info: Link coloring OFF on input line 66.
  (out/main.out) (out/main.out)
-\@outlinefile=\write6
-\openout6 = `main.out'.
+\@outlinefile=\write5
+\openout5 = `main.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 72.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 66.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 72.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 66.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 72.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 72.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 66.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 72.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 72.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 72.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 66.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 72.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 72.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 72.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 66.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 72.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 72.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 72.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 66.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 72.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 72.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 66.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 72.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 66.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 72.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 72.
+(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 72.
+(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 72.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 72.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 66.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 72.
-LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 72.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 66.
+LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 66.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `normal'
-(Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 72.
+(Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 66.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 72.
+(Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 66.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on input line 72.
+(Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on input line 66.
  (/usr/share/texmf-dist/tex/latex/translator/translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
 ) (/usr/share/texmf-dist/tex/latex/translator/translator-bibliography-dictionary-English.dict
@@ -1058,225 +844,626 @@ Dictionary: translator-theorem-dictionary, Language: English
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-Package biblatex Info: Trying to load language 'english'...
-Package biblatex Info: ... file 'english.lbx' found.
- (/usr/share/texmf-dist/tex/latex/biblatex/lbx/english.lbx
-File: english.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
-)
-Package biblatex Info: Input encoding 'utf8' detected.
-Package biblatex Info: Automatic encoding selection.
-(biblatex)             Assuming data encoding 'utf8'.
-\openout5 = `main.bcf'.
+ (out/main.nav) (out/main.toc) [2
 
-Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'main.bbl' found.
- (out/main.bbl)
-Package biblatex Info: Reference section=0 on input line 72.
-Package biblatex Info: Reference segment=0 on input line 72.
- (out/main.nav) [1
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation1}) has been already used, duplicate ignored
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (out/main.toc) [2
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.71 \section{Introduction}
+                           
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.71 \section{Introduction}
+                           
 
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 90.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 108.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 90.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 108.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for OT1+mathkerncmss on input line 90.
+LaTeX Font Info:    Trying to load font information for OT1+mathkerncmss on input line 108.
  (/usr/share/texmf-dist/tex/latex/sansmathaccent/ot1mathkerncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mathkerncmss.
 ) [3
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation2}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.108 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.108 \end{frame}
+                 
+
 ] [4
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation3}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.139 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.139 \end{frame}
+                 
+
 ]
-<figures/predictpar.pdf, id=118, 722.7pt x 361.35pt>
+<figures/predictpar.pdf, id=120, 722.7pt x 361.35pt>
 File: figures/predictpar.pdf Graphic file (type pdf)
 <use figures/predictpar.pdf>
-Package pdftex.def Info: figures/predictpar.pdf  used on input line 149.
+Package pdftex.def Info: figures/predictpar.pdf  used on input line 168.
 (pdftex.def)             Requested size: 338.02072pt x 169.00746pt.
 
-Overfull \vbox (0.53688pt too high) detected at line 149
+Overfull \vbox (0.53688pt too high) detected at line 168
  []
 
 [5
 
- <./figures/predictpar.pdf>] [6
 
-] [7
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation4}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.168 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.168 \end{frame}
+                 
+
+] [6
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation5}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.194 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.5}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.194 \end{frame}
+                 
+
+ <./figures/predictpar.pdf>] [7
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation6}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.215 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.6}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.215 \end{frame}
+                 
 
 ] (out/main.toc) [8
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation7}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.217 \section{Discrete Super Learner}
+                                      
+pdfTeX warning (ext4): destination with the same identifier (name{page.7}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.217 \section{Discrete Super Learner}
+                                      
+
 ] [9
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation8}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.242 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.8}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.242 \end{frame}
+                 
 
 ] [10
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation9}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.266 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.9}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.266 \end{frame}
+                 
+
 ] (out/main.toc) [11
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation10}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.268 \section{Ensemble Super Learner}
+                                      
+pdfTeX warning (ext4): destination with the same identifier (name{page.10}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.268 \section{Ensemble Super Learner}
+                                      
 
 ] [12
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation11}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.290 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.11}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.290 \end{frame}
+                 
+
 ] [13
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation12}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.305 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.12}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.305 \end{frame}
+                 
 
 ] [14
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation13}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.324 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.13}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.324 \end{frame}
+                 
+
 ] (out/main.toc) [15
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation14}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.326 \section{Simulations}
+                           
+pdfTeX warning (ext4): destination with the same identifier (name{page.14}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.326 \section{Simulations}
+                           
 
 ] [16
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation15}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.341 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.15}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.341 \end{frame}
+                 
+
 ]
-<figures/trueplot.pdf, id=234, 433.62pt x 361.35pt>
+<figures/trueplot.pdf, id=238, 433.62pt x 361.35pt>
 File: figures/trueplot.pdf Graphic file (type pdf)
 <use figures/trueplot.pdf>
-Package pdftex.def Info: figures/trueplot.pdf  used on input line 282.
+Package pdftex.def Info: figures/trueplot.pdf  used on input line 350.
 (pdftex.def)             Requested size: 245.83282pt x 204.86337pt.
 
-Overfull \vbox (4.38338pt too high) detected at line 282
+Overfull \vbox (4.38338pt too high) detected at line 350
  []
 
 [17
 
- <./figures/trueplot.pdf>] [18
 
-]
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation16}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.350 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.16}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.350 \end{frame}
+                 
+
+] [18
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation17}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.367 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.17}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.367 \end{frame}
+                 
+
+ <./figures/trueplot.pdf>]
 File: figures/predictpar.pdf Graphic file (type pdf)
 <use figures/predictpar.pdf>
-Package pdftex.def Info: figures/predictpar.pdf  used on input line 304.
+Package pdftex.def Info: figures/predictpar.pdf  used on input line 379.
 (pdftex.def)             Requested size: 338.02072pt x 169.00746pt.
 
-pdfTeX warning (ext4): destination with the same identifier (name{fig:predictpar}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.304 \end{frame}
-                 
-Overfull \vbox (0.53688pt too high) detected at line 304
+Overfull \vbox (0.53688pt too high) detected at line 379
  []
 
 [19
 
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation18}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.379 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.18}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.379 \end{frame}
+                 
+
 ]
-<figures/xgboost10k.pdf, id=262, 433.62pt x 361.35pt>
+<figures/xgboost10k.pdf, id=265, 433.62pt x 361.35pt>
 File: figures/xgboost10k.pdf Graphic file (type pdf)
 <use figures/xgboost10k.pdf>
-Package pdftex.def Info: figures/xgboost10k.pdf  used on input line 313.
+Package pdftex.def Info: figures/xgboost10k.pdf  used on input line 388.
 (pdftex.def)             Requested size: 245.83282pt x 204.86337pt.
 
-Overfull \vbox (4.38338pt too high) detected at line 313
+Overfull \vbox (4.38338pt too high) detected at line 388
  []
 
 [20
 
- <./figures/xgboost10k.pdf>]
-<figures/esl_preds_par.pdf, id=276, 722.7pt x 361.35pt>
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation19}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.388 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.19}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.388 \end{frame}
+                 
+
+]
+<figures/esl_preds_par.pdf, id=274, 722.7pt x 361.35pt>
 File: figures/esl_preds_par.pdf Graphic file (type pdf)
 <use figures/esl_preds_par.pdf>
-Package pdftex.def Info: figures/esl_preds_par.pdf  used on input line 322.
+Package pdftex.def Info: figures/esl_preds_par.pdf  used on input line 400.
 (pdftex.def)             Requested size: 338.02072pt x 169.00746pt.
  [21
 
- <./figures/esl_preds_par.pdf>]
-<figures/losses_candidates.pdf, id=291, 433.62pt x 289.08pt>
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation20}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.400 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.20}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.400 \end{frame}
+                 
+
+ <./figures/xgboost10k.pdf>]
+<figures/losses_candidates.pdf, id=288, 433.62pt x 289.08pt>
 File: figures/losses_candidates.pdf Graphic file (type pdf)
 <use figures/losses_candidates.pdf>
-Package pdftex.def Info: figures/losses_candidates.pdf  used on input line 334.
+Package pdftex.def Info: figures/losses_candidates.pdf  used on input line 421.
 (pdftex.def)             Requested size: 267.34068pt x 178.23526pt.
  [22
 
- <./figures/losses_candidates.pdf>]
-<figures/losses_esl_s22.pdf, id=303, 433.62pt x 289.08pt>
-File: figures/losses_esl_s22.pdf Graphic file (type pdf)
-<use figures/losses_esl_s22.pdf>
-Package pdftex.def Info: figures/losses_esl_s22.pdf  used on input line 344.
-(pdftex.def)             Requested size: 267.34068pt x 178.23526pt.
 
-pdfTeX warning (ext4): destination with the same identifier (name{fig:losses_esl_s22}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.344 \end{frame}
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation21}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.421 \end{frame}
                  
-Overfull \vbox (8.16467pt too high) detected at line 344
- []
+pdfTeX warning (ext4): destination with the same identifier (name{page.21}) has been already used, duplicate ignored
 
-[23
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.421 \end{frame}
+                 
 
- <./figures/losses_esl_s22.pdf>]
-<figures/learner_vars_w_esl_1000.pdf, id=318, 505.89pt x 289.08pt>
+ <./figures/esl_preds_par.pdf>]
+<figures/losses_candidates_sl.pdf, id=303, 433.62pt x 289.08pt>
+File: figures/losses_candidates_sl.pdf Graphic file (type pdf)
+<use figures/losses_candidates_sl.pdf>
+Package pdftex.def Info: figures/losses_candidates_sl.pdf  used on input line 438.
+(pdftex.def)             Requested size: 267.34068pt x 178.23526pt.
+ [23
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation22}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.438 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.22}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.438 \end{frame}
+                 
+
+ <./figures/losses_candidates.pdf>]
+<figures/learner_vars_w_esl_1000.pdf, id=315, 505.89pt x 289.08pt>
 File: figures/learner_vars_w_esl_1000.pdf Graphic file (type pdf)
 <use figures/learner_vars_w_esl_1000.pdf>
-Package pdftex.def Info: figures/learner_vars_w_esl_1000.pdf  used on input line 353.
+Package pdftex.def Info: figures/learner_vars_w_esl_1000.pdf  used on input line 457.
 (pdftex.def)             Requested size: 307.28987pt x 175.59749pt.
  [24
 
- <./figures/learner_vars_w_esl_1000.pdf>]
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation23}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.457 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.23}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.457 \end{frame}
+                 
+
+ <./figures/losses_candidates_sl.pdf>]
 <figures/esl_preds_xgboost_vs_main.pdf, id=331, 433.62pt x 289.08pt>
 File: figures/esl_preds_xgboost_vs_main.pdf Graphic file (type pdf)
 <use figures/esl_preds_xgboost_vs_main.pdf>
-Package pdftex.def Info: figures/esl_preds_xgboost_vs_main.pdf  used on input line 367.
+Package pdftex.def Info: figures/esl_preds_xgboost_vs_main.pdf  used on input line 481.
 (pdftex.def)             Requested size: 245.83282pt x 163.89069pt.
 
-Overfull \vbox (5.8201pt too high) detected at line 367
+Overfull \vbox (5.8201pt too high) detected at line 481
  []
 
 [25
 
- <./figures/esl_preds_xgboost_vs_main.pdf>]
-<figures/esl_preds_xgboost_vs_main_kmeans.pdf, id=345, 433.62pt x 289.08pt>
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation24}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.481 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.24}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.481 \end{frame}
+                 
+
+ <./figures/learner_vars_w_esl_1000.pdf>]
+<figures/esl_preds_xgboost_vs_main_kmeans.pdf, id=344, 433.62pt x 289.08pt>
 File: figures/esl_preds_xgboost_vs_main_kmeans.pdf Graphic file (type pdf)
 <use figures/esl_preds_xgboost_vs_main_kmeans.pdf>
-Package pdftex.def Info: figures/esl_preds_xgboost_vs_main_kmeans.pdf  used on input line 377.
+Package pdftex.def Info: figures/esl_preds_xgboost_vs_main_kmeans.pdf  used on input line 494.
 (pdftex.def)             Requested size: 245.83282pt x 163.89069pt.
  [26
 
- <./figures/esl_preds_xgboost_vs_main_kmeans.pdf>]
-<figures/esl_preds_lw_stratified_tiled5.pdf, id=359, 722.7pt x 361.35pt>
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation25}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.494 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.25}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.494 \end{frame}
+                 
+
+ <./figures/esl_preds_xgboost_vs_main.pdf>]
+<figures/esl_preds_lw_stratified_tiled5.pdf, id=358, 722.7pt x 361.35pt>
 File: figures/esl_preds_lw_stratified_tiled5.pdf Graphic file (type pdf)
 <use figures/esl_preds_lw_stratified_tiled5.pdf>
-Package pdftex.def Info: figures/esl_preds_lw_stratified_tiled5.pdf  used on input line 387.
+Package pdftex.def Info: figures/esl_preds_lw_stratified_tiled5.pdf  used on input line 508.
 (pdftex.def)             Requested size: 338.02072pt x 169.00746pt.
+ [27
 
-Overfull \vbox (0.53688pt too high) detected at line 387
- []
 
-[27
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation26}) has been already used, duplicate ignored
 
- <./figures/esl_preds_lw_stratified_tiled5.pdf>] [28
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.508 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.26}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.508 \end{frame}
+                 
+
+ <./figures/esl_preds_xgboost_vs_main_kmeans.pdf>] (out/main.toc) [28
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation27}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.510 \section{Concluding Remarks}
+                                  
+pdfTeX warning (ext4): destination with the same identifier (name{page.27}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.510 \section{Concluding Remarks}
+                                  
+
+ <./figures/esl_preds_lw_stratified_tiled5.pdf>] [29
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation28}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.531 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.28}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.531 \end{frame}
+                 
+
+] [30
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation29}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.531 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.29}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.531 \end{frame}
+                 
+
+] [31
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation30}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.531 \end{frame}
+                 
+pdfTeX warning (ext4): destination with the same identifier (name{page.30}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.531 \end{frame}
+                 
 
 ]
-\tf@nav=\write7
-\openout7 = `main.nav'.
+\tf@nav=\write6
+\openout6 = `main.nav'.
 
-\tf@toc=\write8
-\openout8 = `main.toc'.
+\tf@toc=\write7
+\openout7 = `main.toc'.
 
-\tf@snm=\write9
-\openout9 = `main.snm'.
+\tf@snm=\write8
+\openout8 = `main.snm'.
 
- (out/main.aux)
+ [32
 
-LaTeX Warning: There were multiply-defined labels.
 
+pdfTeX warning (ext4): destination with the same identifier (name{Navigation31}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.534 \end{document}
+                    
+pdfTeX warning (ext4): destination with the same identifier (name{page.31}) has been already used, duplicate ignored
+
+\pgfpages@shipoutshipoutbox ...physicalpagesizes }
+                                                  \endgroup 
+l.534 \end{document}
+                    
+
+] (out/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: B2C6DFC12FF2D3457D0932EA601390AB;1447.
-Package logreq Info: Writing requests to 'main.run.xml'.
-\openout1 = `main.run.xml'.
-
+(rerunfilecheck)             Checksum: 4048E1BB42C8D4FADC81D1BF22F5801C;1584.
  ) 
 Here is how much of TeX's memory you used:
- 35881 strings out of 476025
- 739799 string characters out of 5796532
- 1864388 words of memory out of 5000000
- 55606 multiletter control sequences out of 15000+600000
+ 29220 strings out of 476025
+ 606436 string characters out of 5796532
+ 1871388 words of memory out of 5000000
+ 48989 multiletter control sequences out of 15000+600000
  526001 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,122p,677b,890s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 128i,15n,122p,398b,908s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/main.pdf (28 pages, 720765 bytes).
+Output written on out/main.pdf (31 pages, 744185 bytes).
 PDF statistics:
- 459 PDF objects out of 1000 (max. 8388607)
- 355 compressed objects within 4 object streams
- 77 named destinations out of 1000 (max. 500000)
- 215 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 501 PDF objects out of 1000 (max. 8388607)
+ 394 compressed objects within 4 object streams
+ 86 named destinations out of 1000 (max. 500000)
+ 223 words of extra memory for PDF output out of 10000 (max. 10000000)
 

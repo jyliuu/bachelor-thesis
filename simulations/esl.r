@@ -27,7 +27,12 @@ fit_eSL_with_candidates <- function(candidates, meta_learning_algorithm, k=10) f
             meta_predict(meta_model, lvl_1_covariates)
     }
 
-    list(cv_lvl1_and_loss = cv_lvl1_and_loss, fitted_meta = meta_model, predict_fun = predict_esl)
+    list(
+        cv_lvl1_and_loss = cv_lvl1_and_loss, 
+        candidates_fitted_predict = candidates_fitted_predict, 
+        fitted_meta = meta_model, 
+        predict_fun = predict_esl
+    )
 }
 
 logistic_meta_fit <- function(cv_lvl1_and_loss) {

@@ -56,7 +56,7 @@ fit_and_predict_library_on_new_obs <- function(lib, new_obs, n, K = 1000) {
 }
 
 plot_losses <- function(df_melted, labels, alpha, linetypes) ggplot(df_melted, aes(x = n, y = Loss, color = Model, alpha = Model, linetype = Model)) +
-  geom_line(size = 0.5) +
+  geom_line(size = 1) +
   labs(x = "n", y = "Validation risk") +
   theme_bw() +
   theme(
@@ -71,3 +71,15 @@ plot_losses <- function(df_melted, labels, alpha, linetypes) ggplot(df_melted, a
                     labels = labels) +
   scale_alpha_manual(values=alpha) +
   guides(alpha = "none")
+
+
+plot_grid_predictions <- function(grid, col, name=NULL) {
+  ggplot(grid, aes(x = Age, y = Parasites, fill = !!rlang::sym(col))) + 
+    theme_bw() +
+    geom_tile() + 
+    scale_fill_gradientn(limits = c(0, 1), colors = c("blue", "green", "red")) + 
+    xlab("X1") + 
+    ylab("X2") + 
+    ggtitle(if (is.null(name)) name else col) +
+    labs(fill = "Predictions")
+}

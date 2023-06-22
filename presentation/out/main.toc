@@ -8,3 +8,4 @@
 \beamer@sectionintoc {4}{Simulations}{15}{0}{4}
 \beamer@subsectionintoc {4}{1}{Validation risk and variance}{22}{0}{4}
 \beamer@subsectionintoc {4}{2}{Locally weighted eSL}{25}{0}{4}
+\beamer@sectionintoc {5}{Concluding Remarks}{28}{0}{5}

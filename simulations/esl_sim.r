@@ -3,6 +3,7 @@ library(patchwork)
 source('esl.r')
 source('model.r')
 source('learners.r')
+source('simulation_functions.r')
 
 
 # Test with truth
@@ -139,7 +140,22 @@ plot_predicted_values_kmeans_stratified <- function(N = 3000) {
                         Parasites = seq(0, 7, length.out = 50))
 
     eSL <- fit_eSL_kmeans(simDat)
-    res <- predict_eSL(eSL, grid)                
+
+    candidates_fitted_predict <- eSL$candidates_fitted_predict
+    candidate_plots <- NULL
+    for (name in names(candidates_fitted_predict)) {
+      if (name == 'logRegIntercept') next
+      learner <- candidates_fitted_predict[[name]]
+      learner_predictions <- learner$predict_fun(learner$fitted_model, grid)
+      grid[name] <- learner_predictions
+
+      if (is.null(candidate_plots)) 
+        candidate_plots <- plot_grid_predictions(grid, name, name)
+      else 
+        candidate_plots <- candidate_plots + theme(legend.position = "none") | plot_grid_predictions(grid, name, name)
+    }
+
+    res <- predict_eSL(eSL, grid)
     grid$predicted <- res$predicted
     grid$most_weighted <- factor(res$most_weighted, labels = c("Main effects", "Intercept only", "XGBoost")[unique(res$most_weighted)])
 
@@ -162,12 +178,12 @@ plot_predicted_values_kmeans_stratified <- function(N = 3000) {
       ylab("X2") + 
       ggtitle("Locally weighted eSL predictions (n = 3,000)") +
       labs(fill = "Predictions")
-    list(eslplot_stratified, eslplot_tiled)
+    list(eslplot_stratified, eslplot_tiled, candidate_plots)
   }
 
   simDat <- simulateMalariaData(N)
   p <- fit_esl_and_plot(simDat)
-  p[[1]]
+  p[[2]]
   ggsave('figures/esl_preds_lw_stratified.pdf', plot = p[[1]]+ggtitle("Locally weighted eSL predictions grouped (n = 1,000)") , width = 6, height = 5, units = 'in')
   ggsave('figures/esl_preds_lw_tiled.png', plot = p[[2]], width = 6, height = 5, units = 'in')
   tiled <- p[[2]] + theme(legend.position = "none") | p[[1]] 
@@ -214,4 +230,4 @@ plot_predicted_values_kmeans_location <- function() {
   ggsave('figures/esl_preds_lw_stratified_location_tiled.png', plot = p[[2]], width = 6, height = 5, units = 'in')
 }
 
-plot_predicted_values_kmeans_location()
+plot_predicted_values_kmeans_stratified()

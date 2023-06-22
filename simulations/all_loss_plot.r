@@ -49,7 +49,7 @@ res <- get_losses_and_plot(candidates,
 )
 
 res <- get_losses_and_plot(candidates_eSL_kmeans, 
-    labels = c('Main effects', 'Intercept only', 'XGBoost', 'eSL', 'dSL', 'Locally weighted eSL'),
-    alpha = c(1, 1, 1, 0.6, 0.6, 0.6), 
-    linetypes = c('dashed', 'dashed', 'dashed', 'solid', 'solid', 'solid')
+    labels = c('Main effects', 'Intercept only', 'XGBoost', 'eSL', 'dSL'),
+    alpha = c(1, 1, 1, 0.6, 0.6), 
+    linetypes = c('dashed', 'dashed', 'dashed', 'solid', 'solid')
 )
