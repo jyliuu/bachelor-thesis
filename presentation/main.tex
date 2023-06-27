@@ -70,6 +70,7 @@
 %---------------------------------------------------------
 \section{Introduction}
 
+\subsection{Setup and terminology}
 % binary regression maps to probability interval
 % differs from binary classification in that the prediction is continuous
 % Remark on notation R(\btheta, P)
@@ -87,19 +88,19 @@
         is minimized by the conditional expectation referred to as the \textbf{true regression}
     $$ x \mapsto E(Y \mid X = x) = P(Y = 1 \mid X = x). $$ 
     \note{
-    We will consider the case of binary regression, where an observation consists of a binary outcome Y and covariates X. The observation is distributed according to P which comes from statistical model 
+    We will consider binary regression, where an observation is a tuple consisting of a binary outcome Y and covariates X. The observation is distributed according to P which comes from some statistical model 
 
     Binary regression estimates the probability of Y being equal to 1 given the covariates X. It differs from binary classification in that the prediction is continuous.
 
     We consider a set of regression functions that map from our covariates to the probability interval, which are the functions we use to predict the probability. 
 
-    A way to evaluate the regression functions is to consider the MSE or risk, which we denote as R theta P, and is the integral of squared difference between Y and theta applied on X wrt. to P. 
+    We evaluate the regression functions by considering the MSE or risk, which we denote as R theta P, which is the integral of squared difference between Y and theta applied on X wrt. to P and is what we wish to minimize. 
 
-    However, we can never calculate the true MSE in the form above directly, since it depends on P, which is unknown.
+    However, we can never calculate the true MSE in the form above directly since it depends on P, which is unknown.
 
     It turns out, that the MSE is minimized by the conditional expectation, which we refer to as the true regression. 
 
-    our goal is therefore to estimate the true regression, one way is to assume... 
+    our goal is therefore to estimate the true regression, there are many ways of going about this task, the traditional approach is to assume... 
 
     problem is that our assumptions are frequently incorrect, and we risk misspecifying the model so it is tempting to use nonparametric machine learning methods which are less biased.
 
@@ -110,7 +111,6 @@
 % we assume certain things about the statistical family P, for example that it is a exponential family, and then we can estimate the parameters via maximum likelihood and give an analytic expression of the estimated regression 
 % problem is that our assumptions are frequently incorrect, and we risk misspecifying the model so it is tempting to use nonparametric machine learning methods instead which are less biased
 
-\subsection{Terminology}
 \begin{frame}
     \frametitle{Terminology}
     Let $ D_n = (O_1 , \dots , O_n) \in \mathcal{O}^{n}$ be the \textbf{data}. %upon which we apply our \textbf{learning algorithms}  
@@ -205,8 +205,10 @@ Here $ s(i) $ denotes the split $ s $ where $ O_i$ is in the validation set of $
             $$ R(\la(P_{n, s}^{0}) , P_{n, s}^{1}) = \frac{1}{n_1} \sum_{i : s(i) = s} \left(Y_i - \la(P_{n, s}^{0})(X_i)\right)^2 $$ 
     \end{enumerate}
 \end{exampleblock}
-\note[item]{K-fold cross-validation is integral in the super learner procedure, the super learneris in fact just cross-validation. }
+\note[item]{K-fold cross-validation is integral in the super learner procedure.}
 
+\note[item]{The super learner essentially is about how we can from a library of learners, create the best learner that estimates the regression}
+\note[item]{We first split the data into}
 \note[item]{The level 1 covariates are obtained by fitting each learner to the training data pertaining to the split s, and then using the fitted learners for that split to predict on the observations in the validation set }
 
 \note[item]{The mean squared error for an algorithm in a specific split, can be calculated by evaluating the fitted learner wrt. the empirical measure of the validation set of that split. }
@@ -241,11 +243,11 @@ We compare it to the \textbf{oracle selected learning algorithm} that has the tr
 
 \end{frame}
 
-\subsection{Oracle Property}
+\subsection{Oracle property}
 \begin{frame}
     \frametitle{Discrete Super Learner}
     % We let $ E_{D_n} $ denote the expectation wrt. to the product measure.
-\begin{theorem}[Asymptotic equivalence] \label{cor:dslasymptoticequivalence}
+\begin{block}{Asymptotic equivalence}
     If there exists an $ \varepsilon > 0 $ such that 
    \begin{align*}
        E_{D_n} \frac{1}{K} \sum_{s = 1}^{K} R(\tilde{\la}_n(P_{n, s}^{0}), P) > \varepsilon \qquad \text{for all } n \in \mathbb{N},
@@ -254,7 +256,7 @@ We compare it to the \textbf{oracle selected learning algorithm} that has the tr
    \begin{align*}
        \lim_{n \to \infty} \frac{E_{D_n} \frac{1}{K} \sum_{s = 1}^{K} R(\hat{\la}_n(P_{n, s}^{0}), P)}{E_{D_n} \frac{1}{K} \sum_{s = 1}^{K} R(\tilde{\la}_n(P_{n, s}^{0}), P)} = 1.
    \end{align*}
-\end{theorem}
+\end{block}
 
 \note[item]{The following result holds for the discrete super learner}
 
@@ -288,7 +290,7 @@ We compare it to the \textbf{oracle selected learning algorithm} that has the tr
 
 \note[item]{A meta learning algorithm, is applied to the level 1 data to create a meta learner}
 \end{frame}
-\begin{frame}\frametitle{Ensemble super learner}
+\begin{frame}
     \begin{block}{Ensemble super learner}
     Let $ \meta = \Meta(\lone_{n}) $ be the meta learner from applying a meta learning algorithm $ \Meta $ to the level 1 data, then the map 
     \begin{align*}
@@ -304,7 +306,7 @@ Each learning algorithm is fitted on the entire dataset, and a meta learner is u
 \note[item]{When we wish to predict on new covariates x, we use each fitted learner to evaluate on x and use the meta learner to combine the predictions}
 \end{frame}
 
-\subsection{Constrained Regression}
+\subsection{Constrained regression}
 \begin{frame}
     \frametitle{Ensemble Super Learner: Constrained Regression} 
     There are many meta learning algorithms. One can for example fit a weighted linear combination of the learners where for $ a \in \mathbb{R}^{\ml} $ 
@@ -316,16 +318,16 @@ Each learning algorithm is fitted on the entire dataset, and a meta learner is u
         \esl(P_n)(x) &= \meta_{a}(\la_{1}(P_n)(x) , \dots , \la_{\ml}(P_n)(x)) \\
                      &= \sum_{\q = 1}^{\ml} a_{\q} \la_\q(P_n)(x) \in [0,1].
     \end{align*}
-    The optimal weights, $ a $, can be found by solving a \textbf{constrained least squares} on the level 1 data using quadratic programming techniques. 
+    The optimal weights, $ a $, can be found by solving a \textbf{constrained least squares} on the level 1 data using quadratic programming. 
     \note[item]{Many possible meta learning algorithms can exist, one could for example fit a weighted linear combination of the learning algorithms where the parameter a is a weight vector in R k whose entries are positive and sum to 1}
 
     \note[item]{The ensemble super learner applied to new covariates x is to take a weighted linear combination of the learners with the weights specified by the weight parameter a}
     \note[item]{These weights can be found by solving a constrained least squares using quadratic programming}
 \end{frame}
 
-\section{Simulations}
+\section{Simulation Study}
 \begin{frame}
-    \frametitle{Simulations} 
+    \frametitle{Simulation Study} 
     We consider a simulated dataset consisting of two covariates $ X_1, X_2 $ and a binary outcome $ Y \in \{0, 1\} $ 
     \begin{align*}
         X_1 &\sim \operatorname{Unif}(0.5, 15),\\
@@ -333,7 +335,7 @@ Each learning algorithm is fitted on the entire dataset, and a meta learner is u
         Y \mid X_1 = x_1, X_2 = x_2 &\sim \operatorname{Ber}(\theta_0(x_1, x_2)),
     \end{align*}
     where $\theta_0(x_1, x_2) = \expit({-3.5 - 0.3x_1 + 0.85x_2 + 0.35x_1x_2})$. 
-    \note[item]{We consider a simulated dataset consisting of two covariates and a binary outcome Y which is specified by the following conditional distributions}
+    \note[item]{We consider a simulated dataset consisting of two covariates and a binary outcome Y specified by the following conditional distributions}
 
     \note[item]{Where theta 0 which is the true regression is given explicitly by the following fomula }
 
@@ -528,6 +530,15 @@ The intercept model is included as a \textbf{benchmark}, no learning algorithm s
 
             \note[item]<3>{So by minimizing the quadratic risk over theta, we are minimizing the first the term which can decomposed into the variance of theta plus its squared bias}
     \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Thank you for listening!} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{figures/6habits.png}
+        \caption{``6 habits of super learners'': an article that I found on the internet while researching. URL: \url{https://www.theladders.com/career-advice/6-habits-of-super-learners-2}}
+    \end{figure}
 \end{frame}
  
 

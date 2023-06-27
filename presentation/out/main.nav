@@ -5,15 +5,15 @@
 \headcommand {\sectionentry {1}{Introduction}{2}{Introduction}{0}}
 \headcommand {\slideentry {1}{0}{1}{2/2}{}{0}}
 \headcommand {\beamer@framepages {2}{2}}
-\headcommand {\slideentry {1}{0}{2}{3/3}{}{0}}
+\headcommand {\beamer@subsectionpages {2}{2}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{3}{Setup and terminology}}
+\headcommand {\slideentry {1}{1}{1}{3/3}{Setup and terminology}{0}}
 \headcommand {\beamer@framepages {3}{3}}
-\headcommand {\beamer@subsectionpages {2}{3}}
-\headcommand {\beamer@subsectionentry {0}{1}{1}{4}{Terminology}}
-\headcommand {\slideentry {1}{1}{1}{4/4}{Terminology}{0}}
+\headcommand {\slideentry {1}{1}{2}{4/4}{Setup and terminology}{0}}
 \headcommand {\beamer@framepages {4}{4}}
-\headcommand {\slideentry {1}{1}{2}{5/5}{Terminology}{0}}
+\headcommand {\slideentry {1}{1}{3}{5/5}{Setup and terminology}{0}}
 \headcommand {\beamer@framepages {5}{5}}
-\headcommand {\beamer@subsectionpages {4}{5}}
+\headcommand {\beamer@subsectionpages {3}{5}}
 \headcommand {\beamer@subsectionentry {0}{1}{2}{6}{Cross-validation}}
 \headcommand {\slideentry {1}{2}{1}{6/6}{Cross-validation}{0}}
 \headcommand {\beamer@framepages {6}{6}}
@@ -27,8 +27,8 @@
 \headcommand {\slideentry {2}{0}{2}{9/9}{}{0}}
 \headcommand {\beamer@framepages {9}{9}}
 \headcommand {\beamer@subsectionpages {8}{9}}
-\headcommand {\beamer@subsectionentry {0}{2}{1}{10}{Oracle Property}}
-\headcommand {\slideentry {2}{1}{1}{10/10}{Oracle Property}{0}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{10}{Oracle property}}
+\headcommand {\slideentry {2}{1}{1}{10/10}{Oracle property}{0}}
 \headcommand {\beamer@framepages {10}{10}}
 \headcommand {\beamer@sectionpages {8}{10}}
 \headcommand {\beamer@subsectionpages {10}{10}}
@@ -40,12 +40,12 @@
 \headcommand {\slideentry {3}{0}{3}{13/13}{}{0}}
 \headcommand {\beamer@framepages {13}{13}}
 \headcommand {\beamer@subsectionpages {11}{13}}
-\headcommand {\beamer@subsectionentry {0}{3}{1}{14}{Constrained Regression}}
-\headcommand {\slideentry {3}{1}{1}{14/14}{Constrained Regression}{0}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{14}{Constrained regression}}
+\headcommand {\slideentry {3}{1}{1}{14/14}{Constrained regression}{0}}
 \headcommand {\beamer@framepages {14}{14}}
 \headcommand {\beamer@sectionpages {11}{14}}
 \headcommand {\beamer@subsectionpages {14}{14}}
-\headcommand {\sectionentry {4}{Simulations}{15}{Simulations}{0}}
+\headcommand {\sectionentry {4}{Simulation Study}{15}{Simulation Study}{0}}
 \headcommand {\slideentry {4}{0}{1}{15/15}{}{0}}
 \headcommand {\beamer@framepages {15}{15}}
 \headcommand {\slideentry {4}{0}{2}{16/16}{}{0}}
@@ -81,10 +81,12 @@
 \headcommand {\sectionentry {5}{Concluding Remarks}{28}{Concluding Remarks}{0}}
 \headcommand {\slideentry {5}{0}{1}{28/28}{}{0}}
 \headcommand {\beamer@framepages {28}{28}}
-\headcommand {\beamer@partpages {1}{31}}
-\headcommand {\beamer@subsectionpages {28}{31}}
-\headcommand {\beamer@sectionpages {28}{31}}
-\headcommand {\beamer@documentpages {31}}
-\headcommand {\gdef \inserttotalframenumber {29}}
 \headcommand {\slideentry {5}{0}{2}{29/31}{}{0}}
 \headcommand {\beamer@framepages {29}{31}}
+\headcommand {\beamer@partpages {1}{32}}
+\headcommand {\beamer@subsectionpages {28}{32}}
+\headcommand {\beamer@sectionpages {28}{32}}
+\headcommand {\beamer@documentpages {32}}
+\headcommand {\gdef \inserttotalframenumber {30}}
+\headcommand {\slideentry {5}{0}{3}{32/32}{}{0}}
+\headcommand {\beamer@framepages {32}{32}}

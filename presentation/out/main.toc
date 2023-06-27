@@ -1,11 +1,11 @@
 \beamer@sectionintoc {1}{Introduction}{2}{0}{1}
-\beamer@subsectionintoc {1}{1}{Terminology}{4}{0}{1}
+\beamer@subsectionintoc {1}{1}{Setup and terminology}{3}{0}{1}
 \beamer@subsectionintoc {1}{2}{Cross-validation}{6}{0}{1}
 \beamer@sectionintoc {2}{Discrete Super Learner}{8}{0}{2}
-\beamer@subsectionintoc {2}{1}{Oracle Property}{10}{0}{2}
+\beamer@subsectionintoc {2}{1}{Oracle property}{10}{0}{2}
 \beamer@sectionintoc {3}{Ensemble Super Learner}{11}{0}{3}
-\beamer@subsectionintoc {3}{1}{Constrained Regression}{14}{0}{3}
-\beamer@sectionintoc {4}{Simulations}{15}{0}{4}
+\beamer@subsectionintoc {3}{1}{Constrained regression}{14}{0}{3}
+\beamer@sectionintoc {4}{Simulation Study}{15}{0}{4}
 \beamer@subsectionintoc {4}{1}{Validation risk and variance}{22}{0}{4}
 \beamer@subsectionintoc {4}{2}{Locally weighted eSL}{25}{0}{4}
 \beamer@sectionintoc {5}{Concluding Remarks}{28}{0}{5}
